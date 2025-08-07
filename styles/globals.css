@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@config "../tailwind.config.ts";
+
+/* dropdown fix */
+[data-slot="menu"] {
+  position: absolute !important;
+  z-index: 50;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  background-color: white;
+  border: 1px solid #e5e7eb; /* gray-200 */
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 12rem;
+  padding: 0.5rem 0;
+  overflow: hidden;
+}
+
+[data-slot="menuitem"] {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #374151; /* gray-700 */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+[data-slot="menuitem"]:hover {
+  background-color: #f3f4f6; /* gray-100 */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
