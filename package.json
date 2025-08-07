@@ -27,7 +27,7 @@
     "@react-aria/ssr": "3.9.10",
     "@react-aria/visually-hidden": "3.8.26",
     "clsx": "^2.1.1",
-    "framer-motion": "^10.16.1",
+    "framer-motion": "^11.5.6",
     "gsap": "^3.13.0",
     "intl-messageformat": "10.7.16",
     "keen-slider": "^6.8.6",
