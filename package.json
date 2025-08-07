@@ -40,7 +40,6 @@
     "swiper": "^11.2.10"
   },
   "devDependencies": {
-    "@eslint/compat": "^0.1.0"
     "@next/eslint-plugin-next": "15.3.4",
     "@react-types/shared": "3.30.0",
     "@tailwindcss/postcss": "4.1.11",
