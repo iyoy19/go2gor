@@ -2,7 +2,7 @@ import "@/styles/globals.css";
 import { Metadata } from "next";
 import clsx from "clsx";
 import { siteConfig } from "@/config/site";
-import { Navbar } from "@/Components/navbar";
+import { Navbar } from "@/components/navbar";
 import { fontPoppins } from "@/config/fonts";
 import "swiper/css";
 import "swiper/css/autoplay";
@@ -32,7 +32,7 @@ export default function RootLayout({
           fontPoppins.variable
         )}
       >
-        <div className="relative w-full min-h-screen">
+        <div className="relative w-full">
           <div className="fixed top-0 left-0 right-0 z-50">
             <Navbar />
           </div>

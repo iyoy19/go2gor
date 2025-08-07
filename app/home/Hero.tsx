@@ -51,14 +51,14 @@ export default function HomeSectionOne() {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-tr from-[#FFDEE9] via-[#B5FFFC] to-[#FEE140] pt-10 md:pt-20 font-poppins overflow-hidden">
+    <section className="relative w-full bg-gradient-to-tr from-[#FFDEE9] via-[#B5FFFC] to-[#FEE140] pt-10 md:pt-20 font-poppins overflow-hidden">
       {/* Background Decoration */}
       <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] bg-pink-400 opacity-20 rounded-full blur-3xl z-0" />
       <div className="absolute bottom-[-120px] left-[-80px] w-[250px] h-[250px] bg-blue-400 opacity-20 rounded-full blur-2xl z-0" />
       <div className="absolute inset-0 bg-black/20 md:hidden z-[1]" />{" "}
       {/* Mobile bg dimming */}
       {/* Main Content Container */}
-      <div className="relative flex flex-col md:flex-row items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 gap-10 z-10">
+      <div className="relative w-full overflow-x-hidden flex flex-col md:flex-row items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 gap-10 z-10">
         {/* Mobile: Top Two Headings */}
         <div className="block md:hidden w-full text-left z-10 px-4 mt-2">
           <motion.span
