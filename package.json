@@ -1,5 +1,5 @@
 {
-  "name": "next-app-template",
+  "name": "go2gor",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -40,6 +40,7 @@
     "swiper": "^11.2.10"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.3.1",
     "@next/eslint-plugin-next": "15.3.4",
     "@react-types/shared": "3.30.0",
     "@tailwindcss/postcss": "4.1.11",

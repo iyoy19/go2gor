@@ -13,6 +13,7 @@ const config = {
         sans: ["var(--font-sans)", "Inter", "sans-serif"],
         mono: ["var(--font-mono)"],
         poppins: ["var(--font-poppins)", "sans-serif"],
+        montserrat: ["var(--font-montserrat)"],
       },
     },
   },
