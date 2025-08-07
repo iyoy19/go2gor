@@ -1,4 +1,5 @@
-import { heroui } from "@heroui/theme";
+// tailwind.config.js
+const { heroui } = require("@heroui/theme");
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -14,6 +15,28 @@ const config = {
         mono: ["var(--font-mono)"],
         poppins: ["var(--font-poppins)", "sans-serif"],
         montserrat: ["var(--font-montserrat)"],
+      },
+      backgroundSize: {
+        "400": "400% 400%",
+      },
+      animation: {
+        "gradient-x": "gradient-x 8s ease infinite",
+        "gradient-y": "gradient-y 8s ease infinite",
+        "gradient-xy": "gradient-xy 10s ease infinite",
+      },
+      keyframes: {
+        "gradient-x": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        "gradient-y": {
+          "0%, 100%": { backgroundPosition: "50% 0%" },
+          "50%": { backgroundPosition: "50% 100%" },
+        },
+        "gradient-xy": {
+          "0%, 100%": { backgroundPosition: "0% 0%" },
+          "50%": { backgroundPosition: "100% 100%" },
+        },
       },
     },
   },
