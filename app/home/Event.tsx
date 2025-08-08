@@ -10,7 +10,6 @@ import "swiper/css/effect-coverflow";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
-// ✅ Event Type
 type EventType = {
   id: number;
   title: string;
@@ -27,8 +26,8 @@ const randomImages = Array.from(
   (_, i) => `https://picsum.photos/seed/event-${i + 1}/500/300`
 );
 
-// ✅ Dummy Events Data
-const events: EventType[] = Array.from({ length: 6 }, (_, i) => ({
+// ✅ Semua Event
+const dummyEvents: EventType[] = Array.from({ length: 6 }, (_, i) => ({
   id: i + 1,
   title: `Event Seru #${i + 1}`,
   description: "Ikuti keseruan olahraga bareng komunitas!",
@@ -42,8 +41,14 @@ export default function EventSection() {
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
   const swiperRef = useRef<any>(null);
 
+  // ✅ Filter event agar hanya yang tanggalnya di masa depan
+  const now = new Date();
+  const events: EventType[] = dummyEvents.filter(
+    (e) => new Date(e.eventDate) > now
+  );
+
   return (
-    <section className="relative w-full pt-8 pb-16 px-4 sm:px-6 lg:px-8 font-poppins overflow-hidden bg-gradient-to-br from-[#ffe4e6] via-[#a433c0] to-[#04968a]">
+    <section className="relative w-full pt-8 pb-16 px-4 sm:px-6 lg:px-8 font-poppins overflow-hidden bg-gradient-to-b from-white via-blue-50 to-white">
       {/* ✅ MODAL */}
       <AnimatePresence>
         {selectedEvent && (
@@ -135,67 +140,88 @@ export default function EventSection() {
         </p>
       </div>
 
-      {/* ✅ SLIDER */}
-      <div className="max-w-screen-lg mx-auto relative">
-        <Swiper
-          ref={swiperRef}
-          modules={[Autoplay, Pagination, EffectCoverflow]}
-          slidesPerView={1.2}
-          spaceBetween={20}
-          breakpoints={{
-            640: { slidesPerView: 1.5 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 2.5 },
-          }}
-          autoplay={{ delay: 4000, disableOnInteraction: false }}
-          pagination={{ clickable: true }}
-          loop={true}
-          effect="coverflow"
-          coverflowEffect={{
-            rotate: 30,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: true,
-          }}
-          className="pb-10"
-        >
-          {events.map((event) => (
-            <SwiperSlide key={event.id}>
-              <div
-                onClick={() => setSelectedEvent(event)}
-                className="cursor-pointer relative overflow-hidden rounded-xl shadow-lg bg-white"
-              >
-                <div className="overflow-hidden rounded-t-xl">
-                  <Image
-                    src={event.image}
-                    alt={event.title}
-                    width={500}
-                    height={300}
-                    className="w-full h-64 object-cover transition-transform duration-300 hover:scale-105"
-                  />
-                </div>
+      {/* ✅ CEK KOSONG */}
+      {events.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20">
+          <Image
+            src="https://cdn-icons-png.flaticon.com/512/4076/4076500.png"
+            alt="No Events"
+            width={150}
+            height={150}
+            className="mb-6 opacity-90"
+          />
+          <h3 className="text-2xl font-bold text-white mb-2">
+            Tidak ada event yang sedang berlangsung
+          </h3>
+          <p className="text-white/80 text-center max-w-md">
+            Santai dulu... 🤗 Kami akan segera menghadirkan event seru untuk
+            kamu!
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* ✅ SLIDER */}
+          <div className="max-w-screen-lg mx-auto relative">
+            <Swiper
+              ref={swiperRef}
+              modules={[Autoplay, Pagination, EffectCoverflow]}
+              slidesPerView={1.2}
+              spaceBetween={20}
+              breakpoints={{
+                640: { slidesPerView: 1.5 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 2.5 },
+              }}
+              autoplay={{ delay: 4000, disableOnInteraction: false }}
+              pagination={{ clickable: true }}
+              loop={true}
+              effect="coverflow"
+              coverflowEffect={{
+                rotate: 30,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+              }}
+              className="pb-10"
+            >
+              {events.map((event) => (
+                <SwiperSlide key={event.id}>
+                  <div
+                    onClick={() => setSelectedEvent(event)}
+                    className="cursor-pointer relative overflow-hidden rounded-xl shadow-lg bg-white"
+                  >
+                    <div className="overflow-hidden rounded-t-xl">
+                      <Image
+                        src={event.image}
+                        alt={event.title}
+                        width={500}
+                        height={300}
+                        className="w-full h-64 object-cover transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
 
-                {/* ✅ Judul dan Deskripsi transparan */}
-                <div className="absolute bottom-0 left-0 right-0 bg-black/40 text-white px-4 py-3">
-                  <h3 className="text-lg font-semibold">{event.title}</h3>
-                  <p className="text-sm">{event.description}</p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/40 text-white px-4 py-3">
+                      <h3 className="text-lg font-semibold">{event.title}</h3>
+                      <p className="text-sm">{event.description}</p>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
 
-      {/* ✅ TOMBOL LIHAT SEMUA */}
-      <div className="mt-10 text-center">
-        <Link
-          href="/event"
-          className="bg-black text-white px-6 py-2 rounded-full text-lg font-semibold hover:bg-gray-900 transition"
-        >
-          Lihat Semua Event
-        </Link>
-      </div>
+          {/* ✅ TOMBOL LIHAT SEMUA */}
+          <div className="mt-10 text-center">
+            <Link
+              href="/event"
+              className="bg-black text-white px-6 py-2 rounded-full text-lg font-semibold hover:bg-gray-900 transition"
+            >
+              Lihat Semua Event
+            </Link>
+          </div>
+        </>
+      )}
     </section>
   );
 }

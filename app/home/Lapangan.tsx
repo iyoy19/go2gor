@@ -153,26 +153,80 @@ export default function LapanganSection() {
         </Dropdown>
       </div>
 
-      {/* Mobile - Carousel */}
+      {/* Mobile */}
       <div className="block lg:hidden">
-        <Swiper
-          modules={[Pagination]}
-          pagination={{ clickable: true }}
-          spaceBetween={24}
-          slidesPerView={1}
-          style={{ paddingBottom: "2rem" }}
-        >
-          {dataLapangan.map((field, idx) => (
-            <SwiperSlide
-              key={idx}
-              style={{ display: "flex", justifyContent: "center" }}
-            >
-              <div className="w-[90%]">
-                <Card field={field} />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        {kategori === "semua" ? (
+          <>
+            {/* Grup Futsal */}
+            <div className="mb-8">
+              <h3 className="text-lg font-bold text-indigo-800 mb-4 px-6">
+                Lapangan Futsal
+              </h3>
+              <Swiper
+                modules={[Pagination]}
+                pagination={{ clickable: true }}
+                spaceBetween={24}
+                slidesPerView={1}
+                style={{ paddingBottom: "2rem" }}
+              >
+                {lapanganFutsal.map((field, idx) => (
+                  <SwiperSlide
+                    key={`futsal-${idx}`}
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <div className="w-[90%]">
+                      <Card field={field} />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+
+            {/* Grup Tenis */}
+            <div>
+              <h3 className="text-lg font-bold text-indigo-800 mb-4 px-6">
+                Lapangan Tenis
+              </h3>
+              <Swiper
+                modules={[Pagination]}
+                pagination={{ clickable: true }}
+                spaceBetween={24}
+                slidesPerView={1}
+                style={{ paddingBottom: "2rem" }}
+              >
+                {lapanganTenis.map((field, idx) => (
+                  <SwiperSlide
+                    key={`tenis-${idx}`}
+                    style={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <div className="w-[90%]">
+                      <Card field={field} />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </>
+        ) : (
+          <Swiper
+            modules={[Pagination]}
+            pagination={{ clickable: true }}
+            spaceBetween={24}
+            slidesPerView={1}
+            style={{ paddingBottom: "2rem" }}
+          >
+            {dataLapangan.map((field, idx) => (
+              <SwiperSlide
+                key={idx}
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                <div className="w-[90%]">
+                  <Card field={field} />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
       </div>
 
       {/* Desktop - Grid */}
