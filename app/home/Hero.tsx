@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-// Dynamic import for Lottie
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
   { ssr: false }
@@ -41,7 +40,6 @@ export default function HomeSectionOne() {
     return () => clearTimeout(timer);
   }, [displayText, isDeleting, index]);
 
-  // Scroll listener for scroll indicator
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollIndicator(window.scrollY === 0);
@@ -55,11 +53,10 @@ export default function HomeSectionOne() {
       {/* Background Decoration */}
       <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] bg-pink-400 opacity-20 rounded-full blur-3xl z-0" />
       <div className="absolute bottom-[-120px] left-[-80px] w-[250px] h-[250px] bg-blue-400 opacity-20 rounded-full blur-2xl z-0" />
-      <div className="absolute inset-0 bg-black/20 md:hidden z-[1]" />{" "}
-      {/* Mobile bg dimming */}
-      {/* Main Content Container */}
+      <div className="absolute inset-0 bg-black/20 md:hidden z-[1]" />
+
       <div className="relative w-full overflow-x-hidden flex flex-col md:flex-row items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 gap-10 z-10">
-        {/* Mobile: Top Two Headings */}
+        {/* Mobile: Top Headings */}
         <div className="block md:hidden w-full text-left z-10 px-4 mt-2">
           <motion.span
             initial={{ opacity: 0, y: -20 }}
@@ -103,7 +100,7 @@ export default function HomeSectionOne() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-2 mb-3 min-h-[4.2rem] flex items-start text-[2.2rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.2rem] font-extrabold tracking-tight leading-tight text-black overflow-hidden"
+            className="mt-2 mb-3 min-h-[4.2rem] flex items-start text-[2.2rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.2rem] font-extrabold tracking-tight leading-tight text-black overflow-hidden drop-shadow-md"
           >
             <span className="inline-flex items-center min-w-[12ch] transition-all duration-300">
               {displayText}
@@ -115,6 +112,16 @@ export default function HomeSectionOne() {
             </span>
           </motion.div>
 
+          {/* Extra Heading (New Line) */}
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+            className="text-lg sm:text-xl font-semibold text-black mt-1 lg:mt-2"
+          >
+            Tinggal Klik, Lapangan Langsung Dapet!
+          </motion.h3>
+
           {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -124,9 +131,7 @@ export default function HomeSectionOne() {
           >
             Nggak perlu ribet datang ke GOR! <br />
             Cukup buka website kami, pilih jadwal & lapangan favorit, langsung
-            booking. <br />
-            Cepat, praktis, tanpa antre! Cocok buat futsal, badminton, basket,
-            dan olahraga lainnya di kota kamu.
+            booking.
           </motion.p>
 
           {/* CTA */}
@@ -138,13 +143,13 @@ export default function HomeSectionOne() {
           >
             <Link
               href="/lapangan"
-              className="basis-1/2 text-center px-4 py-3 text-sm sm:text-base font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition duration-200 transform hover:scale-105"
+              className="basis-1/2 text-center px-4 py-3 text-sm sm:text-base font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition duration-200 transform hover:scale-105 backdrop-blur-md"
             >
               Cek Lapangan
             </Link>
             <Link
               href="/booking"
-              className="basis-1/2 text-center px-4 py-3 text-sm sm:text-base font-semibold text-blue-600 border-2 border-blue-600 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105"
+              className="basis-1/2 text-center px-4 py-3 text-sm sm:text-base font-semibold text-blue-600 border-2 border-blue-600 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105 backdrop-blur-md"
             >
               Booking Now
             </Link>
@@ -167,13 +172,13 @@ export default function HomeSectionOne() {
           </motion.div>
         </div>
 
-        {/* Mobile: Remaining Text */}
+        {/* Mobile: Text */}
         <div className="block md:hidden w-full flex flex-col justify-start text-left z-10 px-4 mt-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-2 mb-3 min-h-[2.5rem] sm:min-h-[3rem] flex items-start text-[2rem] sm:text-[2.5rem] font-extrabold tracking-tight leading-tight text-black overflow-hidden"
+            className="mt-2 mb-3 min-h-[2.5rem] sm:min-h-[3rem] flex items-start text-[2rem] sm:text-[2.5rem] font-extrabold tracking-tight leading-tight text-black overflow-hidden drop-shadow-md"
           >
             <span className="inline-flex items-center min-w-[12ch] transition-all duration-300">
               {displayText}
@@ -184,6 +189,16 @@ export default function HomeSectionOne() {
               />
             </span>
           </motion.div>
+
+          {/* Extra Heading (Mobile) */}
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+            className="text-base sm:text-lg font-semibold text-black mt-1"
+          >
+            Tinggal Klik, Lapangan Langsung Dapet!
+          </motion.h3>
 
           {/* Description */}
           <motion.p
@@ -202,7 +217,7 @@ export default function HomeSectionOne() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
-            className="mt-6 flex flex-row justify-start items-center gap-3 w-full"
+            className="mt-6 flex flex-row justify-start items-center gap-3 w-full backdrop-blur-md"
           >
             <Link
               href="/lapangan"
@@ -235,7 +250,8 @@ export default function HomeSectionOne() {
           </motion.div>
         </div>
       </div>
-      {/* Scroll Indicator - Only show at top */}
+
+      {/* Scroll Indicator */}
       {showScrollIndicator && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
