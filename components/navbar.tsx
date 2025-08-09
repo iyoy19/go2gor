@@ -30,6 +30,8 @@ import {
   LogIn,
   CalendarClock,
   Rotate3d,
+  Moon,
+  Sun,
 } from "lucide-react";
 
 import { Button } from "@heroui/button";
@@ -59,6 +61,17 @@ export const Navbar = () => {
     {}
   );
   const [scrolled, setScrolled] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      document.documentElement.classList.add("dark");
+      setIsDark(true);
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,62 +82,76 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const toggleDarkMode = () => {
+    if (isDark) {
+      document.documentElement.classList.remove("dark");
+      setIsDark(false);
+    } else {
+      document.documentElement.classList.add("dark");
+      setIsDark(true);
+    }
+  };
+
   const navbarClass = clsx(
-    "fixed top-0 z-50 w-full transition-all duration-300",
-    scrolled ? "bg-black/10 backdrop-blur-md shadow-sm" : "bg-transparent"
+    "fixed top-0 z-50 w-full transition-all duration-300 backdrop-blur-md",
+    scrolled ? "bg-white/10 dark:bg-black/10 shadow-sm" : "bg-transparent"
   );
 
   return (
     <HeroUINavbar
-      maxWidth="xl"
+      maxWidth="full"
       isMenuOpen={menuOpen}
       onMenuOpenChange={setMenuOpen}
-      className={clsx(navbarClass, "relative")}
+      className={clsx(navbarClass, "relative px-0 sm:px-6 lg:px-8")}
     >
-      {/* Ikon + teks lengkap (desktop) */}
+      {/* Desktop: Logo kiri */}
       <NavbarContent className="hidden sm:flex" justify="start">
-        <NavbarBrand as="li" className="gap-3 max-w-fit">
+        <NavbarBrand as="li" className="gap-3 max-w-fit flex items-center">
           <NextLink href="/" className="flex items-center gap-2">
             <Rotate3d size={28} className="text-yellow-300 drop-shadow-md" />
             <h1
-              className={`text-xl sm:text-2xl font-extrabold tracking-tight leading-none ${rubikDirt.className}`}
+              className={clsx(
+                `text-xl sm:text-2xl font-extrabold tracking-tight leading-none ${rubikDirt.className}`,
+                "dark:text-white"
+              )}
             >
               <span className="text-yellow-400 drop-shadow-md">Go</span>
-              <span className="text-black drop-shadow-md">2</span>
+              <span className="text-black dark:text-white drop-shadow-md">
+                2
+              </span>
               <span className="text-indigo-500 drop-shadow-md">Gor</span>
             </h1>
           </NextLink>
         </NavbarBrand>
       </NavbarContent>
 
-      {/* Ikon saja (mobile left) */}
-      <NavbarContent className="sm:hidden" justify="start">
-        <NavbarBrand as="li" className="max-w-fit">
-          <NextLink href="/" className="flex items-center">
-            <Rotate3d size={28} className="text-yellow-300 drop-shadow-md" />
-          </NextLink>
-        </NavbarBrand>
-      </NavbarContent>
-
-      {/* Teks GoGor (mobile center only) */}
+      {/* Mobile: Logo kiri */}
       <NavbarContent
-        className="sm:hidden absolute left-1/2 -translate-x-1/2"
-        justify="center"
+        className="sm:hidden"
+        justify="start"
+        style={{ gap: "0.5rem" }}
       >
-        <NavbarBrand as="li" className="max-w-fit">
-          <NextLink href="/" className="flex items-center">
+        <NavbarBrand as="li" className="max-w-fit flex items-center gap-2">
+          <NextLink href="/" className="flex items-center gap-2">
+            <Rotate3d size={28} className="text-yellow-300 drop-shadow-md" />
             <h1
-              className={`text-xl sm:text-2xl font-extrabold tracking-tight leading-none ${rubikDirt.className}`}
+              className={clsx(
+                "text-xl font-extrabold tracking-tight leading-none",
+                rubikDirt.className,
+                "dark:text-white"
+              )}
             >
               <span className="text-yellow-400 drop-shadow-md">Go</span>
-              <span className="text-black drop-shadow-md">2</span>
+              <span className="text-black dark:text-white drop-shadow-md">
+                2
+              </span>
               <span className="text-indigo-500 drop-shadow-md">Gor</span>
             </h1>
           </NextLink>
         </NavbarBrand>
       </NavbarContent>
 
-      {/* Desktop Navigation */}
+      {/* Desktop: Navigasi tengah */}
       <NavbarContent className="hidden lg:flex" justify="center">
         {siteConfig.navItems.map((item) => {
           const Icon = item.icon ? icons[item.icon] : null;
@@ -135,7 +162,7 @@ export const Navbar = () => {
                 <DropdownTrigger>
                   <Button
                     variant="light"
-                    className="font-medium text-black hover:text-primary"
+                    className="font-medium text-black dark:text-white hover:text-primary"
                     startContent={Icon ? <Icon className="w-4 h-4" /> : null}
                   >
                     {item.label}
@@ -152,6 +179,7 @@ export const Navbar = () => {
                         startContent={
                           ChildIcon ? <ChildIcon className="w-4 h-4" /> : null
                         }
+                        className="dark:text-white"
                       >
                         {child.label}
                       </DropdownItem>
@@ -166,7 +194,7 @@ export const Navbar = () => {
             <NavbarItem key={item.href}>
               <NextLink
                 href={item.href!}
-                className="flex items-center gap-2 text-black transition-colors text-medium hover:text-primary"
+                className="flex items-center gap-2 text-black dark:text-white transition-colors text-medium hover:text-primary"
               >
                 {Icon && <Icon className="w-4 h-4" />}
                 {item.label}
@@ -176,25 +204,52 @@ export const Navbar = () => {
         })}
       </NavbarContent>
 
-      {/* Right Desktop */}
+      {/* Desktop: Tombol dark mode + login kanan */}
       <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-auto"
+        className="hidden sm:flex items-center gap-4 flex-1 pr-0"
         justify="end"
       >
-        <NavbarItem className="hidden md:flex">
+        <NavbarItem>
+          <Button
+            variant="flat"
+            onClick={toggleDarkMode}
+            aria-label="Toggle Dark Mode"
+            className="text-black dark:text-white hover:text-primary"
+          >
+            {isDark ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
+          </Button>
+        </NavbarItem>
+
+        <NavbarItem>
           <Button
             as={HeroUILink}
             href="/login"
             variant="flat"
-            className="text-black hover:text-primary"
+            className="text-black dark:text-white hover:text-primary"
           >
             Login
           </Button>
         </NavbarItem>
       </NavbarContent>
 
-      {/* Mobile Toggle */}
-      <NavbarContent className="pl-4 sm:hidden basis-1" justify="end">
+      {/* Mobile: Tombol dark mode + toggle menu kanan */}
+      <NavbarContent
+        className="sm:hidden flex basis-1 items-center gap-2 pr-0"
+        justify="end"
+      >
+        <Button
+          variant="flat"
+          onClick={toggleDarkMode}
+          aria-label="Toggle Dark Mode"
+          className="text-black dark:text-white hover:text-primary"
+        >
+          {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </Button>
+
         <NavbarMenuToggle onClick={() => setMenuOpen(!menuOpen)} />
       </NavbarContent>
 
@@ -216,7 +271,7 @@ export const Navbar = () => {
                     {item.href && !hasChildren ? (
                       <NextLink
                         href={item.href}
-                        className="flex items-center w-full gap-2 px-2 py-2 text-lg transition-colors rounded hover:text-primary"
+                        className="flex items-center w-full gap-2 px-2 py-2 text-lg transition-colors rounded hover:text-primary text-black dark:text-white"
                         onClick={() => setMenuOpen(false)}
                       >
                         {Icon && <Icon className="w-4 h-4" />}
@@ -230,7 +285,7 @@ export const Navbar = () => {
                             [item.label]: !prev[item.label],
                           }))
                         }
-                        className="flex items-center justify-between w-full gap-2 px-2 py-2 text-lg transition-colors rounded hover:text-primary"
+                        className="flex items-center justify-between w-full gap-2 px-2 py-2 text-lg transition-colors rounded hover:text-primary text-black dark:text-white"
                       >
                         <div className="flex items-center gap-2">
                           {Icon && <Icon className="w-4 h-4" />}
@@ -239,41 +294,40 @@ export const Navbar = () => {
                         <span className="text-sm">{isOpen ? "▲" : "▼"}</span>
                       </button>
                     ) : (
-                      <span className="flex items-center gap-2 px-2 py-2 text-lg text-muted-foreground">
+                      <span className="flex items-center gap-2 px-2 py-2 text-lg text-muted-foreground dark:text-gray-400">
                         {Icon && <Icon className="w-4 h-4" />}
                         {item.label}
                       </span>
                     )}
                   </NavbarMenuItem>
 
-                {hasChildren &&
-                  isOpen &&
-                  "children" in item &&
-                  Array.isArray(item.children) && (
-                    <div className="flex flex-col gap-1 mt-1 ml-6">
-                      {item.children.map((child, childIndex) => {
-                        const ChildIcon = child.icon && icons[child.icon];
-                        return (
-                          <NavbarMenuItem
-                            key={`${child.href ?? child.label ?? `child-menu-item-${childIndex}`}`}
-                          >
-                            <NextLink
-                              href={child.href ?? "#"}
-                              className="flex items-center w-full gap-2 px-2 py-1 text-base transition-colors rounded hover:text-primary"
-                              onClick={() => setMenuOpen(false)}
-                            >
-                              {ChildIcon && <ChildIcon className="w-4 h-4" />}
-                              {child.label}
-                            </NextLink>
-                          </NavbarMenuItem>
-                        );
-                      })}
-                    </div>
-                  )}
-              </div>
-            );
-          }
-        )}
+                  {hasChildren &&
+                    isOpen &&
+                    "children" in item &&
+                    Array.isArray(item.children) && (
+                      <div className="flex flex-col gap-1 mt-1 ml-6">
+                        {item.children.map((child, childIndex) => {
+                          const ChildIcon = child.icon && icons[child.icon];
+                          return (
+                            <NavbarMenuItem key={`${child.href}-${childIndex}`}>
+                              <NextLink
+                                href={child.href}
+                                className="flex items-center w-full gap-2 px-2 py-1 text-base transition-colors rounded hover:text-primary text-black dark:text-white"
+                                onClick={() => setMenuOpen(false)}
+                              >
+                                {ChildIcon && <ChildIcon className="w-4 h-4" />}
+                                {child.label}
+                              </NextLink>
+                            </NavbarMenuItem>
+                          );
+                        })}
+                      </div>
+                    )}
+                </div>
+              );
+            }
+          )}
+        </div>
       </NavbarMenu>
     </HeroUINavbar>
   );

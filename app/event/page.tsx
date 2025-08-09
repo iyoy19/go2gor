@@ -1,7 +1,235 @@
-export default function Page() {
+"use client";
+
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { FiCalendar, FiMapPin, FiX, FiArrowRight } from "react-icons/fi";
+
+type EventType = {
+  id: number;
+  title: string;
+  category: string;
+  description: string;
+  image: string;
+  slug: string;
+  eventDate: string;
+  location: string;
+};
+
+const dummyEvents: EventType[] = [
+  {
+    id: 1,
+    title: "Turnamen Futsal Kemerdekaan",
+    category: "Turnamen Futsal",
+    description: "Rayakan hari kemerdekaan dengan turnamen futsal antar komunitas. Tunjukkan skill terbaikmu dan menangkan hadiahnya!",
+    image: "https://picsum.photos/seed/futsal1/800/600",
+    slug: "turnamen-futsal-kemerdekaan",
+    eventDate: "2025-08-17T09:00:00Z",
+    location: "Go2Gor Arena, Jakarta",
+  },
+  {
+    id: 2,
+    title: "Badminton Fun Match",
+    category: "Fun Match Badminton",
+    description: "Ajang sparring santai untuk semua level. Cari teman main baru dan bersenang-senang di lapangan.",
+    image: "https://picsum.photos/seed/badminton1/800/600",
+    slug: "badminton-fun-match",
+    eventDate: "2025-09-05T18:00:00Z",
+    location: "Go2Gor Center, Bandung",
+  },
+  {
+    id: 3,
+    title: "Liga Futsal Amatir Go2Gor",
+    category: "Liga Futsal",
+    description: "Kompetisi liga futsal untuk tim amatir. Rebut gelar juara dan buktikan timmu yang terbaik!",
+    image: "https://picsum.photos/seed/futsal2/800/600",
+    slug: "liga-futsal-amatir",
+    eventDate: "2025-09-10T19:00:00Z",
+    location: "Go2Gor Stadium, Surabaya",
+  },
+  {
+    id: 4,
+    title: "Coaching Clinic Badminton",
+    category: "Coaching Clinic",
+    description: "Tingkatkan permainanmu dengan bimbingan dari pelatih profesional. Terbuka untuk umum, slot terbatas!",
+    image: "https://picsum.photos/seed/badminton2/800/600",
+    slug: "coaching-clinic-badminton",
+    eventDate: "2025-09-22T15:00:00Z",
+    location: "Go2Gor Hall, Yogyakarta",
+  },
+];
+
+export default function EventPage() {
+  const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
+  const now = new Date();
+  const upcomingEvents = dummyEvents.filter((e) => new Date(e.eventDate) > now);
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    }),
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center text-white bg-gradient-to-br from-green-400 via-blue-500 to-purple-600">
-      <h1 className="text-4xl font-bold">Halaman Event</h1>
+    <div className="min-h-screen bg-gray-900 text-white pt-28 pb-16 px-4 sm:px-6 lg:px-8 font-poppins">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-3">
+            Upcoming Events
+          </h1>
+          <p className="text-lg text-gray-400">
+            Jangan lewatkan event olahraga paling seru di kotamu!
+          </p>
+        </motion.div>
+
+        {upcomingEvents.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {upcomingEvents.map((event, i) => (
+              <motion.div
+                key={event.id}
+                custom={i}
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+                onClick={() => setSelectedEvent(event)}
+                className="cursor-pointer group"
+              >
+                <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl overflow-hidden h-full flex flex-col hover:border-indigo-500/70 transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="relative h-48">
+                    <Image
+                      src={event.image}
+                      alt={event.title}
+                      layout="fill"
+                      objectFit="cover"
+                      className="transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <span className="absolute top-3 right-3 bg-indigo-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">{event.category}</span>
+                  </div>
+                  <div className="p-5 flex flex-col flex-grow">
+                    <h2 className="text-xl font-bold text-white mb-3 leading-tight flex-grow">
+                      {event.title}
+                    </h2>
+                    <div className="mt-auto space-y-2 text-sm text-gray-400">
+                        <div className="flex items-center gap-2">
+                            <FiCalendar className="text-indigo-400"/>
+                            <span>{new Date(event.eventDate).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <FiMapPin className="text-indigo-400"/>
+                            <span>{event.location}</span>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="text-center py-20 flex flex-col items-center"
+            >
+                <Image
+                src="/images/noevent1.svg"
+                alt="No Events"
+                width={200}
+                height={200}
+                className="mb-6 opacity-80"
+                />
+                <h2 className="text-2xl font-bold text-white mb-2">
+                Belum Ada Event
+                </h2>
+                <p className="text-gray-400 max-w-md">
+                Saat ini belum ada event yang akan datang. Cek kembali nanti ya!
+                </p>
+            </motion.div>
+        )}
+      </div>
+
+      <AnimatePresence>
+        {selectedEvent && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedEvent(null)}
+          >
+            <motion.div
+              className="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl mx-auto border border-gray-700/80 overflow-hidden"
+              initial={{ scale: 0.9, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 50 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+                <div className="relative h-72 w-full">
+                    <Image
+                        src={selectedEvent.image}
+                        alt={selectedEvent.title}
+                        layout="fill"
+                        objectFit="cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <button onClick={() => setSelectedEvent(null)} className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-black/80 transition"><FiX size={20}/></button>
+                </div>
+              
+              <div className="p-8">
+                <span className="bg-indigo-500 text-white text-sm font-semibold px-3 py-1 rounded-full mb-4 inline-block">{selectedEvent.category}</span>
+                <h3 className="text-3xl font-bold text-white mb-3 leading-tight">
+                    {selectedEvent.title}
+                </h3>
+                <p className="text-gray-300 text-base leading-relaxed mb-6">
+                    {selectedEvent.description}
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 mb-8">
+                    <div className="flex items-center gap-3 bg-gray-700/50 p-3 rounded-lg">
+                        <FiCalendar size={20} className="text-indigo-400"/>
+                        <div>
+                            <p className="font-semibold">Tanggal & Waktu</p>
+                            <p className="text-sm">{new Date(selectedEvent.eventDate).toLocaleString("id-ID", { dateStyle: 'full', timeStyle: 'short' })}</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3 bg-gray-700/50 p-3 rounded-lg">
+                        <FiMapPin size={20} className="text-indigo-400"/>
+                        <div>
+                            <p className="font-semibold">Lokasi</p>
+                            <p className="text-sm">{selectedEvent.location}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex justify-end">
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center gap-2 bg-indigo-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-indigo-500/30"
+                    >
+                        <span>Daftar Sekarang</span>
+                        <FiArrowRight/>
+                    </motion.button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

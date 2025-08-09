@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { StarIcon } from "@heroicons/react/24/solid";
 
@@ -78,31 +78,107 @@ function formatDate(dateStr: string) {
 export default function Testimoni() {
   const [index, setIndex] = useState(0);
 
-  const handleSwipe = (dir: "up" | "down") => {
-    if (dir === "up") {
+  const handleSwipe = (dir: "up" | "down" | "left" | "right") => {
+    if (dir === "up" || dir === "right") {
       setIndex((prev) => (prev + 1) % reviews.length);
     } else {
       setIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
     }
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        handleSwipe("right");
+      } else if (e.key === "ArrowLeft") {
+        handleSwipe("left");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const review = reviews[index];
 
-  return (
-    <section
-      className="py-20 bg-gradient-to-b from-white to-blue-50"
-      id="testimoni"
-    >
-      <div className="max-w-3xl mx-auto px-4 text-center">
-        <h2 className="text-4xl font-extrabold text-blue-900 mb-12">
-          Apa Kata Mereka?
-        </h2>
+  const renderCardContent = (isDesktop: boolean) => (
+    <>
+      {review.type === "image" && review.imageUrl ? (
+        <div
+          className={`relative ${isDesktop ? "h-full" : "flex-1"} rounded-2xl overflow-hidden shadow-lg`}
+        >
+          <img
+            src={review.imageUrl}
+            alt={`Testimoni dari ${review.name}`}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        <div className="flex flex-1 items-center justify-center p-6">
+          <p className="text-gray-700 dark:text-gray-300 italic text-lg text-center">
+            {review.description}
+          </p>
+        </div>
+      )}
+    </>
+  );
 
-        <div className="relative h-[440px]">
+  const renderCardFooter = () => (
+    <div className="flex items-center gap-4 border-t border-gray-300 dark:border-slate-700 p-4 md:p-6 md:border-t-0 md:border-l">
+      <img
+        src={review.avatar}
+        alt={review.name}
+        className="w-16 h-16 rounded-full ring-4 ring-blue-400 dark:ring-blue-400 object-cover flex-shrink-0"
+      />
+      <div className="flex-1 text-left">
+        <div className="flex items-center justify-between">
+          <h4 className="text-xl font-semibold text-black dark:text-white">{review.name}</h4>
+          <div className="flex items-center text-yellow-500 dark:text-yellow-400">
+            {[...Array(5)].map((_, i) =>
+              i < review.rating ? (
+                <StarIcon key={i} className="w-5 h-5" />
+              ) : (
+                <StarIcon
+                  key={i}
+                  className="w-5 h-5 text-gray-400 dark:text-gray-600"
+                  aria-hidden="true"
+                />
+              )
+            )}
+          </div>
+        </div>
+        <div className="flex justify-between mt-1 text-sm text-gray-600 dark:text-gray-400 font-medium">
+          <div>{review.bookingHistory.join(", ")}</div>
+          <div className="text-right text-gray-500 dark:text-gray-500">
+            <span className="font-semibold">Diunggah: </span>
+            {formatDate(review.uploadedAt)}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <section className="relative py-20 overflow-hidden" id="testimoni">
+      <div className="absolute top-1/4 left-0 w-72 h-72 bg-purple-200/20 dark:bg-purple-500/20 rounded-full blur-3xl animate-blob"></div>
+      <div className="absolute bottom-1/4 right-0 w-72 h-72 bg-blue-200/20 dark:bg-blue-500/20 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
+
+      <div className="relative max-w-6xl mx-auto px-4 text-center">
+        <motion.h2
+          className="text-4xl font-extrabold text-black dark:text-white mb-12"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          Apa Kata Mereka?
+        </motion.h2>
+
+        {/* Mobile View */}
+        <div className="relative h-[480px] w-full max-w-sm mx-auto md:hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={index}
-              className="absolute inset-0 flex flex-col justify-between rounded-3xl shadow-lg border border-blue-200 bg-white p-6"
+              className="absolute inset-0 flex flex-col justify-between rounded-3xl shadow-2xl border border-yellow-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 backdrop-blur-lg"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
@@ -114,75 +190,56 @@ export default function Testimoni() {
                 else if (info.offset.y > 50) handleSwipe("down");
               }}
             >
-              {review.type === "image" && review.imageUrl ? (
-                <>
-                  <div className="relative flex-1 rounded-2xl overflow-hidden mb-4 shadow-lg">
-                    <img
-                      src={review.imageUrl}
-                      alt={`Testimoni dari ${review.name}`}
-                      className="w-full h-full rounded-2xl"
-                    />
-                  </div>
-                  {review.description && (
-                    <p className="text-gray-700 text-center text-sm mb-4">
-                      {review.description}
-                    </p>
-                  )}
-                </>
-              ) : (
-                <div className="flex flex-1 items-center justify-center mb-4 px-6">
-                  {review.description && (
-                    <p className="text-gray-700 italic text-lg text-center">
-                      {review.description}
-                    </p>
-                  )}
-                </div>
-              )}
+              {renderCardContent(false)}
+              {renderCardFooter()}
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
-              {/* Footer: avatar, nama+rating, lapangan, tanggal upload */}
-              <div className="flex items-center gap-4 border-t border-blue-100 pt-4">
-                <img
-                  src={review.avatar}
-                  alt={review.name}
-                  className="w-16 h-16 rounded-full ring-4 ring-blue-400 object-cover flex-shrink-0"
-                />
-                <div className="flex-1">
-                  {/* Baris 1: Nama dan rating */}
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-xl font-semibold text-blue-800">
-                      {review.name}
-                    </h4>
-                    <div className="flex items-center text-yellow-400">
-                      {[...Array(5)].map((_, i) =>
-                        i < review.rating ? (
-                          <StarIcon key={i} className="w-5 h-5" />
-                        ) : (
-                          <StarIcon
-                            key={i}
-                            className="w-5 h-5 text-gray-300"
-                            aria-hidden="true"
-                          />
-                        )
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Baris 2: Nama lapangan & tanggal upload */}
-                  <div className="flex justify-between mt-1 text-sm text-gray-600 font-medium">
-                    <div>{review.bookingHistory.join(", ")}</div>
-                    <div className="text-right text-gray-400">
-                      <span className="font-semibold">Diunggah: </span>
-                      {formatDate(review.uploadedAt)}
-                    </div>
-                  </div>
-                </div>
+        {/* Desktop View */}
+        <div className="relative h-[320px] max-w-4xl mx-auto hidden md:block">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={index}
+              className="absolute inset-0 flex flex-row justify-between rounded-3xl shadow-2xl border border-yellow-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 backdrop-blur-lg overflow-hidden"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.5 }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              onDragEnd={(e, info) => {
+                if (info.offset.x < -50) handleSwipe("right");
+                else if (info.offset.x > 50) handleSwipe("left");
+              }}
+            >
+              <div className="w-1/2 h-full">{renderCardContent(true)}</div>
+              <div className="w-1/2 h-full flex flex-col justify-center">
+                {renderCardFooter()}
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <p className="text-sm mt-6 text-gray-400">
-          Geser ke atas atau bawah untuk melihat testimoni lainnya 👆👇
+        {/* Indicators */}
+        <div className="flex justify-center gap-3 mt-8">
+          {reviews.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${index === i ? "bg-yellow-400 dark:bg-white scale-125" : "bg-gray-400 dark:bg-slate-600"}`}
+              aria-label={`Go to testimonial ${i + 1}`}
+            />
+          ))}
+        </div>
+
+        <p className="text-sm mt-6 text-gray-500 dark:text-gray-500">
+          <span className="md:hidden">
+            Geser ke atas atau bawah untuk melihat testimoni lainnya 👆👇
+          </span>
+          <span className="hidden md:inline">
+            Geser kartu atau gunakan panah keyboard untuk navigasi 👈👉
+          </span>
         </p>
       </div>
     </section>

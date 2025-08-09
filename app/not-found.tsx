@@ -16,8 +16,7 @@ export default function NotFound() {
   return (
     <div
       className="min-h-screen w-full flex items-center justify-center
-      bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300
-      bg-[length:400%_400%] animate-gradient-xy transition-all duration-1000"
+      bg-black"
     >
       <Lottie
         animationData={NotFoundAnimation}

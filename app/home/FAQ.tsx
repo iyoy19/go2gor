@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Accordion, AccordionItem } from "@heroui/react";
 
 const faqs = [
   {
@@ -74,79 +73,112 @@ export default function FAQ() {
   };
 
   return (
-    <section
-      className="py-16 bg-gradient-to-tr from-[#FFDEE9] via-[#B5FFFC] to-[#FEE140]"
-      id="faq"
-    >
-      <div className="container mx-auto px-4 max-w-7xl">
-        <h2 className="text-3xl font-bold text-center mb-10">FAQ</h2>
+    <section className="bg-gray-900">
+      <div className="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 sm:px-6 lg:py-16 lg:px-8">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            Pertanyaan Umum
+          </h2>
 
-        {/* Mobile */}
-        <div className="md:hidden space-y-4">
-          {splitFaqs.map((faqsPart, idx) => {
-            const isOpen = openIndexes.includes(idx);
-            return (
-              <div
-                key={idx}
-                className="rounded-lg outline outline-gray-300 overflow-hidden"
-              >
-                <button
-                  onClick={() => toggleIndex(idx)}
-                  className="w-full text-left px-4 py-3 font-semibold bg-white flex justify-between items-center"
-                  aria-expanded={isOpen}
-                >
-                  {columnTitles[idx] || `Bagian ${idx + 1}`}
-                  <span
-                    className={`transform transition-transform duration-300 ${
-                      isOpen ? "rotate-180" : "rotate-0"
-                    }`}
-                  >
-                    ▼
-                  </span>
-                </button>
-                {isOpen && (
-                  <Accordion variant="light" className="space-y-3 p-4 bg-white">
-                    {faqsPart.map(({ question, answer }, i) => (
-                      <AccordionItem
-                        key={i}
-                        aria-label={question}
-                        title={question}
-                        className="light-0"
-                      >
-                        <p className="text-gray-600">{answer}</p>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                )}
-              </div>
-            );
-          })}
+          <p className="mt-4 text-gray-300">
+            Berikut adalah beberapa pertanyaan yang sering diajukan tentang
+            Go2Gor.
+          </p>
         </div>
 
-        {/* Desktop */}
-        <div className="hidden md:grid grid-cols-4 gap-8">
-          {splitFaqs.map((faqsPart, idx) => (
-            <div
-              key={idx}
-              className="rounded-lg outline outline-gray-300 p-6 bg-white"
-            >
-              <h3 className="text-xl font-semibold mb-6">
-                {columnTitles[idx] || `Bagian ${idx + 1}`}
-              </h3>
-              <Accordion variant="light" className="space-y-4">
-                {faqsPart.map(({ question, answer }, i) => (
-                  <AccordionItem
-                    key={i}
-                    aria-label={question}
-                    title={question}
-                    className="light-0"
+        <div className="flow-root mt-12">
+          <div className="-my-8 divide-y divide-gray-700">
+            <details className="py-8 group" open>
+              <summary className="flex items-center justify-between cursor-pointer">
+                <h3 className="text-lg font-medium text-white">
+                  Bagaimana cara memesan lapangan di Go2Gor?
+                </h3>
+
+                <span className="relative flex-shrink-0 ml-1.5 w-5 h-5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="absolute inset-0 w-5 h-5 opacity-100 group-open:opacity-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
                   >
-                    <p className="text-gray-600">{answer}</p>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-          ))}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="absolute inset-0 w-5 h-5 opacity-0 group-open:opacity-100"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </span>
+              </summary>
+
+              <p className="mt-4 leading-relaxed text-gray-400">
+                Anda dapat memesan lapangan dengan mudah melalui platform kami.
+                Cari lapangan yang Anda inginkan, pilih jadwal yang tersedia,
+                dan lakukan pembayaran secara online.
+              </p>
+            </details>
+
+            <details className="py-8 group">
+              <summary className="flex items-center justify-between cursor-pointer">
+                <h3 className="text-lg font-medium text-white">
+                  Apakah saya bisa membatalkan pesanan?
+                </h3>
+
+                <span className="relative flex-shrink-0 ml-1.5 w-5 h-5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="absolute inset-0 w-5 h-5 opacity-100 group-open:opacity-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="absolute inset-0 w-5 h-5 opacity-0 group-open:opacity-100"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </span>
+              </summary>
+
+              <p className="mt-4 leading-relaxed text-gray-400">
+                Kebijakan pembatalan bervariasi tergantung pada penyedia
+                lapangan. Silakan periksa syarat dan ketentuan saat memesan.
+              </p>
+            </details>
+          </div>
         </div>
       </div>
     </section>

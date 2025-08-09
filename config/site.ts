@@ -24,13 +24,12 @@ export const siteConfig = {
       icon: "users",
       children: [
         { label: "Forum", href: "/forum", icon: "message-circle" },
-        { label: "Event", href: "/#event", icon: "calendar" }, // navigasi ke section Event di homepage
+        { label: "Event", href: "/event", icon: "calendar" },
       ],
     },
   ],
   navMenuItems: [
     { label: "Kontak", href: "/kontak", icon: "phone" },
-    { label: "Tentang", href: "/about", icon: "info" },
     { label: "Login", href: "/login", icon: "log-in" },
   ],
   links: {

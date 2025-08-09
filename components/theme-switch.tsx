@@ -1,13 +1,10 @@
 "use client";
 
-import { FC } from "react";
-import { VisuallyHidden } from "@react-aria/visually-hidden";
-import { SwitchProps, useSwitch } from "@heroui/switch";
+import { FC, useState, useEffect } from "react";
+import { Switch, SwitchProps } from "@nextui-org/react";
 import { useTheme } from "next-themes";
-import { useIsSSR } from "@react-aria/ssr";
 import clsx from "clsx";
-
-import { SunFilledIcon, MoonFilledIcon } from "@/components/icons";
+import { FaSun, FaMoon } from "react-icons/fa"; // New import
 
 export interface ThemeSwitchProps {
   className?: string;
@@ -19,63 +16,49 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
   classNames,
 }) => {
   const { theme, setTheme } = useTheme();
-  const isSSR = useIsSSR();
+  const [mounted, setMounted] = useState(false);
 
-  const onChange = () => {
-    theme === "light" ? setTheme("dark") : setTheme("light");
-  };
+  // Pastikan komponen sudah mount agar theme sudah valid (hindari SSR mismatch)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const {
-    Component,
-    slots,
-    isSelected,
-    getBaseProps,
-    getInputProps,
-    getWrapperProps,
-  } = useSwitch({
-    isSelected: theme === "light" || isSSR,
-    "aria-label": `Switch to ${theme === "light" || isSSR ? "dark" : "light"} mode`,
-    onChange,
-  });
+  if (!mounted) return null;
 
   return (
-    <Component
-      {...getBaseProps({
-        className: clsx(
-          "px-px transition-opacity hover:opacity-80 cursor-pointer",
-          className,
-          classNames?.base
-        ),
-      })}
-    >
-      <VisuallyHidden>
-        <input {...getInputProps()} />
-      </VisuallyHidden>
-      <div
-        {...getWrapperProps()}
-        className={slots.wrapper({
-          class: clsx(
-            [
-              "w-auto h-auto",
-              "bg-transparent",
-              "rounded-lg",
-              "flex items-center justify-center",
-              "group-data-[selected=true]:bg-transparent",
-              "!text-default-500",
-              "pt-px",
-              "px-0",
-              "mx-0",
-            ],
-            classNames?.wrapper
-          ),
-        })}
-      >
-        {!isSelected || isSSR ? (
-          <SunFilledIcon size={22} />
+    <Switch
+      aria-label="Toggle theme"
+      isSelected={theme === "dark"}
+      onValueChange={(selected) => setTheme(selected ? "dark" : "light")}
+      size="lg"
+      // Removed color="primary" to prevent yellow color
+      thumbIcon={({ isSelected, className: thumbClassName }) =>
+        isSelected ? (
+          <FaMoon className={clsx(thumbClassName, "text-white w-6 h-6")} /> // Changed to FaMoon
         ) : (
-          <MoonFilledIcon size={22} />
-        )}
-      </div>
-    </Component>
+          <FaSun className={clsx(thumbClassName, "text-black w-6 h-6")} /> // Changed to FaSun
+        )
+      }
+      classNames={{
+        base: clsx("w-10 h-10 p-0 bg-transparent", className, classNames?.base),
+        wrapper: clsx(
+          "w-full h-full rounded-full border border-current backdrop-blur-sm",
+          theme === "light"
+            ? "bg-white/10 border-gray-300"
+            : "bg-black/20 border-gray-600",
+          "focus:outline-none focus:ring-0",
+          classNames?.wrapper
+        ),
+        thumb: clsx(
+          "w-9 h-9 flex items-center justify-center rounded-full", // Adjusted thumb size and ensured rounded-full
+          theme === "light" ? "bg-white" : "bg-gray-700",
+          "shadow-lg",
+          classNames?.thumb
+        ),
+        startContent: "hidden",
+        endContent: "hidden",
+      }}
+    />
   );
 };
+
