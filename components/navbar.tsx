@@ -246,33 +246,34 @@ export const Navbar = () => {
                     )}
                   </NavbarMenuItem>
 
-                  {hasChildren &&
-                    isOpen &&
-                    "children" in item &&
-                    Array.isArray(item.children) && (
-                      <div className="flex flex-col gap-1 mt-1 ml-6">
-                        {item.children.map((child, childIndex) => {
-                          const ChildIcon = child.icon && icons[child.icon];
-                          return (
-                            <NavbarMenuItem key={`${child.href}-${childIndex}`}>
-                              <NextLink
-                                href={child.href}
-                                className="flex items-center w-full gap-2 px-2 py-1 text-base transition-colors rounded hover:text-primary"
-                                onClick={() => setMenuOpen(false)}
-                              >
-                                {ChildIcon && <ChildIcon className="w-4 h-4" />}
-                                {child.label}
-                              </NextLink>
-                            </NavbarMenuItem>
-                          );
-                        })}
-                      </div>
-                    )}
-                </div>
-              );
-            }
-          )}
-        </div>
+                {hasChildren &&
+                  isOpen &&
+                  "children" in item &&
+                  Array.isArray(item.children) && (
+                    <div className="flex flex-col gap-1 mt-1 ml-6">
+                      {item.children.map((child, childIndex) => {
+                        const ChildIcon = child.icon && icons[child.icon];
+                        return (
+                          <NavbarMenuItem
+                            key={`${child.href ?? child.label ?? `child-menu-item-${childIndex}`}`}
+                          >
+                            <NextLink
+                              href={child.href ?? "#"}
+                              className="flex items-center w-full gap-2 px-2 py-1 text-base transition-colors rounded hover:text-primary"
+                              onClick={() => setMenuOpen(false)}
+                            >
+                              {ChildIcon && <ChildIcon className="w-4 h-4" />}
+                              {child.label}
+                            </NextLink>
+                          </NavbarMenuItem>
+                        );
+                      })}
+                    </div>
+                  )}
+              </div>
+            );
+          }
+        )}
       </NavbarMenu>
     </HeroUINavbar>
   );
