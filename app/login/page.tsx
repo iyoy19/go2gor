@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import clsx from "clsx";
 import { useTheme } from "next-themes";
 
-import { ThemeSwitch } from "@/components/theme-switch"; // sesuaikan path import
+import { ThemeSwitch } from "@/components/theme-switch";
 
 export default function LoginPage() {
   const { theme } = useTheme();
@@ -18,13 +18,19 @@ export default function LoginPage() {
   if (!mounted) return null;
 
   return (
-    <div className="flex items-center justify-center flex-grow p-4 sm:p-6 lg:p-8">
+    <div
+      className={clsx(
+        "flex items-center justify-center flex-grow p-4 sm:p-6 lg:p-8 pt-24 sm:pt-28 lg:pt-20",
+        "bg-gradient-to-b from-cyan-100 to-yellow-200",
+        "dark:bg-gradient-to-b dark:from-gray-900 dark:to-black"
+      )}
+    >
       <div
         className={clsx(
-          "w-full max-w-md rounded-2xl p-8 sm:p-10 shadow-2xl border transform transition-all duration-300 hover:scale-[1.01]",
+          "w-full max-w-md rounded-3xl p-8 sm:p-10 shadow-2xl border transform transition-all duration-300 hover:scale-[1.02] hover:shadow-3xl",
           theme === "dark"
-            ? "bg-gray-800 bg-opacity-70 backdrop-filter backdrop-blur-lg border-gray-700"
-            : "bg-white bg-opacity-70 backdrop-filter backdrop-blur-lg border-gray-300"
+            ? "bg-gray-800/80 backdrop-blur-xl border-gray-600/50 shadow-gray-900/50"
+            : "bg-white/80 backdrop-blur-xl border-gray-200/50 shadow-gray-200/50"
         )}
       >
         <h1
