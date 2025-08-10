@@ -14,10 +14,7 @@ export default function NotFound() {
   if (!mounted) return null;
 
   return (
-    <div
-      className="min-h-screen w-full flex items-center justify-center
-      bg-black"
-    >
+    <div className="w-full flex items-center justify-center">
       <Lottie
         animationData={NotFoundAnimation}
         className="w-[500px] h-[500px]"

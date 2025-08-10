@@ -99,11 +99,7 @@ export const Navbar = () => {
       maxWidth="full"
       isMenuOpen={menuOpen}
       onMenuOpenChange={setMenuOpen}
-      className={clsx(
-        navbarClass,
-        "relative px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20"
-      )}
-      style={{ maxWidth: "100vw", overflowX: "hidden" }}
+      className={clsx(navbarClass, "relative")}
     >
       {/* Logo kiri desktop & tablet */}
       <NavbarContent className="hidden sm:flex md:flex lg:flex" justify="start">
@@ -147,10 +143,6 @@ export const Navbar = () => {
             href="/"
             className="flex items-center gap-2 truncate min-w-0"
           >
-            <Rotate3d
-              size={28}
-              className="text-yellow-300 drop-shadow-md flex-shrink-0"
-            />
             <h1
               className={clsx(
                 "text-xl font-extrabold tracking-tight leading-none truncate",
@@ -230,11 +222,11 @@ export const Navbar = () => {
       >
         <NavbarItem>
           <Button
+            isIconOnly
             variant="flat"
             onClick={toggleDarkMode}
             aria-label="Toggle Dark Mode"
-            className="text-black dark:text-white hover:text-primary"
-            size="md"
+            className="text-black dark:text-white hover:text-primary rounded-full"
           >
             {isDark ? (
               <Sun className="w-5 h-5" />
@@ -263,11 +255,11 @@ export const Navbar = () => {
         justify="end"
       >
         <Button
+          isIconOnly
           variant="flat"
           onClick={toggleDarkMode}
           aria-label="Toggle Dark Mode"
-          className="text-black dark:text-white hover:text-primary"
-          size="sm"
+          className="text-black dark:text-white hover:text-primary rounded-full"
         >
           {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </Button>

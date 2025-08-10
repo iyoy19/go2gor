@@ -114,7 +114,7 @@ export default function Testimoni() {
         </div>
       ) : (
         <div className="flex flex-1 items-center justify-center p-6">
-          <p className="text-gray-700 dark:text-gray-300 italic text-lg text-center">
+          <p className="text-gray-700 dark:text-gray-300 italic text-base md:text-lg text-center">
             {review.description}
           </p>
         </div>
@@ -123,33 +123,33 @@ export default function Testimoni() {
   );
 
   const renderCardFooter = () => (
-    <div className="flex items-center gap-4 border-t border-gray-300 dark:border-slate-700 p-4 md:p-6 md:border-t-0 md:border-l">
+    <div className="flex items-center gap-3 border-t border-gray-300 dark:border-slate-700 p-4 md:border-t-0 md:border-l">
       <img
         src={review.avatar}
         alt={review.name}
-        className="w-16 h-16 rounded-full ring-4 ring-blue-400 dark:ring-blue-400 object-cover flex-shrink-0"
+        className="w-12 h-12 rounded-full ring-2 ring-blue-400 dark:ring-blue-400 object-cover flex-shrink-0"
       />
-      <div className="flex-1 text-left">
-        <div className="flex items-center justify-between">
-          <h4 className="text-xl font-semibold text-black dark:text-white">{review.name}</h4>
-          <div className="flex items-center text-yellow-500 dark:text-yellow-400">
+      <div className="flex-1 text-left min-w-0">
+        <div className="flex items-center justify-between gap-2">
+          <h4 className="text-lg font-semibold text-black dark:text-white truncate">{review.name}</h4>
+          <div className="flex items-center text-yellow-500 dark:text-yellow-400 flex-shrink-0">
             {[...Array(5)].map((_, i) =>
               i < review.rating ? (
-                <StarIcon key={i} className="w-5 h-5" />
+                <StarIcon key={i} className="w-4 h-4" />
               ) : (
                 <StarIcon
                   key={i}
-                  className="w-5 h-5 text-gray-400 dark:text-gray-600"
+                  className="w-4 h-4 text-gray-400 dark:text-gray-600"
                   aria-hidden="true"
                 />
               )
             )}
           </div>
         </div>
-        <div className="flex justify-between mt-1 text-sm text-gray-600 dark:text-gray-400 font-medium">
-          <div>{review.bookingHistory.join(", ")}</div>
-          <div className="text-right text-gray-500 dark:text-gray-500">
-            <span className="font-semibold">Diunggah: </span>
+        <div className="flex justify-between mt-1 text-xs text-gray-600 dark:text-gray-400 font-medium">
+          <div className="truncate">{review.bookingHistory.join(", ")}</div>
+          <div className="text-right text-gray-500 dark:text-gray-500 flex-shrink-0">
+            <span className="font-semibold hidden sm:inline">Diunggah: </span>
             {formatDate(review.uploadedAt)}
           </div>
         </div>
@@ -174,7 +174,7 @@ export default function Testimoni() {
         </motion.h2>
 
         {/* Mobile View */}
-        <div className="relative h-[480px] w-full max-w-sm mx-auto md:hidden">
+        <div className="relative min-h-[450px] w-full max-w-sm mx-auto md:hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={index}
@@ -197,7 +197,7 @@ export default function Testimoni() {
         </div>
 
         {/* Desktop View */}
-        <div className="relative h-[320px] max-w-4xl mx-auto hidden md:block">
+        <div className="relative min-h-[280px] max-w-4xl mx-auto hidden md:block">
           <AnimatePresence mode="wait">
             <motion.div
               key={index}

@@ -17,7 +17,7 @@ export default function Footer() {
 
   return (
     <footer className="font-poppins text-gray-700 dark:text-gray-300 border-t border-gray-300 dark:border-slate-800">
-      <div className="container mx-auto px-6 py-16 max-w-7xl">
+      <div className="container mx-auto px-4 sm:px-6 py-16 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           
           {/* Branding & Social */}
@@ -78,7 +78,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-gray-300 dark:border-slate-800">
-        <div className="container mx-auto px-6 py-6 max-w-7xl flex flex-col sm:flex-row justify-between items-center text-center">
+        <div className="container mx-auto px-4 sm:px-6 py-6 max-w-7xl flex flex-col sm:flex-row justify-between items-center text-center">
           <p className="text-gray-500 dark:text-gray-500 text-xs select-none">
             &copy; {new Date().getFullYear()} Go2Gor. All rights reserved. Dibuat dengan ❤️ untuk para pecinta olahraga.
           </p>

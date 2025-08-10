@@ -142,13 +142,13 @@ export default function HomeSectionOne() {
           >
             <Link
               href="/lapangan"
-              className="basis-1/2 text-center px-4 py-3 text-sm sm:text-base font-semibold text-white bg-blue-400 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 rounded-lg shadow-md transition duration-200 transform hover:scale-105 backdrop-blur-md"
+              className="basis-1/2 text-center px-4 py-3 text-sm sm:text-base font-semibold text-white bg-blue-500 dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-800 rounded-lg shadow-md transition duration-200 transform hover:scale-105 backdrop-blur-md"
             >
               Cek Lapangan
             </Link>
             <Link
               href="/booking"
-              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-400 dark:text-blue-600 border-2 border-blue-400 dark:border-blue-600 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105 backdrop-blur-md"
+              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-500 dark:text-blue-700 border-2 border-blue-500 dark:border-blue-700 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105 backdrop-blur-md"
             >
               Booking Now
             </Link>

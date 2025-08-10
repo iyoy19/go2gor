@@ -7,6 +7,7 @@ import { Autoplay, Pagination, EffectCards } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/effect-cards";
+
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
@@ -53,14 +54,14 @@ export default function EventSection() {
       <AnimatePresence>
         {selectedEvent && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/50 px-4"
+            className="fixed inset-0 z-[999] flex items-center justify-center backdrop-blur-md bg-black/50 px-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedEvent(null)}
           >
             <motion.div
-              className="relative w-full max-w-md lg:max-w-lg bg-white/80 dark:bg-white/10 border border-black/20 dark:border-white/20 backdrop-blur-xl rounded-2xl p-6 shadow-2xl text-black dark:text-white"
+              className="relative w-full max-w-md lg:max-w-lg bg-white/80 dark:bg-gray-800/80 border border-black/20 dark:border-gray-700/50 backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-2xl text-black dark:text-white"
               initial={{ scale: 0.8, y: 100 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.8, y: 100 }}
@@ -79,7 +80,7 @@ export default function EventSection() {
                 alt={selectedEvent.title}
                 width={500}
                 height={300}
-                className="rounded-xl mb-4 object-cover w-full h-48"
+                className="rounded-xl mb-4 object-cover w-full h-40 sm:h-48"
               />
 
               <h3 className="text-2xl font-extrabold mb-2 leading-tight">
@@ -186,15 +187,15 @@ export default function EventSection() {
               cardsEffect={{
                 slideShadows: false,
               }}
-              className="pb-10 w-full max-w-[300px] sm:max-w-[400px] h-[450px] sm:h-[500px]"
+              className="pb-10 w-full max-w-sm md:max-w-md h-[480px] md:h-[550px]"
             >
               {events.map((event) => (
                 <SwiperSlide key={event.id}>
                   <div
                     onClick={() => setSelectedEvent(event)}
-                    className="group cursor-pointer relative overflow-hidden rounded-xl shadow-lg h-full bg-white dark:bg-slate-800 border border-yellow-200 dark:border-slate-700 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300"
+                    className="group cursor-pointer relative overflow-hidden rounded-xl shadow-lg h-full bg-white/50 dark:bg-slate-800/50 backdrop-blur-lg border border-gray-300 dark:border-slate-700 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300"
                   >
-                    <div className="overflow-hidden rounded-t-xl h-2/3">
+                    <div className="overflow-hidden rounded-t-xl h-4/5">
                       <Image
                         src={event.image}
                         alt={event.title}
@@ -204,7 +205,7 @@ export default function EventSection() {
                       />
                     </div>
 
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-black dark:text-white px-4 py-3 h-1/3 flex flex-col justify-end">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-black dark:text-white px-4 py-3 h-1/5 flex flex-col justify-end">
                       <h3 className="text-lg font-semibold">{event.title}</h3>
                       <p className="text-sm text-black/80 dark:text-white/80">
                         {event.description}

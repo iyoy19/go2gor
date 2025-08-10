@@ -2,10 +2,10 @@
 
 export default function Promo() {
   return (
-    <section className="py-16 bg-yellow-50" id="promo">
+    <section className="py-16" id="promo">
       <div className="container mx-auto px-4 text-center">
         <h2 className="text-3xl font-bold mb-6 text-black dark:text-white">Promo & Diskon</h2>
-        <div className="bg-yellow-100 p-8 rounded-lg shadow-md">
+        <div className="bg-white/20 dark:bg-white/10 backdrop-blur-lg p-8 rounded-lg shadow-md border border-white/30">
           <h3 className="text-2xl font-semibold text-red-400 mb-2">
             Diskon 20%!
           </h3>

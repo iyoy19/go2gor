@@ -13,11 +13,13 @@ export default function HomePage() {
   return (
     <main>
       <Hero />
-      <Event />
-      <Lapangan />
-      <StepBooking />
-      <Testimoni />
-      <CTA />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <Event />
+        <Lapangan />
+        <StepBooking />
+        <Testimoni />
+        <CTA />
+      </div>
       <Footer />
     </main>
   );

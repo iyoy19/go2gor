@@ -32,24 +32,22 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body
         className={clsx(
-          "min-h-screen antialiased overflow-x-hidden",
+          "min-h-screen antialiased",
           "bg-gradient-to-b from-cyan-100 to-yellow-200 text-black",
           "dark:bg-gradient-to-b dark:from-gray-900 dark:to-black dark:text-white",
           fontPoppins.variable
         )}
       >
         <Providers attribute="class" defaultTheme="system" enableSystem>
-          <div className="relative w-full">
+          <div className="relative w-full overflow-x-hidden">
             {/* Navbar fixed on top */}
             <div className="fixed top-0 left-0 right-0 z-50">
               <Navbar />
             </div>
 
             {/* Main content with responsive padding top to prevent navbar overlap */}
-            <main className="relative z-0 flex flex-col min-h-screen pt-[64px] sm:pt-[64px] md:pt-[72px] lg:pt-[72px]">
-              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                {children}
-              </div>
+            <main className="relative z-0 flex flex-col min-h-screen">
+              {children}
             </main>
           </div>
         </Providers>

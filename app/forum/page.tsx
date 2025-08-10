@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiMessageSquare,
@@ -125,7 +126,7 @@ export default function ForumPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white pt-28 pb-16 px-4 sm:px-6 lg:px-8 font-poppins">
+    <div className="min-h-screen text-white pt-28 pb-16 px-4 sm:px-6 lg:px-8 font-poppins">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <motion.div
@@ -275,6 +276,17 @@ const CreatePostModal = ({
     onClose();
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -285,7 +297,7 @@ const CreatePostModal = ({
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl mx-4 p-8 border border-gray-700/80"
+            className="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl mx-auto p-6 sm:p-8 border border-gray-700/80 my-4 sm:my-10"
             initial={{ scale: 0.9, opacity: 0, y: 50 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 50 }}
