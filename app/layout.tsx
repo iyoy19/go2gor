@@ -45,9 +45,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <Navbar />
             </div>
 
-            {/* Main content with padding top to prevent navbar overlap */}
-            <main className="relative z-0 flex flex-col min-h-screen pt-[64px]">
-              {children}
+            {/* Main content with responsive padding top to prevent navbar overlap */}
+            <main className="relative z-0 flex flex-col min-h-screen pt-[64px] sm:pt-[64px] md:pt-[72px] lg:pt-[72px]">
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                {children}
+              </div>
             </main>
           </div>
         </Providers>

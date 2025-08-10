@@ -63,23 +63,20 @@ export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
+  // Detect prefers-color-scheme on load
   useEffect(() => {
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       document.documentElement.classList.add("dark");
       setIsDark(true);
     }
   }, []);
 
+  // Scroll handler untuk efek bg navbar
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const toggleDarkMode = () => {
@@ -102,18 +99,29 @@ export const Navbar = () => {
       maxWidth="full"
       isMenuOpen={menuOpen}
       onMenuOpenChange={setMenuOpen}
-      className={clsx(navbarClass, "relative px-0 sm:px-6 lg:px-8")}
+      className={clsx(
+        navbarClass,
+        "relative px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20"
+      )}
+      style={{ maxWidth: "100vw", overflowX: "hidden" }}
     >
-      {/* Desktop: Logo kiri */}
-      <NavbarContent className="hidden sm:flex" justify="start">
-        <NavbarBrand as="li" className="gap-3 max-w-fit flex items-center">
-          <NextLink href="/" className="flex items-center gap-2">
-            <Rotate3d size={28} className="text-yellow-300 drop-shadow-md" />
+      {/* Logo kiri desktop & tablet */}
+      <NavbarContent className="hidden sm:flex md:flex lg:flex" justify="start">
+        <NavbarBrand
+          as="li"
+          className="gap-3 max-w-fit flex items-center min-w-0"
+        >
+          <NextLink href="/" className="flex items-center gap-2 min-w-0">
+            <Rotate3d
+              size={28}
+              className="text-yellow-300 drop-shadow-md flex-shrink-0"
+            />
             <h1
               className={clsx(
-                `text-xl sm:text-2xl font-extrabold tracking-tight leading-none ${rubikDirt.className}`,
+                `text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight leading-none truncate ${rubikDirt.className}`,
                 "dark:text-white"
               )}
+              style={{ whiteSpace: "nowrap" }}
             >
               <span className="text-yellow-400 drop-shadow-md">Go</span>
               <span className="text-black dark:text-white drop-shadow-md">
@@ -125,21 +133,31 @@ export const Navbar = () => {
         </NavbarBrand>
       </NavbarContent>
 
-      {/* Mobile: Logo kiri */}
+      {/* Logo kiri mobile */}
       <NavbarContent
-        className="sm:hidden"
+        className="sm:hidden flex flex-nowrap"
         justify="start"
         style={{ gap: "0.5rem" }}
       >
-        <NavbarBrand as="li" className="max-w-fit flex items-center gap-2">
-          <NextLink href="/" className="flex items-center gap-2">
-            <Rotate3d size={28} className="text-yellow-300 drop-shadow-md" />
+        <NavbarBrand
+          as="li"
+          className="max-w-[60vw] flex-shrink-0 flex items-center gap-2 overflow-hidden"
+        >
+          <NextLink
+            href="/"
+            className="flex items-center gap-2 truncate min-w-0"
+          >
+            <Rotate3d
+              size={28}
+              className="text-yellow-300 drop-shadow-md flex-shrink-0"
+            />
             <h1
               className={clsx(
-                "text-xl font-extrabold tracking-tight leading-none",
+                "text-xl font-extrabold tracking-tight leading-none truncate",
                 rubikDirt.className,
                 "dark:text-white"
               )}
+              style={{ whiteSpace: "nowrap" }}
             >
               <span className="text-yellow-400 drop-shadow-md">Go</span>
               <span className="text-black dark:text-white drop-shadow-md">
@@ -151,7 +169,7 @@ export const Navbar = () => {
         </NavbarBrand>
       </NavbarContent>
 
-      {/* Desktop: Navigasi tengah */}
+      {/* Navigasi tengah desktop lg ke atas */}
       <NavbarContent className="hidden lg:flex" justify="center">
         {siteConfig.navItems.map((item) => {
           const Icon = item.icon ? icons[item.icon] : null;
@@ -164,6 +182,7 @@ export const Navbar = () => {
                     variant="light"
                     className="font-medium text-black dark:text-white hover:text-primary"
                     startContent={Icon ? <Icon className="w-4 h-4" /> : null}
+                    size="md"
                   >
                     {item.label}
                   </Button>
@@ -194,7 +213,7 @@ export const Navbar = () => {
             <NavbarItem key={item.href}>
               <NextLink
                 href={item.href!}
-                className="flex items-center gap-2 text-black dark:text-white transition-colors text-medium hover:text-primary"
+                className="flex items-center gap-2 text-black dark:text-white transition-colors text-base hover:text-primary"
               >
                 {Icon && <Icon className="w-4 h-4" />}
                 {item.label}
@@ -204,7 +223,7 @@ export const Navbar = () => {
         })}
       </NavbarContent>
 
-      {/* Desktop: Tombol dark mode + login kanan */}
+      {/* Tombol Dark Mode + Login desktop/tablet */}
       <NavbarContent
         className="hidden sm:flex items-center gap-4 flex-1 pr-0"
         justify="end"
@@ -215,6 +234,7 @@ export const Navbar = () => {
             onClick={toggleDarkMode}
             aria-label="Toggle Dark Mode"
             className="text-black dark:text-white hover:text-primary"
+            size="md"
           >
             {isDark ? (
               <Sun className="w-5 h-5" />
@@ -230,15 +250,16 @@ export const Navbar = () => {
             href="/login"
             variant="flat"
             className="text-black dark:text-white hover:text-primary"
+            size="md"
           >
             Login
           </Button>
         </NavbarItem>
       </NavbarContent>
 
-      {/* Mobile: Tombol dark mode + toggle menu kanan */}
+      {/* Tombol Dark Mode + Toggle menu mobile */}
       <NavbarContent
-        className="sm:hidden flex basis-1 items-center gap-2 pr-0"
+        className="sm:hidden flex flex-nowrap basis-auto items-center gap-3 pr-3"
         justify="end"
       >
         <Button
@@ -246,6 +267,7 @@ export const Navbar = () => {
           onClick={toggleDarkMode}
           aria-label="Toggle Dark Mode"
           className="text-black dark:text-white hover:text-primary"
+          size="sm"
         >
           {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </Button>
@@ -253,9 +275,15 @@ export const Navbar = () => {
         <NavbarMenuToggle onClick={() => setMenuOpen(!menuOpen)} />
       </NavbarContent>
 
-      {/* Mobile Menu */}
-      <NavbarMenu className="w-full p-0 m-0">
-        <div className="flex flex-col w-full gap-2 px-2 mt-2">
+      {/* Mobile menu */}
+      <NavbarMenu
+        className={clsx(
+          "w-full p-0 m-0 bg-white dark:bg-black/90",
+          "transition-[max-height] duration-300 ease-in-out overflow-hidden",
+          menuOpen ? "max-h-[1000px]" : "max-h-0"
+        )}
+      >
+        <div className="flex flex-col w-full gap-1 px-3 py-2">
           {[...siteConfig.navItems, ...siteConfig.navMenuItems].map(
             (item, index) => {
               const Icon = item.icon && icons[item.icon];
@@ -267,14 +295,14 @@ export const Navbar = () => {
 
               return (
                 <div key={`${item.label}-${index}`} className="w-full">
-                  <NavbarMenuItem>
+                  <NavbarMenuItem className="p-0">
                     {item.href && !hasChildren ? (
                       <NextLink
                         href={item.href}
-                        className="flex items-center w-full gap-2 px-2 py-2 text-lg transition-colors rounded hover:text-primary text-black dark:text-white"
+                        className="flex items-center w-full gap-2 px-3 py-2 text-base font-medium rounded hover:text-primary text-black dark:text-white transition-colors"
                         onClick={() => setMenuOpen(false)}
                       >
-                        {Icon && <Icon className="w-4 h-4" />}
+                        {Icon && <Icon className="w-5 h-5" />}
                         {item.label}
                       </NextLink>
                     ) : hasChildren ? (
@@ -285,17 +313,21 @@ export const Navbar = () => {
                             [item.label]: !prev[item.label],
                           }))
                         }
-                        className="flex items-center justify-between w-full gap-2 px-2 py-2 text-lg transition-colors rounded hover:text-primary text-black dark:text-white"
+                        className="flex items-center justify-between w-full gap-2 px-3 py-2 text-base font-medium rounded hover:text-primary text-black dark:text-white transition-colors"
+                        aria-expanded={isOpen}
+                        aria-controls={`${item.label}-submenu`}
                       >
                         <div className="flex items-center gap-2">
-                          {Icon && <Icon className="w-4 h-4" />}
+                          {Icon && <Icon className="w-5 h-5" />}
                           {item.label}
                         </div>
-                        <span className="text-sm">{isOpen ? "▲" : "▼"}</span>
+                        <span className="text-sm select-none">
+                          {isOpen ? "▲" : "▼"}
+                        </span>
                       </button>
                     ) : (
-                      <span className="flex items-center gap-2 px-2 py-2 text-lg text-muted-foreground dark:text-gray-400">
-                        {Icon && <Icon className="w-4 h-4" />}
+                      <span className="flex items-center gap-2 px-3 py-2 text-base text-muted-foreground dark:text-gray-400">
+                        {Icon && <Icon className="w-5 h-5" />}
                         {item.label}
                       </span>
                     )}
@@ -305,14 +337,17 @@ export const Navbar = () => {
                     isOpen &&
                     "children" in item &&
                     Array.isArray(item.children) && (
-                      <div className="flex flex-col gap-1 mt-1 ml-6">
+                      <div
+                        id={`${item.label}-submenu`}
+                        className="flex flex-col gap-1 mt-1 ml-8"
+                      >
                         {item.children.map((child, childIndex) => {
                           const ChildIcon = child.icon && icons[child.icon];
                           return (
                             <NavbarMenuItem key={`${child.href}-${childIndex}`}>
                               <NextLink
                                 href={child.href}
-                                className="flex items-center w-full gap-2 px-2 py-1 text-base transition-colors rounded hover:text-primary text-black dark:text-white"
+                                className="flex items-center w-full gap-2 px-3 py-1 text-sm rounded hover:text-primary text-black dark:text-white transition-colors"
                                 onClick={() => setMenuOpen(false)}
                               >
                                 {ChildIcon && <ChildIcon className="w-4 h-4" />}
