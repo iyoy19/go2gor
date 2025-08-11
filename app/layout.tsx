@@ -34,6 +34,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         className={clsx(
           "min-h-screen antialiased",
           "bg-gradient-to-b from-emerald-100 to-white text-black",
+
           "dark:bg-gradient-to-b dark:from-gray-900 dark:to-black dark:text-white",
           fontPoppins.variable
         )}
