@@ -30,8 +30,6 @@ import {
   LogIn,
   CalendarClock,
   Rotate3d,
-  Moon,
-  Sun,
 } from "lucide-react";
 
 import { Button } from "@heroui/button";
@@ -61,15 +59,6 @@ export const Navbar = () => {
     {}
   );
   const [scrolled, setScrolled] = useState(false);
-  const [isDark, setIsDark] = useState(false);
-
-  // Detect prefers-color-scheme on load
-  useEffect(() => {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      document.documentElement.classList.add("dark");
-      setIsDark(true);
-    }
-  }, []);
 
   // Scroll handler untuk efek bg navbar
   useEffect(() => {
@@ -79,19 +68,9 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const toggleDarkMode = () => {
-    if (isDark) {
-      document.documentElement.classList.remove("dark");
-      setIsDark(false);
-    } else {
-      document.documentElement.classList.add("dark");
-      setIsDark(true);
-    }
-  };
-
   const navbarClass = clsx(
     "fixed top-0 z-50 w-full transition-all duration-300 ease-in-out backdrop-blur-md",
-    scrolled ? "bg-white/10 dark:bg-black/10 shadow-sm" : "bg-transparent"
+    scrolled ? "bg-white/10 shadow-sm" : "bg-transparent"
   );
 
   return (
@@ -115,12 +94,11 @@ export const Navbar = () => {
             <h1
               className={clsx(
                 `text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight leading-none truncate ${rubikDirt.className}`,
-                "dark:text-white"
               )}
               style={{ whiteSpace: "nowrap" }}
             >
               <span className="text-yellow-400 drop-shadow-md">Go</span>
-              <span className="text-black dark:text-white drop-shadow-md">
+              <span className="text-black drop-shadow-md">
                 2
               </span>
               <span className="text-indigo-500 drop-shadow-md">Gor</span>
@@ -147,12 +125,11 @@ export const Navbar = () => {
               className={clsx(
                 "text-xl font-extrabold tracking-tight leading-none truncate",
                 rubikDirt.className,
-                "dark:text-white"
               )}
               style={{ whiteSpace: "nowrap" }}
             >
               <span className="text-yellow-400 drop-shadow-md">Go</span>
-              <span className="text-black dark:text-white drop-shadow-md">
+              <span className="text-black drop-shadow-md">
                 2
               </span>
               <span className="text-indigo-500 drop-shadow-md">Gor</span>
@@ -172,7 +149,7 @@ export const Navbar = () => {
                 <DropdownTrigger>
                   <Button
                     variant="light"
-                    className="font-medium text-black dark:text-white hover:text-primary"
+                    className="font-medium text-black hover:text-primary"
                     startContent={Icon ? <Icon className="w-4 h-4" /> : null}
                     size="md"
                   >
@@ -190,7 +167,6 @@ export const Navbar = () => {
                         startContent={
                           ChildIcon ? <ChildIcon className="w-4 h-4" /> : null
                         }
-                        className="dark:text-white"
                       >
                         {child.label}
                       </DropdownItem>
@@ -205,7 +181,7 @@ export const Navbar = () => {
             <NavbarItem key={item.href}>
               <NextLink
                 href={item.href!}
-                className="flex items-center gap-2 text-black dark:text-white transition-colors text-base hover:text-primary"
+                className="flex items-center gap-2 text-black transition-colors text-base hover:text-primary"
               >
                 {Icon && <Icon className="w-4 h-4" />}
                 {item.label}
@@ -215,33 +191,17 @@ export const Navbar = () => {
         })}
       </NavbarContent>
 
-      {/* Tombol Dark Mode + Login desktop/tablet */}
+      {/* Login desktop/tablet */}
       <NavbarContent
         className="hidden sm:flex items-center gap-4 flex-1 pr-0"
         justify="end"
       >
         <NavbarItem>
           <Button
-            isIconOnly
-            variant="flat"
-            onClick={toggleDarkMode}
-            aria-label="Toggle Dark Mode"
-            className="text-black dark:text-white hover:text-primary rounded-full"
-          >
-            {isDark ? (
-              <Sun className="w-5 h-5" />
-            ) : (
-              <Moon className="w-5 h-5" />
-            )}
-          </Button>
-        </NavbarItem>
-
-        <NavbarItem>
-          <Button
             as={HeroUILink}
             href="/login"
             variant="flat"
-            className="text-black dark:text-white hover:text-primary"
+            className="text-black hover:text-primary"
             size="md"
           >
             Login
@@ -249,21 +209,11 @@ export const Navbar = () => {
         </NavbarItem>
       </NavbarContent>
 
-      {/* Tombol Dark Mode + Toggle menu mobile */}
+      {/* Toggle menu mobile */}
       <NavbarContent
         className="sm:hidden flex flex-nowrap basis-auto items-center gap-3 pr-3"
         justify="end"
       >
-        <Button
-          isIconOnly
-          variant="flat"
-          onClick={toggleDarkMode}
-          aria-label="Toggle Dark Mode"
-          className="text-black dark:text-white hover:text-primary rounded-full"
-        >
-          {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </Button>
-
         <NavbarMenuToggle onClick={() => setMenuOpen(!menuOpen)} />
       </NavbarContent>
 
@@ -271,7 +221,7 @@ export const Navbar = () => {
       <NavbarMenu
         className={clsx(
           "overflow-hidden transition-all duration-300 ease-in-out",
-          "bg-white/50 dark:bg-black/50",
+          "bg-white/50",
           menuOpen
             ? "max-h-[1000px] opacity-100 translate-y-0"
             : "max-h-0 opacity-0 -translate-y-2"
@@ -293,7 +243,7 @@ export const Navbar = () => {
                     {item.href && !hasChildren ? (
                       <NextLink
                         href={item.href}
-                        className="flex items-center w-full gap-2 px-3 py-2 text-base font-medium rounded hover:text-primary text-black dark:text-white transition-colors"
+                        className="flex items-center w-full gap-2 px-3 py-2 text-base font-medium rounded hover:text-primary text-black transition-colors"
                         onClick={() => setMenuOpen(false)}
                       >
                         {Icon && <Icon className="w-5 h-5" />}
@@ -307,7 +257,7 @@ export const Navbar = () => {
                             [item.label]: !prev[item.label],
                           }))
                         }
-                        className="flex items-center justify-between w-full gap-2 px-3 py-2 text-base font-medium rounded hover:text-primary text-black dark:text-white transition-colors"
+                        className="flex items-center justify-between w-full gap-2 px-3 py-2 text-base font-medium rounded hover:text-primary text-black transition-colors"
                         aria-expanded={isOpen}
                         aria-controls={`${item.label}-submenu`}
                       >
@@ -320,7 +270,7 @@ export const Navbar = () => {
                         </span>
                       </button>
                     ) : (
-                      <span className="flex items-center gap-2 px-3 py-2 text-base text-muted-foreground dark:text-gray-400">
+                      <span className="flex items-center gap-2 px-3 py-2 text-base text-muted-foreground">
                         {Icon && <Icon className="w-5 h-5" />}
                         {item.label}
                       </span>
@@ -333,7 +283,7 @@ export const Navbar = () => {
                     Array.isArray(item.children) && (
                       <div
                         id={`${item.label}-submenu`}
-                        className="flex flex-col gap-1 mt-1 ml-6 pl-2 border-l border-gray-200 dark:border-gray-700 transition-all duration-200"
+                        className="flex flex-col gap-1 mt-1 ml-6 pl-2 border-l border-gray-200 transition-all duration-200"
                       >
                         {item.children.map((child, childIndex) => {
                           const ChildIcon = child.icon && icons[child.icon];
@@ -341,7 +291,7 @@ export const Navbar = () => {
                             <NavbarMenuItem key={`${child.href}-${childIndex}`}>
                               <NextLink
                                 href={child.href}
-                                className="flex items-center w-full gap-2 px-3 py-1 text-sm rounded hover:text-primary text-black dark:text-white transition-colors"
+                                className="flex items-center w-full gap-2 px-3 py-1 text-sm rounded hover:text-primary text-black transition-colors"
                                 onClick={() => setMenuOpen(false)}
                               >
                                 {ChildIcon && <ChildIcon className="w-4 h-4" />}
@@ -361,3 +311,4 @@ export const Navbar = () => {
     </HeroUINavbar>
   );
 };
+

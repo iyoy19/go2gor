@@ -237,8 +237,9 @@ export default function HomeSectionOne() {
         <div className="hidden md:flex w-full md:w-1/2 justify-center items-center z-0">
           <motion.div
             className="w-[250px] sm:w-[350px] md:w-[450px]"
-            animate={{ y: [0, -10, 0] }}
-            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
           >
             <Player
               autoplay

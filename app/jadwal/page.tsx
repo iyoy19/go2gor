@@ -18,7 +18,6 @@ import {
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 
 // Dummy Data
 import { LapanganType, dummyFields } from "@/data/lapangan";
@@ -66,7 +65,6 @@ const getDatesForNext7Days = (): { date: string; label: string }[] => {
 };
 
 export default function JadwalLapanganPage() {
-  const { theme } = useTheme();
   const availableDates = useMemo(() => getDatesForNext7Days(), []);
   const [selectedFieldId, setSelectedFieldId] = useState<string>(
     dummyFields[0].id.toString()
@@ -99,38 +97,21 @@ export default function JadwalLapanganPage() {
     }).format(price);
   };
 
-  const textColorClass = theme === "light" ? "text-black" : "text-white";
-  const bgColorClass = theme === "light" ? "bg-yellow-50" : "bg-gray-800";
-  const borderColorClass =
-    theme === "light" ? "border-yellow-200" : "border-gray-700";
-  const cardBgClass = theme === "light" ? "bg-yellow-100/80" : "bg-gray-800/80";
-  const cardBorderClass =
-    theme === "light" ? "border-yellow-200" : "border-gray-700";
+  // Hardcoded light mode classes
+  const textColorClass = "text-neutral-800";
+  const bgColorClass = "bg-white";
+  const borderColorClass = "border-gray-200";
+  const cardBgClass = "bg-gray-50";
+  const cardBorderClass = "border-gray-300";
 
   return (
     <section className="pt-24 pb-12 md:pt-32 md:pb-20 font-poppins">
-      {" "}
-      {/* Adjusted padding for Navbar */}
       <div className="container mx-auto px-4 max-w-7xl">
-        <motion.h1
-          className={clsx(
-            "text-4xl md:text-5xl font-extrabold text-center mb-10",
-            textColorClass
-          )}
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Jadwal Lapangan
-        </motion.h1>
-
         <motion.div
           className={clsx(
-            "grid grid-cols-1 lg:grid-cols-3 gap-8",
+            "grid grid-cols-1 gap-8 rounded-xl p-6 shadow-lg border",
             bgColorClass,
-            "rounded-xl p-6 shadow-lg",
-            borderColorClass,
-            "border"
+            borderColorClass
           )}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -139,20 +120,18 @@ export default function JadwalLapanganPage() {
           {/* Field Selection */}
           <div className="lg:col-span-1">
             <h2 className={clsx("text-2xl font-bold mb-4", textColorClass)}>
-              Pilih Lapangan
+              Pilih Lapangan Olahraga Anda
             </h2>
             <Dropdown>
               <DropdownTrigger>
                 <Button
                   variant="bordered"
                   className={clsx(
-                    "capitalize w-full justify-between",
-                    "bg-yellow-100 dark:bg-gray-700 text-black dark:text-white",
-                    "border border-yellow-200 dark:border-gray-600 hover:border-blue-500",
-                    "hover:bg-yellow-200 dark:hover:bg-gray-600"
+                    "capitalize w-full justify-between border transition-colors",
+                    "bg-white text-gray-800 hover:bg-gray-100 border-gray-300"
                   )}
                 >
-                  {currentField?.name || "Pilih Lapangan"}
+                  {currentField?.name || "Pilih Lapangan..."}
                   <ChevronDownIcon className="w-5 h-5" />
                 </Button>
               </DropdownTrigger>
@@ -164,9 +143,8 @@ export default function JadwalLapanganPage() {
                   setSelectedFieldId(Array.from(keys)[0] as string)
                 }
                 className={clsx(
-                  "bg-yellow-50 dark:bg-gray-900",
-                  "border border-yellow-200 dark:border-gray-700",
-                  "rounded-xl shadow-lg"
+                  "rounded-xl shadow-lg",
+                  "bg-white border border-gray-200"
                 )}
               >
                 {dummyFields.map((field, index) => (
@@ -174,9 +152,9 @@ export default function JadwalLapanganPage() {
                     key={field.id.toString()}
                     className={clsx(
                       textColorClass,
-                      "hover:bg-yellow-100 dark:hover:bg-gray-700",
+                      "hover:bg-gray-100",
                       index < dummyFields.length - 1 &&
-                        "border-b border-yellow-200 dark:border-gray-700"
+                        "border-b border-gray-200"
                     )}
                   >
                     {field.name} ({field.sport})
@@ -189,10 +167,9 @@ export default function JadwalLapanganPage() {
             {currentField && (
               <motion.div
                 className={clsx(
-                  "mt-6 p-6 rounded-lg shadow-md",
+                  "mt-6 p-6 rounded-lg shadow-md border",
                   cardBgClass,
-                  cardBorderClass,
-                  "border"
+                  cardBorderClass
                 )}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -213,7 +190,7 @@ export default function JadwalLapanganPage() {
                   )}
                 >
                   <MapPinIcon className="w-5 h-5 text-blue-500" />{" "}
-                  {currentField.venue}
+                  Lokasi: {currentField.venue}
                 </p>
                 <p
                   className={clsx(
@@ -222,11 +199,11 @@ export default function JadwalLapanganPage() {
                   )}
                 >
                   <TagIcon className="w-5 h-5 text-blue-500" />{" "}
-                  {currentField.sport}
+                  Jenis Olahraga: {currentField.sport}
                 </p>
                 <p className={clsx("flex items-center gap-2", textColorClass)}>
                   <ClockIcon className="w-5 h-5 text-blue-500" />{" "}
-                  {formatPrice(currentField.price)} / jam
+                  Harga: {formatPrice(currentField.price)} / jam
                 </p>
               </motion.div>
             )}
@@ -235,7 +212,7 @@ export default function JadwalLapanganPage() {
           {/* Schedule Display */}
           <div className="lg:col-span-2">
             <h2 className={clsx("text-2xl font-bold mb-4", textColorClass)}>
-              Pilih Tanggal & Waktu
+              Pilih Tanggal dan Waktu Booking
             </h2>
 
             {/* Date Selection */}
@@ -247,12 +224,8 @@ export default function JadwalLapanganPage() {
                   className={clsx(
                     "flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors",
                     selectedDate === dateOption.date
-                      ? "bg-blue-400 text-white shadow-md"
-                      : clsx(
-                          "bg-yellow-100 dark:bg-gray-700",
-                          textColorClass,
-                          "hover:bg-yellow-200 dark:hover:bg-gray-600"
-                        )
+                      ? "bg-blue-600 text-white shadow-md"
+                      : "bg-gray-200 text-gray-800 hover:bg-gray-300"
                   )}
                 >
                   {dateOption.label}
@@ -263,10 +236,9 @@ export default function JadwalLapanganPage() {
             {/* Time Slots Grid */}
             <div
               className={clsx(
-                "mt-6 p-6 rounded-lg shadow-md grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4",
+                "mt-6 p-6 rounded-lg shadow-md grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 border",
                 cardBgClass,
-                cardBorderClass,
-                "border"
+                cardBorderClass
               )}
             >
               {schedule?.slots.map((slot) => (
@@ -275,8 +247,8 @@ export default function JadwalLapanganPage() {
                   className={clsx(
                     "px-3 py-2 rounded-md text-sm font-semibold transition-all duration-200",
                     slot.isBooked
-                      ? "bg-red-200 text-red-700 dark:bg-red-900 dark:text-red-200 cursor-not-allowed opacity-70"
-                      : "bg-green-200 text-green-700 dark:bg-green-800 dark:text-green-100 hover:bg-green-300 dark:hover:bg-green-700"
+                      ? "bg-red-200 text-red-700 cursor-not-allowed opacity-70"
+                      : "bg-green-200 text-green-700 hover:bg-green-300"
                   )}
                   disabled={slot.isBooked}
                 >
@@ -288,11 +260,14 @@ export default function JadwalLapanganPage() {
             {/* Booking Action */}
             <div className="mt-8 text-center">
               <Link
-                href="/booking" // Link to a generic booking page or form
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-400 to-purple-400 text-white px-8 py-4 rounded-full text-lg font-bold shadow-xl hover:from-blue-500 hover:to-purple-500 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 ease-in-out"
+                href="/booking"
+                className={clsx(
+                  "inline-flex items-center gap-2 px-8 py-4 rounded-full text-lg font-bold shadow-xl transition-all duration-300 ease-in-out",
+                  "bg-blue-600 text-white hover:bg-blue-700"
+                )}
               >
                 <CalendarDaysIcon className="w-6 h-6" />
-                Booking Sekarang
+                Pesan Sekarang
               </Link>
             </div>
           </div>
