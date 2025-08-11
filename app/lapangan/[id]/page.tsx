@@ -24,12 +24,20 @@ export default function LapanganDetailPage() {
   const fieldId = params.id;
 
   const field = useMemo(() => {
+    // Ensure fieldId is a string, handling cases where it might be an array or undefined
+    let idToParse: string | undefined;
+    if (Array.isArray(fieldId)) {
+      idToParse = fieldId[0]; // Take the first element if it's an array
+    } else if (typeof fieldId === "string") {
+      idToParse = fieldId;
+    }
+
     // In a real app, you'd fetch this data. Here we find it from the dummy array.
     // The ID could be a slug or a number. We'll handle both.
     return dummyFields.find(
       (f) =>
-        f.id === parseInt(fieldId, 10) ||
-        f.name.toLowerCase().replace(/ /g, "-") === fieldId
+        (idToParse && f.id === parseInt(idToParse, 10)) || // Use idToParse here
+        (idToParse && f.name.toLowerCase().replace(/ /g, "-") === idToParse) // Use idToParse here
     );
   }, [fieldId]);
 
