@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import {
   FiSearch,
   FiMapPin,
@@ -14,76 +15,7 @@ import {
 import { FaFutbol, FaRegLightbulb } from "react-icons/fa";
 import { GiWhistle, GiPodiumWinner } from "react-icons/gi";
 
-type LapanganType = {
-  id: number;
-  name: string;
-  venue: string;
-  sport: "Futsal" | "Badminton";
-  image: string;
-  price: number;
-  features: string[];
-};
-
-const dummyFields: LapanganType[] = [
-  {
-    id: 1,
-    name: "Futsal Arena A",
-    venue: "Go2Gor Arena, Jakarta",
-    sport: "Futsal",
-    image: "https://picsum.photos/seed/futsal-arena-a/800/600",
-    price: 150000,
-    features: ["Rumput Sintetis", "Standar FIFA", "Lampu LED"],
-  },
-  {
-    id: 2,
-    name: "Futsal Arena B",
-    venue: "Go2Gor Arena, Jakarta",
-    sport: "Futsal",
-    image: "https://picsum.photos/seed/futsal-arena-b/800/600",
-    price: 125000,
-    features: ["Lantai Interlock", "Papan Skor Digital"],
-  },
-  {
-    id: 3,
-    name: "Badminton Court 1",
-    venue: "Go2Gor Center, Bandung",
-    sport: "Badminton",
-    image: "https://picsum.photos/seed/badminton-court-1/800/600",
-    price: 75000,
-    features: ["Karpet Vinyl", "Standar BWF", "Lampu LED"],
-  },
-  {
-    id: 4,
-    name: "Badminton Court 2",
-    venue: "Go2Gor Center, Bandung",
-    sport: "Badminton",
-    image: "https://picsum.photos/seed/badminton-court-2/800/600",
-    price: 85000,
-    features: ["Karpet Vinyl", "Papan Skor Digital"],
-  },
-  {
-    id: 5,
-    name: "Victory Futsal",
-    venue: "Go2Gor Stadium, Surabaya",
-    sport: "Futsal",
-    image: "https://picsum.photos/seed/victory-futsal/800/600",
-    price: 175000,
-    features: [
-      "Rumput Sintetis Premium",
-      "Standar Internasional",
-      "Kamera CCTV",
-    ],
-  },
-  {
-    id: 6,
-    name: "Smash Badminton Hall",
-    venue: "Go2Gor Hall, Yogyakarta",
-    sport: "Badminton",
-    image: "https://picsum.photos/seed/smash-badminton/800/600",
-    price: 90000,
-    features: ["Lantai Kayu Parket", "Standar BWF", "Kafetaria"],
-  },
-];
+import { LapanganType, dummyFields } from "@/data/lapangan";
 
 const sportFilters = ["Semua", "Futsal", "Badminton"];
 
@@ -238,14 +170,11 @@ const FieldCard = ({ field }: { field: LapanganType }) => {
               <span className="text-sm font-normal text-gray-400">/jam</span>
             </p>
           </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 bg-indigo-500 text-white px-5 py-2.5 rounded-full font-semibold shadow-lg shadow-indigo-500/30"
-          >
-            <span>Booking</span>
-            <FiArrowRight />
-          </motion.button>
+          <Link href={`/lapangan/${field.id}`}
+            className="flex items-center gap-2 bg-indigo-500 text-white px-5 py-2.5 rounded-full font-semibold shadow-lg shadow-indigo-500/30">
+              <span>Detail</span>
+              <FiArrowRight />
+          </Link>
         </div>
       </div>
     </div>

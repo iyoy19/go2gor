@@ -11,32 +11,7 @@ import "swiper/css/effect-cards";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
-type EventType = {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  slug: string;
-  eventDate: string;
-  createdAt: string;
-};
-
-// ✅ Dummy Images
-const randomImages = Array.from(
-  { length: 10 },
-  (_, i) => `https://picsum.photos/seed/event-${i + 1}/500/300`
-);
-
-// ✅ Semua Event
-const dummyEvents: EventType[] = Array.from({ length: 6 }, (_, i) => ({
-  id: i + 1,
-  title: `Event Seru #${i + 1}`,
-  description: "Ikuti keseruan olahraga bareng komunitas!",
-  image: randomImages[i],
-  slug: `event-seru-${i + 1}`,
-  eventDate: new Date(Date.now() + i * 86400000).toISOString(), // +i hari
-  createdAt: new Date(Date.now() - i * 86400000).toISOString(), // -i hari
-}));
+import { EventType, dummyEvents } from "@/data/event";
 
 export default function EventSection() {
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
@@ -61,7 +36,7 @@ export default function EventSection() {
             onClick={() => setSelectedEvent(null)}
           >
             <motion.div
-              className="relative w-full max-w-md lg:max-w-lg bg-white/80 dark:bg-gray-800/80 border border-black/20 dark:border-gray-700/50 backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-2xl text-black dark:text-white"
+              className="relative w-full max-w-md lg:max-w-lg bg-gray-100 dark:bg-gray-800 border border-black/20 dark:border-gray-700/50 rounded-2xl p-4 sm:p-6 shadow-2xl text-gray-900 dark:text-gray-100"
               initial={{ scale: 0.8, y: 100 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.8, y: 100 }}
@@ -193,7 +168,7 @@ export default function EventSection() {
                 <SwiperSlide key={event.id}>
                   <div
                     onClick={() => setSelectedEvent(event)}
-                    className="group cursor-pointer relative overflow-hidden rounded-xl shadow-lg h-full bg-white/50 dark:bg-slate-800/50 backdrop-blur-lg border border-gray-300 dark:border-slate-700 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300"
+                    className="group cursor-pointer relative overflow-hidden rounded-xl shadow-lg h-full bg-white dark:bg-gray-700 border border-black-300 dark:border-slate-700 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300"
                   >
                     <div className="overflow-hidden rounded-t-xl h-4/5">
                       <Image
@@ -205,9 +180,9 @@ export default function EventSection() {
                       />
                     </div>
 
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-black dark:text-white px-4 py-3 h-1/5 flex flex-col justify-end">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-blue-100 to-transparent dark:bg-gradient-to-t dark:from-gray-900 dark:to-transparent text-black dark:text-white px-4 py-3 h-1/5 flex flex-col justify-end">
                       <h3 className="text-lg font-semibold">{event.title}</h3>
-                      <p className="text-sm text-black/80 dark:text-white/80">
+                      <p className="text-sm text-black dark:text-white">
                         {event.description}
                       </p>
                     </div>
@@ -221,7 +196,7 @@ export default function EventSection() {
           <div className="mt-10 text-center">
             <Link
               href="/event"
-              className="bg-blue-400 dark:bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-600 dark:hover:bg-blue-700 transition-transform hover:scale-105 shadow-lg"
+              className="bg-indigo-500 dark:bg-indigo-700 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-600 dark:hover:bg-blue-700 transition-transform hover:scale-105 shadow-lg"
             >
               Lihat Semua Event
             </Link>

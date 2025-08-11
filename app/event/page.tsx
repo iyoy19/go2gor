@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { FiCalendar, FiMapPin, FiX, FiArrowRight } from "react-icons/fi";
+import { dummyEvents } from "@/data/event";
 
 type EventType = {
   id: number;
@@ -15,53 +16,6 @@ type EventType = {
   eventDate: string;
   location: string;
 };
-
-const dummyEvents: EventType[] = [
-  {
-    id: 1,
-    title: "Turnamen Futsal Kemerdekaan",
-    category: "Turnamen Futsal",
-    description:
-      "Rayakan hari kemerdekaan dengan turnamen futsal antar komunitas. Tunjukkan skill terbaikmu dan menangkan hadiahnya!",
-    image: "https://picsum.photos/seed/futsal1/800/600",
-    slug: "turnamen-futsal-kemerdekaan",
-    eventDate: "2025-08-17T09:00:00Z",
-    location: "Go2Gor Arena, Jakarta",
-  },
-  {
-    id: 2,
-    title: "Badminton Fun Match",
-    category: "Fun Match Badminton",
-    description:
-      "Ajang sparring santai untuk semua level. Cari teman main baru dan bersenang-senang di lapangan.",
-    image: "https://picsum.photos/seed/badminton1/800/600",
-    slug: "badminton-fun-match",
-    eventDate: "2025-09-05T18:00:00Z",
-    location: "Go2Gor Center, Bandung",
-  },
-  {
-    id: 3,
-    title: "Liga Futsal Amatir Go2Gor",
-    category: "Liga Futsal",
-    description:
-      "Kompetisi liga futsal untuk tim amatir. Rebut gelar juara dan buktikan timmu yang terbaik!",
-    image: "https://picsum.photos/seed/futsal2/800/600",
-    slug: "liga-futsal-amatir",
-    eventDate: "2025-09-10T19:00:00Z",
-    location: "Go2Gor Stadium, Surabaya",
-  },
-  {
-    id: 4,
-    title: "Coaching Clinic Badminton",
-    category: "Coaching Clinic",
-    description:
-      "Tingkatkan permainanmu dengan bimbingan dari pelatih profesional. Terbuka untuk umum, slot terbatas!",
-    image: "https://picsum.photos/seed/badminton2/800/600",
-    slug: "coaching-clinic-badminton",
-    eventDate: "2025-09-22T15:00:00Z",
-    location: "Go2Gor Hall, Yogyakarta",
-  },
-];
 
 export default function EventPage() {
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);

@@ -33,7 +33,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={clsx(
           "min-h-screen antialiased",
-          "bg-gradient-to-b from-cyan-100 to-yellow-200 text-black",
+          "bg-gradient-to-b from-emerald-100 to-white text-black",
           "dark:bg-gradient-to-b dark:from-gray-900 dark:to-black dark:text-white",
           fontPoppins.variable
         )}

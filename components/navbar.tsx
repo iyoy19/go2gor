@@ -90,7 +90,7 @@ export const Navbar = () => {
   };
 
   const navbarClass = clsx(
-    "fixed top-0 z-50 w-full transition-all duration-300 backdrop-blur-md",
+    "fixed top-0 z-50 w-full transition-all duration-300 ease-in-out backdrop-blur-md",
     scrolled ? "bg-white/10 dark:bg-black/10 shadow-sm" : "bg-transparent"
   );
 
@@ -270,9 +270,11 @@ export const Navbar = () => {
       {/* Mobile menu */}
       <NavbarMenu
         className={clsx(
-          "w-full p-0 m-0 bg-white dark:bg-black/90",
-          "transition-[max-height] duration-300 ease-in-out overflow-hidden",
-          menuOpen ? "max-h-[1000px]" : "max-h-0"
+          "overflow-hidden transition-all duration-300 ease-in-out",
+          "bg-white/50 dark:bg-black/50",
+          menuOpen
+            ? "max-h-[1000px] opacity-100 translate-y-0"
+            : "max-h-0 opacity-0 -translate-y-2"
         )}
       >
         <div className="flex flex-col w-full gap-1 px-3 py-2">
@@ -331,7 +333,7 @@ export const Navbar = () => {
                     Array.isArray(item.children) && (
                       <div
                         id={`${item.label}-submenu`}
-                        className="flex flex-col gap-1 mt-1 ml-8"
+                        className="flex flex-col gap-1 mt-1 ml-6 pl-2 border-l border-gray-200 dark:border-gray-700 transition-all duration-200"
                       >
                         {item.children.map((child, childIndex) => {
                           const ChildIcon = child.icon && icons[child.icon];

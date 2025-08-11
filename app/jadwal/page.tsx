@@ -9,20 +9,19 @@ import {
   DropdownItem,
   Button,
 } from "@nextui-org/react";
-import { ChevronDownIcon, CalendarDaysIcon, MapPinIcon, TagIcon, ClockIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  CalendarDaysIcon,
+  MapPinIcon,
+  TagIcon,
+  ClockIcon,
+} from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 
 // Dummy Data
-interface Field {
-  id: string;
-  name: string;
-  type: 'Futsal' | 'Tenis';
-  location: string;
-  pricePerHour: number;
-  image: string;
-}
+import { LapanganType, dummyFields } from "@/data/lapangan";
 
 interface TimeSlot {
   time: string; // e.g., "08:00", "09:00"
@@ -35,17 +34,11 @@ interface FieldSchedule {
   slots: TimeSlot[];
 }
 
-const dummyFields: Field[] = [
-  { id: "futsal-cempaka", name: "Cempaka Arena", type: "Futsal", location: "GOR Cempaka", pricePerHour: 75000, image: "https://picsum.photos/seed/futsal1/600/400" },
-  { id: "futsal-melati", name: "Melati Pro Court", type: "Futsal", location: "GOR Melati", pricePerHour: 80000, image: "https://picsum.photos/seed/futsal2/600/400" },
-  { id: "tenis-nusantara", name: "Nusantara Open", type: "Tenis", location: "GOR Nusantara", pricePerHour: 100000, image: "https://picsum.photos/seed/tenis1/600/400" },
-  { id: "tenis-sakura", name: "Sakura Elite Court", type: "Tenis", location: "GOR Sakura", pricePerHour: 120000, image: "https://picsum.photos/seed/tenis2/600/400" },
-];
-
 const generateDummySchedule = (fieldId: string, date: string): TimeSlot[] => {
   const slots: TimeSlot[] = [];
-  for (let i = 8; i <= 22; i++) { // 8 AM to 10 PM
-    const time = `${i < 10 ? '0' : ''}${i}:00`;
+  for (let i = 8; i <= 22; i++) {
+    // 8 AM to 10 PM
+    const time = `${i < 10 ? "0" : ""}${i}:00`;
     // Randomly book some slots
     const isBooked = Math.random() > 0.7;
     slots.push({ time, isBooked });
@@ -58,8 +51,15 @@ const getDatesForNext7Days = (): { date: string; label: string }[] => {
   for (let i = 0; i < 7; i++) {
     const d = new Date();
     d.setDate(d.getDate() + i);
-    const dateString = d.toISOString().split('T')[0]; // YYYY-MM-DD
-    const label = i === 0 ? "Hari Ini" : d.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short' });
+    const dateString = d.toISOString().split("T")[0]; // YYYY-MM-DD
+    const label =
+      i === 0
+        ? "Hari Ini"
+        : d.toLocaleDateString("id-ID", {
+            weekday: "short",
+            day: "numeric",
+            month: "short",
+          });
     dates.push({ date: dateString, label });
   }
   return dates;
@@ -68,11 +68,18 @@ const getDatesForNext7Days = (): { date: string; label: string }[] => {
 export default function JadwalLapanganPage() {
   const { theme } = useTheme();
   const availableDates = useMemo(() => getDatesForNext7Days(), []);
-  const [selectedFieldId, setSelectedFieldId] = useState<string>(dummyFields[0].id);
-  const [selectedDate, setSelectedDate] = useState<string>(availableDates[0].date);
+  const [selectedFieldId, setSelectedFieldId] = useState<string>(
+    dummyFields[0].id.toString()
+  );
+  const [selectedDate, setSelectedDate] = useState<string>(
+    availableDates[0].date
+  );
   const [schedule, setSchedule] = useState<FieldSchedule | null>(null);
 
-  const currentField = useMemo(() => dummyFields.find(f => f.id === selectedFieldId), [selectedFieldId]);
+  const currentField = useMemo(
+    () => dummyFields.find((f) => f.id.toString() === selectedFieldId),
+    [selectedFieldId]
+  );
 
   useEffect(() => {
     // Simulate fetching schedule data
@@ -85,20 +92,31 @@ export default function JadwalLapanganPage() {
   }, [selectedFieldId, selectedDate]);
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(price);
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(price);
   };
 
   const textColorClass = theme === "light" ? "text-black" : "text-white";
   const bgColorClass = theme === "light" ? "bg-yellow-50" : "bg-gray-800";
-  const borderColorClass = theme === "light" ? "border-yellow-200" : "border-gray-700";
+  const borderColorClass =
+    theme === "light" ? "border-yellow-200" : "border-gray-700";
   const cardBgClass = theme === "light" ? "bg-yellow-100/80" : "bg-gray-800/80";
-  const cardBorderClass = theme === "light" ? "border-yellow-200" : "border-gray-700";
+  const cardBorderClass =
+    theme === "light" ? "border-yellow-200" : "border-gray-700";
 
   return (
-    <section className="pt-24 pb-12 md:pt-32 md:pb-20 font-poppins"> {/* Adjusted padding for Navbar */} 
+    <section className="pt-24 pb-12 md:pt-32 md:pb-20 font-poppins">
+      {" "}
+      {/* Adjusted padding for Navbar */}
       <div className="container mx-auto px-4 max-w-7xl">
         <motion.h1
-          className={clsx("text-4xl md:text-5xl font-extrabold text-center mb-10", textColorClass)}
+          className={clsx(
+            "text-4xl md:text-5xl font-extrabold text-center mb-10",
+            textColorClass
+          )}
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -107,14 +125,22 @@ export default function JadwalLapanganPage() {
         </motion.h1>
 
         <motion.div
-          className={clsx("grid grid-cols-1 lg:grid-cols-3 gap-8", bgColorClass, "rounded-xl p-6 shadow-lg", borderColorClass, "border")}
+          className={clsx(
+            "grid grid-cols-1 lg:grid-cols-3 gap-8",
+            bgColorClass,
+            "rounded-xl p-6 shadow-lg",
+            borderColorClass,
+            "border"
+          )}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           {/* Field Selection */}
           <div className="lg:col-span-1">
-            <h2 className={clsx("text-2xl font-bold mb-4", textColorClass)}>Pilih Lapangan</h2>
+            <h2 className={clsx("text-2xl font-bold mb-4", textColorClass)}>
+              Pilih Lapangan
+            </h2>
             <Dropdown>
               <DropdownTrigger>
                 <Button
@@ -134,7 +160,9 @@ export default function JadwalLapanganPage() {
                 aria-label="Pilih Lapangan"
                 selectionMode="single"
                 selectedKeys={new Set([selectedFieldId])}
-                onSelectionChange={(keys) => setSelectedFieldId(Array.from(keys)[0] as string)}
+                onSelectionChange={(keys) =>
+                  setSelectedFieldId(Array.from(keys)[0] as string)
+                }
                 className={clsx(
                   "bg-yellow-50 dark:bg-gray-900",
                   "border border-yellow-200 dark:border-gray-700",
@@ -142,15 +170,16 @@ export default function JadwalLapanganPage() {
                 )}
               >
                 {dummyFields.map((field, index) => (
-                  <DropdownItem 
-                    key={field.id} 
+                  <DropdownItem
+                    key={field.id.toString()}
                     className={clsx(
-                      textColorClass, 
+                      textColorClass,
                       "hover:bg-yellow-100 dark:hover:bg-gray-700",
-                      index < dummyFields.length - 1 && "border-b border-yellow-200 dark:border-gray-700"
+                      index < dummyFields.length - 1 &&
+                        "border-b border-yellow-200 dark:border-gray-700"
                     )}
                   >
-                    {field.name} ({field.type})
+                    {field.name} ({field.sport})
                   </DropdownItem>
                 ))}
               </DropdownMenu>
@@ -159,27 +188,59 @@ export default function JadwalLapanganPage() {
             {/* Field Details Card */}
             {currentField && (
               <motion.div
-                className={clsx("mt-6 p-6 rounded-lg shadow-md", cardBgClass, cardBorderClass, "border")}
+                className={clsx(
+                  "mt-6 p-6 rounded-lg shadow-md",
+                  cardBgClass,
+                  cardBorderClass,
+                  "border"
+                )}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <h3 className={clsx("text-xl font-bold mb-3", textColorClass)}>{currentField.name}</h3>
-                <img src={currentField.image} alt={currentField.name} className="w-full h-48 object-cover rounded-md mb-4" />
-                <p className={clsx("flex items-center gap-2 mb-2", textColorClass)}><MapPinIcon className="w-5 h-5 text-blue-500" /> {currentField.location}</p>
-                <p className={clsx("flex items-center gap-2 mb-2", textColorClass)}><TagIcon className="w-5 h-5 text-blue-500" /> {currentField.type}</p>
-                <p className={clsx("flex items-center gap-2", textColorClass)}><ClockIcon className="w-5 h-5 text-blue-500" /> {formatPrice(currentField.pricePerHour)} / jam</p>
+                <h3 className={clsx("text-xl font-bold mb-3", textColorClass)}>
+                  {currentField.name}
+                </h3>
+                <img
+                  src={currentField.image}
+                  alt={currentField.name}
+                  className="w-full h-48 object-cover rounded-md mb-4"
+                />
+                <p
+                  className={clsx(
+                    "flex items-center gap-2 mb-2",
+                    textColorClass
+                  )}
+                >
+                  <MapPinIcon className="w-5 h-5 text-blue-500" />{" "}
+                  {currentField.venue}
+                </p>
+                <p
+                  className={clsx(
+                    "flex items-center gap-2 mb-2",
+                    textColorClass
+                  )}
+                >
+                  <TagIcon className="w-5 h-5 text-blue-500" />{" "}
+                  {currentField.sport}
+                </p>
+                <p className={clsx("flex items-center gap-2", textColorClass)}>
+                  <ClockIcon className="w-5 h-5 text-blue-500" />{" "}
+                  {formatPrice(currentField.price)} / jam
+                </p>
               </motion.div>
             )}
           </div>
 
           {/* Schedule Display */}
           <div className="lg:col-span-2">
-            <h2 className={clsx("text-2xl font-bold mb-4", textColorClass)}>Pilih Tanggal & Waktu</h2>
-            
+            <h2 className={clsx("text-2xl font-bold mb-4", textColorClass)}>
+              Pilih Tanggal & Waktu
+            </h2>
+
             {/* Date Selection */}
             <div className="flex space-x-3 overflow-x-auto pb-4 hide-scrollbar">
-              {availableDates.map(dateOption => (
+              {availableDates.map((dateOption) => (
                 <button
                   key={dateOption.date}
                   onClick={() => setSelectedDate(dateOption.date)}
@@ -187,7 +248,11 @@ export default function JadwalLapanganPage() {
                     "flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors",
                     selectedDate === dateOption.date
                       ? "bg-blue-400 text-white shadow-md"
-                      : clsx("bg-yellow-100 dark:bg-gray-700", textColorClass, "hover:bg-yellow-200 dark:hover:bg-gray-600")
+                      : clsx(
+                          "bg-yellow-100 dark:bg-gray-700",
+                          textColorClass,
+                          "hover:bg-yellow-200 dark:hover:bg-gray-600"
+                        )
                   )}
                 >
                   {dateOption.label}
@@ -196,8 +261,15 @@ export default function JadwalLapanganPage() {
             </div>
 
             {/* Time Slots Grid */}
-            <div className={clsx("mt-6 p-6 rounded-lg shadow-md grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4", cardBgClass, cardBorderClass, "border")}>
-              {schedule?.slots.map(slot => (
+            <div
+              className={clsx(
+                "mt-6 p-6 rounded-lg shadow-md grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4",
+                cardBgClass,
+                cardBorderClass,
+                "border"
+              )}
+            >
+              {schedule?.slots.map((slot) => (
                 <button
                   key={slot.time}
                   className={clsx(

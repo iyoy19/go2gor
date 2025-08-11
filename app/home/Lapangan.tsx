@@ -18,39 +18,7 @@ import { motion } from "framer-motion";
 import "swiper/css";
 import "swiper/css/pagination";
 
-const lapanganFutsal = [
-  {
-    name: "Cempaka Arena",
-    slug: "lapangan-utama-cempaka",
-    description: "Rumput sintetis & lighting mantap buat sparring malam.",
-    location: "GOR Cempaka, Jakarta Timur",
-    image: "https://picsum.photos/seed/lap1/600/400",
-  },
-  {
-    name: "Melati Pro Court",
-    slug: "lapangan-melati-pro",
-    description: "Tempat favorit anak komunitas futsal Bekasi.",
-    location: "GOR Melati, Bekasi",
-    image: "https://picsum.photos/seed/lap2/600/400",
-  },
-];
-
-const lapanganTenis = [
-  {
-    name: "Nusantara Open",
-    slug: "arena-nusantara",
-    description: "Lapangan licin? No way. Vinyl anti-selip terbaik.",
-    location: "GOR Nusantara, Depok",
-    image: "https://picsum.photos/seed/lap3/600/400",
-  },
-  {
-    name: "Sakura Elite Court",
-    slug: "lapangan-sakura-elite",
-    description: "Tempat main tenis rasa private club.",
-    location: "GOR Sakura, Tangerang",
-    image: "https://picsum.photos/seed/lap4/600/400",
-  },
-];
+import { LapanganType, dummyFields } from "@/data/lapangan";
 
 export default function LapanganSection() {
   const [selectedKeys, setSelectedKeys] = useState(new Set(["default"]));
@@ -61,10 +29,10 @@ export default function LapanganSection() {
   ) as "default" | "futsal" | "tenis" | "semua";
 
   const dataLapangan = useMemo(() => {
-    if (kategori === "semua") return [...lapanganFutsal, ...lapanganTenis];
-    if (kategori === "tenis") return lapanganTenis;
-    if (kategori === "futsal") return lapanganFutsal;
-    return [...lapanganFutsal, ...lapanganTenis];
+    if (kategori === "semua") return dummyFields;
+    if (kategori === "tenis") return dummyFields.filter(field => field.sport === "Tenis");
+    if (kategori === "futsal") return dummyFields.filter(field => field.sport === "Futsal");
+    return dummyFields; // Default to all fields
   }, [kategori]);
 
   const labelMap: Record<typeof kategori, string> = {
@@ -74,7 +42,7 @@ export default function LapanganSection() {
     semua: "Semua Lapangan",
   };
 
-  const Card = ({ field }: { field: (typeof dataLapangan)[0] }) => (
+  const Card = ({ field }: { field: LapanganType }) => (
     <motion.div 
       className="group bg-white/50 dark:bg-slate-800/50 backdrop-blur-xl border border-gray-300 dark:border-slate-700 rounded-3xl shadow-2xl overflow-hidden flex flex-col hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300"
       initial={{ opacity: 0, y: 50 }}
@@ -92,17 +60,16 @@ export default function LapanganSection() {
       </div>
       <div className="p-5 flex-1 flex flex-col justify-between">
         <div>
-          <Link href={`/lapangan/${field.slug}`}>
-            <h3 className="text-xl font-semibold text-black dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-              {field.name}
-            </h3>
+          <Link href={`/lapangan/${field.id}`}
+            className="text-xl font-semibold text-black dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            {field.name}
           </Link>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{field.location}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{field.venue}</p>
           <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">{field.description}</p>
         </div>
         <div className="flex justify-between mt-5 items-center">
           <Link
-            href={`/lapangan/${field.slug}`}
+            href={`/lapangan/${field.id}`}
             className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
           >
             Lihat Detail
@@ -189,9 +156,9 @@ export default function LapanganSection() {
                 slidesPerView={1}
                 className="pb-10"
               >
-                {lapanganFutsal.map((field, idx) => (
+                {dummyFields.filter(field => field.sport === "Futsal").map((field) => (
                   <SwiperSlide
-                    key={`futsal-${idx}`}
+                    key={field.id}
                     style={{ display: "flex", justifyContent: "center" }}
                   >
                     <div className="w-[90%]">
@@ -214,9 +181,9 @@ export default function LapanganSection() {
                 slidesPerView={1}
                 className="pb-10"
               >
-                {lapanganTenis.map((field, idx) => (
+                {dummyFields.filter(field => field.sport === "Tenis").map((field) => (
                   <SwiperSlide
-                    key={`tenis-${idx}`}
+                    key={field.id}
                     style={{ display: "flex", justifyContent: "center" }}
                   >
                     <div className="w-[90%]">
@@ -235,9 +202,9 @@ export default function LapanganSection() {
             slidesPerView={1}
             className="pb-10"
           >
-            {dataLapangan.map((field, idx) => (
+            {dataLapangan.map((field) => (
               <SwiperSlide
-                key={idx}
+                key={field.id}
                 style={{ display: "flex", justifyContent: "center" }}
               >
                 <div className="w-[90%]">
@@ -251,8 +218,8 @@ export default function LapanganSection() {
 
       {/* Desktop - Grid */}
       <div className="hidden lg:grid gap-8 px-6 sm:grid-cols-2 lg:grid-cols-3">
-        {dataLapangan.map((field, idx) => (
-          <Card key={idx} field={field} />
+        {dataLapangan.map((field) => (
+          <Card key={field.id} field={field} />
         ))}
       </div>
     </section>
