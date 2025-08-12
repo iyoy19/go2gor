@@ -131,8 +131,10 @@ export default function Testimoni() {
       />
       <div className="flex-1 text-left min-w-0">
         <div className="flex items-center justify-between gap-2">
-          <h4 className="text-lg font-semibold text-black dark:text-white truncate">{review.name}</h4>
-          <div className="flex items-center text-yellow-500 dark:text-yellow-400 flex-shrink-0">
+          <h4 className="text-lg font-semibold text-black dark:text-white truncate">
+            {review.name}
+          </h4>
+          <div className="flex items-center text-yellow-500 flex-shrink-0">
             {[...Array(5)].map((_, i) =>
               i < review.rating ? (
                 <StarIcon key={i} className="w-4 h-4" />
@@ -178,7 +180,7 @@ export default function Testimoni() {
           <AnimatePresence mode="wait">
             <motion.div
               key={index}
-              className="absolute inset-0 flex flex-col justify-between rounded-3xl shadow-2xl border border-yellow-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 backdrop-blur-lg"
+              className="absolute inset-0 flex flex-col justify-between rounded-3xl shadow-2xl dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 backdrop-blur-lg"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
@@ -201,7 +203,7 @@ export default function Testimoni() {
           <AnimatePresence mode="wait">
             <motion.div
               key={index}
-              className="absolute inset-0 flex flex-row justify-between rounded-3xl shadow-2xl border border-yellow-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 backdrop-blur-lg overflow-hidden"
+              className="absolute inset-0 flex flex-row justify-between rounded-3xl shadow-2xl border border-gray-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 backdrop-blur-lg overflow-hidden"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
