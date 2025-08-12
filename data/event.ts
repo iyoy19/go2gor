@@ -6,8 +6,30 @@ export type EventType = {
   slug: string;
   eventDate: string;
   createdAt: string;
-  category: string; // Added
-  location: string; // Added
+  category: string;
+  location: string;
+  registrationFee: number;
+  maxTeams: number;
+  remainingSlots: number;
+  prizes: {
+    first: {
+      amount: number;
+      extras?: string[];
+    };
+    second: {
+      amount: number;
+      extras?: string[];
+    };
+    third: {
+      amount: number;
+      extras?: string[];
+    };
+  };
+  requirements: string[];
+  timeline: {
+    date: string;
+    event: string;
+  }[];
 };
 
 // ✅ Dummy Images
@@ -53,60 +75,253 @@ const eventLocations = [
 export const dummyEvents: EventType[] = [
   {
     id: 101,
-    title: "Festival Olahraga Keluarga",
+    title: "Festival Futsal Community Cup 2025",
     description:
-      "Ajak keluarga berolahraga bersama dan nikmati berbagai lomba seru!",
-    image: "https://picsum.photos/seed/event-family/500/300",
-    slug: "festival-olahraga-keluarga",
-    eventDate: new Date("2025-08-15T09:00:00Z").toISOString(),
+      "Turnamen futsal bergengsi antar komunitas dengan total hadiah puluhan juta rupiah! Ikuti keseruan pertandingan dan jalin silaturahmi antar komunitas futsal.",
+    image: "https://picsum.photos/seed/event-futsal/500/300",
+    slug: "festival-futsal-community-cup-2025",
+    eventDate: new Date("2025-09-03T09:00:00Z").toISOString(),
     createdAt: new Date("2025-08-10T10:00:00Z").toISOString(),
-    category: "Family",
-    location: "Lapangan Serbaguna 1",
+    category: "Futsal",
+    location: "GOR Futsal Center",
+    registrationFee: 250000,
+    maxTeams: 16,
+    remainingSlots: 12,
+    prizes: {
+      first: {
+        amount: 5000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+      second: {
+        amount: 3000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+      third: {
+        amount: 1500000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+    },
+    requirements: [
+      "Tim terdiri dari 7-12 pemain",
+      "Minimal usia pemain 18 tahun",
+      "Membawa fotokopi KTP untuk semua pemain",
+      "Menggunakan jersey tim yang seragam",
+      "Pembayaran maksimal H-3 sebelum event",
+      "Wajib mengikuti technical meeting",
+    ],
+    timeline: [
+      {
+        date: "2025-09-01",
+        event: "Technical Meeting (19:00 WIB)",
+      },
+      {
+        date: "2025-09-03",
+        event: "Pembukaan Turnamen",
+      },
+      {
+        date: "2025-09-10",
+        event: "Final & Penutupan",
+      },
+    ],
   },
   {
     id: 102,
-    title: "Liga Futsal Pelajar",
+    title: "Badminton Open Tournament 2025",
     description:
-      "Kompetisi futsal antar pelajar se-kota, rebut piala bergengsi!",
-    image: "https://picsum.photos/seed/event-futsal/500/300",
-    slug: "liga-futsal-pelajar",
-    eventDate: new Date("2025-08-17T14:00:00Z").toISOString(),
+      "Turnamen badminton terbuka dengan berbagai kategori! Tunjukkan kemampuan terbaikmu dan raih hadiah menarik.",
+    image: "https://picsum.photos/seed/event-badminton/500/300",
+    slug: "badminton-open-tournament-2025",
+    eventDate: new Date("2025-09-15T08:00:00Z").toISOString(),
     createdAt: new Date("2025-08-12T11:00:00Z").toISOString(),
-    category: "Futsal",
-    location: "Lapangan Futsal A",
+    category: "Badminton",
+    location: "GOR Badminton Center",
+    registrationFee: 150000,
+    maxTeams: 32,
+    remainingSlots: 20,
+    prizes: {
+      first: {
+        amount: 3000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+      second: {
+        amount: 2000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+      third: {
+        amount: 1000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+    },
+    requirements: [
+      "Pemain amatir (bukan atlet profesional)",
+      "Membawa KTP saat registrasi ulang",
+      "Menggunakan pakaian olahraga yang sesuai",
+      "Pembayaran maksimal H-3 sebelum event",
+      "Wajib mengikuti technical meeting",
+    ],
+    timeline: [
+      {
+        date: "2025-09-13",
+        event: "Technical Meeting (19:00 WIB)",
+      },
+      {
+        date: "2025-09-15",
+        event: "Pembukaan Tournament",
+      },
+      {
+        date: "2025-09-17",
+        event: "Final & Penutupan",
+      },
+    ],
   },
   {
     id: 103,
-    title: "Open Tournament Badminton",
-    description: "Turnamen terbuka untuk semua usia, hadiah jutaan rupiah!",
+    title: "Badminton Open Tournament 2025",
+    description:
+      "Turnamen badminton terbuka dengan berbagai kategori! Tunjukkan kemampuan terbaikmu dan raih hadiah menarik.",
     image: "https://picsum.photos/seed/event-badminton/500/300",
-    slug: "open-tournament-badminton",
-    eventDate: new Date("2025-08-20T08:00:00Z").toISOString(),
-    createdAt: new Date("2025-08-13T12:00:00Z").toISOString(),
+    slug: "badminton-open-tournament-2025",
+    eventDate: new Date("2025-09-15T08:00:00Z").toISOString(),
+    createdAt: new Date("2025-08-12T11:00:00Z").toISOString(),
     category: "Badminton",
-    location: "Lapangan Badminton B",
+    location: "GOR Badminton Center",
+    registrationFee: 150000,
+    maxTeams: 32,
+    remainingSlots: 20,
+    prizes: {
+      first: {
+        amount: 3000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+      second: {
+        amount: 2000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+      third: {
+        amount: 1000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+    },
+    requirements: [
+      "Pemain amatir (bukan atlet profesional)",
+      "Membawa KTP saat registrasi ulang",
+      "Menggunakan pakaian olahraga yang sesuai",
+      "Pembayaran maksimal H-3 sebelum event",
+      "Wajib mengikuti technical meeting",
+    ],
+    timeline: [
+      {
+        date: "2025-09-13",
+        event: "Technical Meeting (19:00 WIB)",
+      },
+      {
+        date: "2025-09-15",
+        event: "Pembukaan Tournament",
+      },
+      {
+        date: "2025-09-17",
+        event: "Final & Penutupan",
+      },
+    ],
   },
   {
     id: 104,
-    title: "Fun Run 5K Kota Gor",
+    title: "Badminton Open Tournament 2025",
     description:
-      "Lomba lari santai 5 kilometer, terbuka untuk umum. Dapatkan medali finisher!",
-    image: "https://picsum.photos/seed/event-funrun/500/300",
-    slug: "fun-run-5k-kota-gor",
-    eventDate: new Date("2025-08-22T06:00:00Z").toISOString(),
-    createdAt: new Date("2025-08-14T09:00:00Z").toISOString(),
-    category: "Lari",
-    location: "GOR Kota Gor Lapangan Utama",
+      "Turnamen badminton terbuka dengan berbagai kategori! Tunjukkan kemampuan terbaikmu dan raih hadiah menarik.",
+    image: "https://picsum.photos/seed/event-badminton/500/300",
+    slug: "badminton-open-tournament-2025",
+    eventDate: new Date("2025-09-15T08:00:00Z").toISOString(),
+    createdAt: new Date("2025-08-12T11:00:00Z").toISOString(),
+    category: "Badminton",
+    location: "GOR Badminton Center",
+    registrationFee: 150000,
+    maxTeams: 32,
+    remainingSlots: 20,
+    prizes: {
+      first: {
+        amount: 3000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+      second: {
+        amount: 2000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+      third: {
+        amount: 1000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+    },
+    requirements: [
+      "Pemain amatir (bukan atlet profesional)",
+      "Membawa KTP saat registrasi ulang",
+      "Menggunakan pakaian olahraga yang sesuai",
+      "Pembayaran maksimal H-3 sebelum event",
+      "Wajib mengikuti technical meeting",
+    ],
+    timeline: [
+      {
+        date: "2025-09-13",
+        event: "Technical Meeting (19:00 WIB)",
+      },
+      {
+        date: "2025-09-15",
+        event: "Pembukaan Tournament",
+      },
+      {
+        date: "2025-09-17",
+        event: "Final & Penutupan",
+      },
+    ],
   },
   {
     id: 105,
-    title: "Turnamen Tenis Meja Antar RT",
-    description: "Kompetisi tenis meja seru antar RT, rebutkan piala bergilir!",
-    image: "https://picsum.photos/seed/event-tenismeja/500/300",
-    slug: "turnamen-tenis-meja-antar-rt",
-    eventDate: new Date("2025-08-25T10:00:00Z").toISOString(),
-    createdAt: new Date("2025-08-15T13:00:00Z").toISOString(),
-    category: "Tenis Meja",
-    location: "Aula RW 05",
+    title: "Badminton Open Tournament 2025",
+    description:
+      "Turnamen badminton terbuka dengan berbagai kategori! Tunjukkan kemampuan terbaikmu dan raih hadiah menarik.",
+    image: "https://picsum.photos/seed/event-badminton/500/300",
+    slug: "badminton-open-tournament-2025",
+    eventDate: new Date("2025-09-15T08:00:00Z").toISOString(),
+    createdAt: new Date("2025-08-12T11:00:00Z").toISOString(),
+    category: "Badminton",
+    location: "GOR Badminton Center",
+    registrationFee: 150000,
+    maxTeams: 32,
+    remainingSlots: 20,
+    prizes: {
+      first: {
+        amount: 3000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+      second: {
+        amount: 2000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+      third: {
+        amount: 1000000,
+        extras: ["Trophy", "Medali", "Sertifikat"],
+      },
+    },
+    requirements: [
+      "Pemain amatir (bukan atlet profesional)",
+      "Membawa KTP saat registrasi ulang",
+      "Menggunakan pakaian olahraga yang sesuai",
+      "Pembayaran maksimal H-3 sebelum event",
+      "Wajib mengikuti technical meeting",
+    ],
+    timeline: [
+      {
+        date: "2025-09-13",
+        event: "Technical Meeting (19:00 WIB)",
+      },
+      {
+        date: "2025-09-15",
+        event: "Pembukaan Tournament",
+      },
+      {
+        date: "2025-09-17",
+        event: "Final & Penutupan",
+      },
+    ],
   },
 ];

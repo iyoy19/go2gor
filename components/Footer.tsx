@@ -20,18 +20,21 @@ export default function Footer() {
   };
 
   return (
-    <footer className="font-poppins text-gray-700 dark:text-gray-300 border-t border-gray-300 dark:border-slate-800">
-      <div className="container mx-auto px-4 sm:px-6 py-16 max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+    <footer className="font-poppins text-gray-700 dark:text-gray-300 border-t border-gray-200/80 dark:border-slate-800/80">
+      <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 max-w-7xl">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10">
           {/* Branding & Social */}
-          <div className="md:col-span-2 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
+          <div className="col-span-2 sm:col-span-2 lg:col-span-4">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 mb-4 group"
+            >
               <Rotate3d
                 size={32}
-                className="text-yellow-500 dark:text-yellow-300 drop-shadow-md"
+                className="text-yellow-500 dark:text-yellow-300 drop-shadow-md transform transition-transform group-hover:rotate-180 duration-700"
               />
               <h1
-                className={`text-2xl font-extrabold tracking-tight leading-none text-black dark:text-white ${rubikDirt.className}`}
+                className={`text-xl sm:text-2xl font-extrabold tracking-tight leading-none text-black dark:text-white ${rubikDirt.className}`}
               >
                 <span className="text-yellow-600 dark:text-yellow-400">Go</span>
                 <span className="text-black dark:text-white">2</span>
@@ -40,60 +43,60 @@ export default function Footer() {
                 </span>
               </h1>
             </Link>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm mb-6">
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm mb-6 max-w-sm">
               Platform booking lapangan olahraga terdepan yang menghubungkan
               Anda dengan fasilitas terbaik di kota Anda.
             </p>
-            <div className="flex space-x-4 text-gray-600 dark:text-gray-400 text-lg">
+            <div className="flex items-center gap-5 text-gray-500 dark:text-gray-500">
               <a
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="hover:text-pink-500 transition-transform hover:scale-110"
+                className="hover:text-pink-500 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
               >
-                <FiInstagram />
+                <FiInstagram className="w-5 h-5" />
               </a>
               <a
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="hover:text-blue-600 transition-transform hover:scale-110"
+                className="hover:text-blue-600 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
               >
-                <FiFacebook />
+                <FiFacebook className="w-5 h-5" />
               </a>
               <a
                 href="https://twitter.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Twitter"
-                className="hover:text-blue-400 transition-transform hover:scale-110"
+                className="hover:text-blue-400 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
               >
-                <FiTwitter />
+                <FiTwitter className="w-5 h-5" />
               </a>
               <a
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
-                className="hover:text-red-600 transition-transform hover:scale-110"
+                className="hover:text-red-500 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
               >
-                <FiYoutube />
+                <FiYoutube className="w-5 h-5" />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h3 className="text-black dark:text-white text-lg font-semibold mb-4">
+          <div className="col-span-1 sm:col-span-1 lg:col-span-2">
+            <h3 className="text-black dark:text-white text-base sm:text-lg font-semibold mb-4">
               Akses Cepat
             </h3>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-2.5 text-sm">
               <li>
                 <Link
                   href="#lapangan"
-                  className="hover:text-black dark:hover:text-white transition hover:underline underline-offset-4"
+                  className="inline-flex hover:text-black dark:hover:text-white transition-colors duration-200 hover:translate-x-0.5"
                 >
                   Lapangan
                 </Link>
@@ -101,7 +104,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#cara-boking"
-                  className="hover:text-black dark:hover:text-white transition hover:underline underline-offset-4"
+                  className="inline-flex hover:text-black dark:hover:text-white transition-colors duration-200 hover:translate-x-0.5"
                 >
                   Cara Booking
                 </Link>
@@ -109,7 +112,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#testimoni"
-                  className="hover:text-black dark:hover:text-white transition hover:underline underline-offset-4"
+                  className="inline-flex hover:text-black dark:hover:text-white transition-colors duration-200 hover:translate-x-0.5"
                 >
                   Testimoni
                 </Link>
@@ -117,7 +120,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="#faq"
-                  className="hover:text-black dark:hover:text-white transition hover:underline underline-offset-4"
+                  className="inline-flex hover:text-black dark:hover:text-white transition-colors duration-200 hover:translate-x-0.5"
                 >
                   FAQ
                 </Link>
@@ -126,15 +129,15 @@ export default function Footer() {
           </div>
 
           {/* Legal */}
-          <div>
-            <h3 className="text-black dark:text-white text-lg font-semibold mb-4">
+          <div className="col-span-1 sm:col-span-1 lg:col-span-2">
+            <h3 className="text-black dark:text-white text-base sm:text-lg font-semibold mb-4">
               Legal
             </h3>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-2.5 text-sm">
               <li>
                 <Link
                   href="/legal/terms"
-                  className="hover:text-black dark:hover:text-white transition hover:underline underline-offset-4"
+                  className="inline-flex hover:text-black dark:hover:text-white transition-colors duration-200 hover:translate-x-0.5"
                 >
                   Syarat & Ketentuan
                 </Link>
@@ -142,7 +145,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/legal/privacy"
-                  className="hover:text-black dark:hover:text-white transition hover:underline underline-offset-4"
+                  className="inline-flex hover:text-black dark:hover:text-white transition-colors duration-200 hover:translate-x-0.5"
                 >
                   Kebijakan Privasi
                 </Link>
@@ -150,7 +153,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/legal/disclaimer"
-                  className="hover:text-black dark:hover:text-white transition hover:underline underline-offset-4"
+                  className="inline-flex hover:text-black dark:hover:text-white transition-colors duration-200 hover:translate-x-0.5"
                 >
                   Disclaimer
                 </Link>
@@ -159,7 +162,7 @@ export default function Footer() {
           </div>
 
           {/* Kontak */}
-          <div>
+          <div className="col-span-2 sm:col-span-2 lg:col-span-4">
             <h3 className="text-black dark:text-white text-lg font-semibold mb-4">
               Hubungi Kami
             </h3>
@@ -191,11 +194,20 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-gray-300 dark:border-slate-800">
-        <div className="container mx-auto px-4 sm:px-6 py-6 max-w-7xl flex flex-col sm:flex-row justify-between items-center text-center">
-          <p className="text-gray-500 dark:text-gray-500 text-xs select-none w-full">
-            &copy; {new Date().getFullYear()} Go2Gor. All rights reserved
+      <div className="border-t border-gray-200/80 dark:border-slate-800/80 mt-12">
+        <div className="container mx-auto px-4 sm:px-6 py-6 max-w-7xl flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-gray-500 dark:text-gray-500 text-xs sm:text-sm">
+            &copy; {new Date().getFullYear()} Go2Gor. All rights reserved.
           </p>
+          <div className="flex items-center gap-6">
+            <button
+              onClick={scrollToTop}
+              className="inline-flex items-center gap-2 text-xs sm:text-sm text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 transition-colors duration-200"
+            >
+              <span>Kembali ke Atas</span>
+              <ArrowUpIcon className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     </footer>

@@ -7,20 +7,18 @@ import Testimoni from "@/app/home/Testimoni";
 import StepBooking from "@/app/home/StepBooking";
 import Event from "@/app/home/Event";
 import CTA from "@/app/home/CTA";
-import Footer from "@/app/home/Footer";
 
 export default function HomePage() {
   return (
     <main>
       <Hero />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 ">
         <Lapangan />
         <Event />
         <StepBooking />
         <Testimoni />
         <CTA />
       </div>
-      <Footer />
     </main>
   );
 }

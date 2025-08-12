@@ -264,7 +264,7 @@ const FieldCard = ({
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              router.push(`/booking?lapangan=${field.id}`);
+              router.push(`/lapangan/${field.id}/booking`);
             }}
             className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-full font-semibold shadow-md transition text-sm"
           >

@@ -132,7 +132,7 @@ export default function EventPage() {
           className="text-center mb-10"
         >
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
-            Event Terdekat
+            Event Yang akan Datang
           </h1>
         </motion.div>
         {simpleEvents.length > 0 ? (
