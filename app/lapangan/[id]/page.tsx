@@ -58,7 +58,7 @@ export default function LapanganDetailPage() {
   }
 
   return (
-    <div className="min-h-screen text-white pt-24 pb-16 font-poppins">
+    <div className="min-h-screen text-gray-900 pt-24 pb-16 font-poppins">
       {/* Hero Image Section */}
       <motion.div
         className="relative w-full h-[50vh] md:h-[60vh]"
@@ -104,22 +104,28 @@ export default function LapanganDetailPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
           >
-            <h2 className="text-3xl font-bold mb-4">Detail Lapangan</h2>
-            <p className="text-gray-300 leading-relaxed mb-8">
+            <h2 className="text-3xl font-bold mb-4 text-gray-900">
+              Detail Lapangan
+            </h2>
+            <p className="text-gray-700 leading-relaxed mb-8">
               {field.description}
             </p>
 
-            <h3 className="text-2xl font-bold mb-4">Fasilitas Unggulan</h3>
+            <h3 className="text-2xl font-bold mb-4 text-gray-900">
+              Fasilitas Unggulan
+            </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-12">
               {field.features.map((feature) => (
                 <div key={feature} className="flex items-center gap-3">
                   <FiCheckCircle className="text-green-400 w-5 h-5 flex-shrink-0" />
-                  <span className="text-gray-300">{feature}</span>
+                  <span className="text-gray-700">{feature}</span>
                 </div>
               ))}
             </div>
 
-            <h3 className="text-2xl font-bold mb-4">Galeri Foto</h3>
+            <h3 className="text-2xl font-bold mb-4 text-gray-900">
+              Galeri Foto
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {field.gallery.map((imgSrc, index) => (
                 <motion.div
@@ -146,31 +152,34 @@ export default function LapanganDetailPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
           >
-            <div className="sticky top-28 bg-gray-800/80 backdrop-blur-md border border-gray-700 rounded-2xl p-6 shadow-2xl">
+            <div className="sticky top-28 bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl p-6 shadow-xl">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <p className="text-sm text-gray-400">Mulai dari</p>
-                  <p className="text-3xl font-bold text-white">
+                  <p className="text-sm text-indigo-600">Mulai dari</p>
+                  <p className="text-3xl font-bold text-gray-900">
                     Rp {field.price.toLocaleString("id-ID")}
-                    <span className="text-base font-normal text-gray-400">
+                    <span className="text-base font-normal text-indigo-700">
                       /jam
                     </span>
                   </p>
                 </div>
-                <div className="bg-indigo-500 text-white text-sm font-bold px-3 py-1 rounded-full flex items-center gap-2">
+                <div className="bg-indigo-500 text-white text-sm font-bold px-3 py-1 rounded-full flex items-center gap-2 shadow-md">
                   {field.sport === "Futsal" ? <FaFutbol /> : <GiWhistle />}
                   <span>{field.sport}</span>
                 </div>
               </div>
-              <p className="text-gray-400 text-sm mb-6">
+              <p className="text-gray-600 text-sm mb-6">
                 Harga dapat bervariasi tergantung waktu dan hari.
               </p>
-              <Link href={`/jadwal?field=${field.id}`} passHref>
+              <Link
+                href={`/lapangan/${field.id}/booking`}
+                className="block w-full"
+              >
                 <Button
                   color="primary"
                   fullWidth
                   size="lg"
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg"
+                  className="bg-gradient-to-r from-indigo-500 to-indigo-700 hover:from-indigo-600 hover:to-indigo-800 text-white font-bold text-lg shadow-lg border-0"
                   endContent={<FiArrowRight />}
                 >
                   Lihat Jadwal & Booking

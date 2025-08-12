@@ -1,365 +1,247 @@
 "use client";
 
-import { useState } from "react";
-import { useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
-  FiMessageSquare,
-  FiArrowUp,
-  FiArrowDown,
-  FiPlus,
-  FiX,
-  FiSearch,
-  FiChevronDown,
-} from "react-icons/fi";
-import Image from "next/image";
-
-type User = {
-  name: string;
-  avatar: string;
-};
-
-type Post = {
-  id: number;
-  user: User;
-  title: string;
-  content: string;
-  category: string;
-  votes: number;
-  comments: number;
-  createdAt: string;
-};
-
-const dummyUser: User = {
-  name: "Kamu",
-  avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-};
-
-const initialPosts: Post[] = [
-  {
-    id: 1,
-    user: {
-      name: "Futsalholic",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026701d",
-    },
-    title: "Cari tim buat tanding futsal weekend ini, ada yang siap?",
-    content:
-      "Tim kami (5 orang) lagi cari lawan tanding buat hari Sabtu atau Minggu sore di daerah Jakarta Selatan. Level medium, yang penting seru dan keringetan bareng! Ada yang minat?",
-    category: "Cari Lawan",
-    votes: 125,
-    comments: 42,
-    createdAt: "2 jam lalu",
-  },
-  {
-    id: 2,
-    user: {
-      name: "ShuttlecockMaster",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026702d",
-    },
-    title: "Tips smash badminton biar lebih kenceng gimana ya?",
-    content:
-      "Udah coba berbagai teknik tapi smash-ku masih kurang bertenaga. Ada senior di sini yang mau bagi-bagi ilmu? Mungkin dari posisi kaki atau ayunan tangan? Thank you!",
-    category: "Badminton",
-    votes: 98,
-    comments: 28,
-    createdAt: "5 jam lalu",
-  },
-  {
-    id: 3,
-    user: {
-      name: "TournamentHunter",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026703d",
-    },
-    title: "[INFO] Turnamen Futsal Go2Gor Cup 2025, Hadiah Jutaan Rupiah!",
-    content:
-      "Go2Gor bakal ngadain turnamen futsal besar-besaran bulan depan! Pendaftaran udah dibuka, slot terbatas. Yuk siapin tim kalian dari sekarang. Info lengkap ada di poster ya.",
-    category: "Info Turnamen",
-    votes: 210,
-    comments: 76,
-    createdAt: "1 hari lalu",
-  },
-  {
-    id: 4,
-    user: {
-      name: "GripRaket",
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-    },
-    title: "Rekomendasi raket badminton untuk pemula budget 500rb?",
-    content:
-      "Baru mau mulai main badminton nih, bingung pilih raket. Ada saran raket yang bagus buat pemula, enteng, dan enak buat kontrol? Budget sekitar 500ribuan. Makasih!",
-    category: "Badminton",
-    votes: 72,
-    comments: 31,
-    createdAt: "2 hari lalu",
-  },
-];
-
-const categories = [
-  "Semua",
-  "Futsal",
-  "Badminton",
-  "Info Turnamen",
-  "Cari Lawan",
-];
+  FaUserCircle,
+  FaSearch,
+  FaRegCommentDots,
+  FaRegThumbsUp,
+  FaRegThumbsDown,
+} from "react-icons/fa";
+import { forumPosts, ForumPost } from "../../data/forumPosts";
 
 export default function ForumPage() {
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
-  const [activeCategory, setActiveCategory] = useState("Semua");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [posts, setPosts] = useState<ForumPost[]>(forumPosts);
+  const [newPost, setNewPost] = useState({ title: "", content: "" });
+  const [showForm, setShowForm] = useState(false);
+  const [openCommentId, setOpenCommentId] = useState<number | null>(null);
 
-  const filteredPosts = posts.filter(
-    (post) => activeCategory === "Semua" || post.category === activeCategory
-  );
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setPosts(
+      forumPosts.filter(
+        (post) =>
+          post.title.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          post.content.toLowerCase().includes(e.target.value.toLowerCase())
+      )
+    );
+  };
 
-  const handleCreatePost = (
-    newPost: Omit<Post, "id" | "user" | "votes" | "comments" | "createdAt">
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const post: Post = {
-      ...newPost,
-      id: posts.length + 1,
-      user: dummyUser,
-      votes: 0,
-      comments: 0,
-      createdAt: "Baru saja",
-    };
-    setPosts([post, ...posts]);
+    setNewPost({ ...newPost, [e.target.name]: e.target.value });
+  };
+
+  const handleAddPost = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPost.title || !newPost.content) return;
+    setPosts([
+      {
+        id: posts.length + 1,
+        author: "Guest User",
+        avatar: "",
+        title: newPost.title,
+        content: newPost.content,
+        date: new Date().toISOString().slice(0, 10),
+        comments: [],
+        likes: 0,
+        dislikes: 0,
+        tags: [],
+      },
+      ...posts,
+    ]);
+    setNewPost({ title: "", content: "" });
+    setShowForm(false);
   };
 
   return (
-    <div className="min-h-screen text-white pt-28 pb-16 px-4 sm:px-6 lg:px-8 font-poppins">
+    <motion.div
+      className="min-h-screen bg-gray-50 py-4 px-4 md:px-16 mt-16"
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="flex justify-between items-center mb-8"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Forum Komunitas
-          </h1>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 bg-indigo-500 text-white px-4 py-2 rounded-full font-semibold shadow-lg shadow-indigo-500/30"
-          >
-            <FiPlus />
-            <span>Postingan Baru</span>
-          </motion.button>
-        </motion.div>
-
-        {/* Filters */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-          className="flex flex-wrap items-center gap-3 mb-8"
-        >
-          {categories.map((category) => (
-            <motion.button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`px-4 py-1.5 text-sm font-semibold rounded-full transition-colors duration-300 ${activeCategory === category ? "bg-white text-gray-900" : "bg-gray-800 hover:bg-gray-700"}`}
-            >
-              {category}
-            </motion.button>
-          ))}
-        </motion.div>
-
-        {/* Post List */}
-        <motion.div className="space-y-5">
-          <AnimatePresence>
-            {filteredPosts.map((post, i) => (
-              <motion.div
-                key={post.id}
-                layout
-                initial={{ opacity: 0, y: 20, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.98 }}
-                transition={{ duration: 0.4, delay: i * 0.05, ease: "easeOut" }}
-              >
-                <PostCard post={post} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-      </div>
-
-      <CreatePostModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onCreate={handleCreatePost}
-      />
-    </div>
-  );
-}
-
-const PostCard = ({ post }: { post: Post }) => {
-  return (
-    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-5 flex gap-5 hover:border-indigo-500/50 transition-colors duration-300">
-      {/* Votes */}
-      <div className="flex flex-col items-center gap-2 text-gray-400">
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          className="hover:text-indigo-400"
-        >
-          <FiArrowUp size={20} />
-        </motion.button>
-        <span className="font-bold text-lg text-white">{post.votes}</span>
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          className="hover:text-blue-400"
-        >
-          <FiArrowDown size={20} />
-        </motion.button>
-      </div>
-
-      {/* Content */}
-      <div className="flex-1">
-        <div className="flex items-center gap-3 mb-2">
-          <Image
-            src={post.user.avatar}
-            alt={post.user.name}
-            width={28}
-            height={28}
-            className="rounded-full"
-          />
-          <span className="font-semibold text-sm text-gray-300">
-            Diposting oleh {post.user.name}
-          </span>
-          <span className="text-xs text-gray-500">• {post.createdAt}</span>
-        </div>
-        <h2 className="text-xl font-bold text-white mb-2 leading-tight">
-          {post.title}
-        </h2>
-        <p className="text-gray-400 text-sm mb-4 line-clamp-2">
-          {post.content}
-        </p>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3 text-gray-400">
-            <div className="flex items-center gap-1.5 text-sm">
-              <FiMessageSquare />
-              <span>{post.comments} Komentar</span>
-            </div>
-            <span className="bg-gray-700 text-gray-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">
-              {post.category}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const CreatePostModal = ({
-  isOpen,
-  onClose,
-  onCreate,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  onCreate: (
-    post: Omit<Post, "id" | "user" | "votes" | "comments" | "createdAt">
-  ) => void;
-}) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [category, setCategory] = useState(categories[1]);
-
-  const handleSubmit = () => {
-    if (!title || !content) return;
-    onCreate({ title, content, category });
-    setTitle("");
-    setContent("");
-    setCategory(categories[1]);
-    onClose();
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
-
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <motion.div
-            className="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl mx-auto p-6 sm:p-8 border border-gray-700/80 my-4 sm:my-10"
-            initial={{ scale: 0.9, opacity: 0, y: 50 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 50 }}
-            transition={{ type: "spring", damping: 20, stiffness: 300 }}
-          >
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white">
-                Buat Postingan Baru
-              </h2>
-              <button
-                onClick={onClose}
-                className="text-gray-400 hover:text-white"
-              >
-                <FiX size={24} />
-              </button>
-            </div>
-            <div className="space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+          <h1 className="text-3xl font-bold text-gray-800">Forum Komunitas</h1>
+          <div className="flex gap-2 items-center">
+            <div className="relative">
               <input
                 type="text"
-                placeholder="Judul Postingan..."
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full bg-gray-900/70 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                placeholder="Cari topik atau pertanyaan..."
+                value={search}
+                onChange={handleSearch}
+                className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 bg-white shadow-sm"
               />
-              <textarea
-                placeholder="Apa yang kamu pikirkan?"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows={6}
-                className="w-full bg-gray-900/70 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none"
-              />
-              <div className="relative">
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="w-full appearance-none bg-gray-900/70 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-                >
-                  {categories
-                    .filter((c) => c !== "Semua")
-                    .map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                </select>
-                <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <FaSearch className="absolute left-3 top-3 text-gray-400" />
+            </div>
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold shadow"
+            >
+              + Buat Topik
+            </button>
+          </div>
+        </div>
+
+        {/* Form Buat Topik Baru */}
+        {showForm && (
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-8 border border-green-100 animate-fade-in">
+            <form onSubmit={handleAddPost}>
+              <div className="mb-4">
+                <input
+                  type="text"
+                  name="title"
+                  value={newPost.title}
+                  onChange={handleInputChange}
+                  placeholder="Judul Topik"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                  required
+                />
               </div>
+              <div className="mb-4">
+                <textarea
+                  name="content"
+                  value={newPost.content}
+                  onChange={handleInputChange}
+                  placeholder="Tulis pertanyaan atau diskusi..."
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 min-h-[100px]"
+                  required
+                />
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="submit"
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold shadow"
+                >
+                  Posting
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowForm(false)}
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold"
+                >
+                  Batal
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* Daftar Post */}
+        <div className="space-y-6">
+          {posts.length === 0 && (
+            <div className="text-center text-gray-400 py-12">
+              Tidak ada topik ditemukan.
             </div>
-            <div className="flex justify-end mt-6">
-              <motion.button
-                onClick={handleSubmit}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-indigo-500 text-white px-6 py-2 rounded-full font-semibold shadow-lg shadow-indigo-500/30 disabled:bg-gray-600 disabled:shadow-none"
-                disabled={!title || !content}
-              >
-                Publikasikan
-              </motion.button>
+          )}
+          {posts.map((post) => (
+            <div
+              key={post.id}
+              className="bg-white rounded-lg shadow-md p-6 border border-gray-100 hover:shadow-lg transition-shadow group"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                {post.avatar ? (
+                  <img
+                    src={post.avatar}
+                    alt={post.author}
+                    className="w-9 h-9 rounded-full object-cover"
+                  />
+                ) : (
+                  <FaUserCircle className="w-9 h-9 text-gray-400" />
+                )}
+                <div>
+                  <div className="font-semibold text-gray-700 group-hover:text-green-600 transition-colors">
+                    {post.author}
+                  </div>
+                  <div className="text-xs text-gray-400">{post.date}</div>
+                </div>
+              </div>
+              <div className="mb-2">
+                <h2 className="text-lg font-bold text-gray-800 mb-1">
+                  {post.title}
+                </h2>
+                <p className="text-gray-600">{post.content}</p>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {post.tags.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+              <div className="flex items-center gap-6 mt-2 text-gray-500">
+                <div
+                  className="flex items-center gap-1 cursor-pointer hover:text-green-600"
+                  onClick={() =>
+                    setOpenCommentId(openCommentId === post.id ? null : post.id)
+                  }
+                >
+                  <FaRegCommentDots />
+                  <span className="text-sm">{post.comments.length}</span>
+                </div>
+                <div className="flex items-center gap-1 cursor-pointer hover:text-green-600">
+                  <FaRegThumbsUp />
+                  <span className="text-sm">{post.likes}</span>
+                </div>
+                <div className="flex items-center gap-1 cursor-pointer hover:text-red-500">
+                  <FaRegThumbsDown />
+                  <span className="text-sm">{post.dislikes}</span>
+                </div>
+              </div>
+              {/* Komentar Expandable Section */}
+              {openCommentId === post.id && (
+                <div className="w-full bg-gray-50 border border-gray-200 rounded-lg shadow-inner p-4 mt-4 animate-fade-in max-h-72 overflow-y-auto">
+                  <div className="font-semibold mb-2 text-gray-700">
+                    Komentar
+                  </div>
+                  {post.comments.length === 0 ? (
+                    <div className="text-gray-400 text-sm mb-2">
+                      Belum ada komentar.
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="flex flex-col gap-3 mb-2">
+                        {post.comments.map((comment) => (
+                          <div
+                            key={comment.id}
+                            className="flex gap-2 items-start"
+                          >
+                            <FaUserCircle className="w-7 h-7 text-gray-300 mt-1" />
+                            <div className="flex-1">
+                              <div className="font-semibold text-gray-700 text-sm">
+                                {comment.author}
+                              </div>
+                              <div className="text-xs text-gray-400 mb-1">
+                                {comment.date}
+                              </div>
+                              <div className="text-gray-600 text-sm mb-2">
+                                {comment.content}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <button
+                        type="button"
+                        className="text-green-600 hover:underline text-xs font-semibold px-2 py-1 rounded"
+                      >
+                        Balas
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          ))}
+        </div>
+      </div>
+    </motion.div>
   );
-};
+}

@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FiSearch,
   FiMapPin,
@@ -34,11 +35,11 @@ export default function LapanganPage() {
     });
   }, [activeSport, searchTerm]);
 
-  const textColorClass = "text-neutral-800";
-  const secondaryTextColorClass = "text-gray-600";
+  const textColorClass = "text-gray-900";
+  const secondaryTextColorClass = "text-gray-500";
   const bgColorClass = "bg-white";
-  const cardBgClass = "bg-white/50";
-  const borderColorClass = "border-gray-200";
+  const cardBgClass = "bg-white/90";
+  const borderColorClass = "border-gray-100";
 
   return (
     <div
@@ -180,14 +181,16 @@ const FieldCard = ({
   textColorClass: string;
   borderColorClass: string;
 }) => {
+  const router = useRouter();
   return (
-    <div
+    <Link
+      href={`/lapangan/${field.id}`}
       className={clsx(
-        "backdrop-blur-sm rounded-2xl overflow-hidden h-full flex flex-col group transition-all duration-300 hover:border-indigo-500/70 hover:shadow-2xl hover:shadow-indigo-900/20 transform hover:-translate-y-1",
-        "bg-white/50 border border-gray-200/50"
+        "rounded-2xl overflow-hidden h-full flex flex-col group transition-all duration-300 hover:border-indigo-400 hover:shadow-xl transform hover:-translate-y-1 cursor-pointer",
+        "bg-white border border-gray-100 shadow-sm"
       )}
     >
-      <div className="relative h-56">
+      <div className="relative h-56 overflow-hidden rounded-t-2xl bg-gray-100">
         <Image
           src={field.image}
           alt={field.name}
@@ -195,9 +198,15 @@ const FieldCard = ({
           objectFit="cover"
           className="transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-        <div className="absolute top-4 left-4 bg-indigo-500 text-white text-sm font-bold px-3 py-1 rounded-full flex items-center gap-2">
-          {field.sport === "Futsal" ? <FaFutbol /> : <GiWhistle />}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="w-full h-full transition-all duration-300 bg-gradient-to-t from-black/40 to-transparent opacity-70 group-hover:from-black/20 group-hover:opacity-40"></div>
+        </div>
+        <div className="absolute top-4 left-4 bg-white/90 text-indigo-600 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-2 shadow-sm border border-indigo-100">
+          {field.sport === "Futsal" ? (
+            <FaFutbol className="text-indigo-500" />
+          ) : (
+            <GiWhistle className="text-indigo-500" />
+          )}
           <span>{field.sport}</span>
         </div>
       </div>
@@ -212,7 +221,7 @@ const FieldCard = ({
         </p>
         <h3
           className={clsx(
-            "text-2xl font-bold mb-3 leading-tight flex-grow",
+            "text-xl font-semibold mb-3 leading-tight flex-grow tracking-tight",
             textColorClass
           )}
         >
@@ -224,11 +233,10 @@ const FieldCard = ({
             <span
               key={feature}
               className={clsx(
-                "text-xs px-2.5 py-1 rounded-full flex items-center gap-1.5",
-                "bg-gray-200 text-gray-700"
+                "text-xs px-2 py-1 rounded-full flex items-center gap-1.5 border border-gray-200 bg-gray-50 text-gray-600"
               )}
             >
-              <FaRegLightbulb className="text-yellow-300" /> {feature}
+              <FaRegLightbulb className="text-yellow-400" /> {feature}
             </span>
           ))}
         </div>
@@ -240,27 +248,31 @@ const FieldCard = ({
           )}
         >
           <div>
-            <p className={clsx("text-sm", secondaryTextColorClass)}>
+            <p className={clsx("text-xs mb-1", secondaryTextColorClass)}>
               Mulai dari
             </p>
-            <p className={clsx("text-xl font-bold", textColorClass)}>
+            <p className={clsx("text-lg font-bold", textColorClass)}>
               Rp {field.price.toLocaleString("id-ID")}
               <span
-                className={clsx("text-sm font-normal", secondaryTextColorClass)}
+                className={clsx("text-xs font-normal", secondaryTextColorClass)}
               >
                 /jam
               </span>
             </p>
           </div>
-          <Link
-            href={`/lapangan/${field.id}`}
-            className="flex items-center gap-2 bg-indigo-500 text-white px-5 py-2.5 rounded-full font-semibold shadow-lg shadow-indigo-500/30"
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              router.push(`/booking?lapangan=${field.id}`);
+            }}
+            className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-full font-semibold shadow-md transition text-sm"
           >
-            <span>Detail</span>
+            <span>Booking</span>
             <FiArrowRight />
-          </Link>
+          </button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

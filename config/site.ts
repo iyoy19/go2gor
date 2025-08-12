@@ -34,5 +34,6 @@ export const siteConfig = {
   ],
   links: {
     Login: "/login",
+    Booking: "/booking",
   },
 };
