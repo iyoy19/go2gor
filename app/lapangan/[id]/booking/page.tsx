@@ -29,7 +29,7 @@ import {
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
-import { LapanganType, dummyFields } from "../../data/lapangan";
+import { LapanganType, dummyFields } from "@/data/lapangan";
 
 interface TimeSlot {
   time: string;
