@@ -101,7 +101,7 @@ export default function HomeSectionOne() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="mt-2 mb-3 min-h-[4.2rem] flex items-start text-[2.2rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.2rem] font-extrabold tracking-tight leading-tight text-black dark:text-white overflow-hidden drop-shadow-md"
           >
-            <span className="inline-flex items-center min-w-[12ch] transition-all duration-300">
+            <span className="inline-flex pt-24 items-center min-w-[14ch] transition-all duration-300">
               {displayText}
               <motion.span
                 className="inline-block w-[3px] h-[1.2em] ml-1 bg-yellow-500 dark:bg-pink-600"
@@ -179,7 +179,7 @@ export default function HomeSectionOne() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="mt-2 mb-3 min-h-[2.5rem] sm:min-h-[3rem] flex items-start text-[2rem] sm:text-[2.5rem] font-extrabold tracking-tight leading-tight text-black dark:text-white overflow-hidden drop-shadow-md"
           >
-            <span className="inline-flex items-center min-w-[12ch] transition-all duration-300">
+            <span className="inline-flex items-center min-w-[14ch] transition-all duration-300">
               {displayText}
               <motion.span
                 className="inline-block w-[3px] h-[1.2em] ml-1 bg-yellow-500 dark:bg-pink-600"

@@ -4,33 +4,205 @@ export const siteConfig = {
   description: "Platform penyewaan lapangan dan komunitas olahraga.",
   navItems: [
     {
-      label: "Beranda",
+      key: "home",
+      label: "Home",
       dropdown: false,
       href: "/",
-      icon: "home",
+      icon: "Home",
     },
     {
-      label: "Booking",
+      key: "match",
+      label: "Match",
       dropdown: true,
-      icon: "calendar-clock",
+      icon: "Trophy",
       children: [
-        { label: "Lapangan", href: "/lapangan", icon: "map-pin" },
-        { label: "Jadwal", href: "/jadwal", icon: "clock" },
+        {
+          key: "match-group",
+          title: "Pertandingan",
+          items: [
+            {
+              key: "jadwal",
+              label: "Jadwal Pertandingan",
+              href: "/jadwal",
+              icon: "CalendarDays",
+              description: "Lihat jadwal pertandingan",
+            },
+            {
+              key: "booking",
+              label: "Booking Lapangan",
+              href: "/booking",
+              icon: "CalendarPlus",
+              description: "Pesan lapangan untuk pertandingan",
+            },
+            {
+              key: "team",
+              label: "Team Match",
+              href: "/team",
+              icon: "Users",
+              description: "Daftar tim yang bertanding",
+            },
+          ],
+        },
       ],
     },
     {
+      key: "arena",
+      label: "Arena",
+      dropdown: true,
+      icon: "Building2",
+      children: [
+        {
+          key: "arena-group",
+          title: "Informasi Arena",
+          items: [
+            {
+              key: "daftar-lapangan",
+              label: "Daftar Lapangan",
+              href: "/lapangan",
+              icon: "Building2",
+              description: "Lihat semua lapangan tersedia",
+            },
+            {
+              key: "fasilitas",
+              label: "Fasilitas",
+              href: "/fasilitas",
+              icon: "Settings",
+              description: "Fasilitas yang tersedia",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      key: "komunitas",
       label: "Komunitas",
       dropdown: true,
-      icon: "users",
+      icon: "Users",
       children: [
-        { label: "Forum", href: "/forum", icon: "message-circle" },
-        { label: "Event", href: "/event", icon: "calendar" },
+        {
+          key: "komunitas-group",
+          title: "Aktivitas Komunitas",
+          items: [
+            {
+              key: "forum",
+              label: "Forum",
+              href: "/forum",
+              icon: "MessageCircle",
+              description: "Diskusi dengan komunitas",
+            },
+            {
+              key: "event",
+              label: "Event",
+              href: "/event",
+              icon: "Calendar",
+              description: "Event komunitas mendatang",
+            },
+            {
+              key: "galeri",
+              label: "Galeri",
+              href: "/galeri",
+              icon: "Image",
+              description: "Galeri foto komunitas",
+            },
+          ],
+        },
       ],
     },
-  ],
-  navMenuItems: [
-    { label: "Kontak", href: "/kontak", icon: "phone" },
-    { label: "Login", href: "/login", icon: "log-in" },
+    {
+      key: "profile",
+      label: "Profile",
+      dropdown: true,
+      icon: "User2",
+      children: [
+        {
+          key: "account-group",
+          title: "Data & Pengaturan Akun",
+          items: [
+            {
+              key: "profil-saya",
+              label: "Profil Saya",
+              href: "/profil",
+              icon: "UserCircle",
+              description: "Lihat & edit data diri",
+            },
+            {
+              key: "pengaturan",
+              label: "Pengaturan Akun",
+              href: "/pengaturan",
+              icon: "Settings2",
+              description: "Email, password, foto profil",
+            },
+            {
+              key: "notif",
+              label: "Preferensi Notifikasi",
+              href: "/notifikasi",
+              icon: "Bell",
+              description: "Atur notifikasi",
+            },
+          ],
+        },
+        {
+          key: "activity-group",
+          title: "Aktivitas & Riwayat",
+          items: [
+            {
+              key: "riwayat-booking",
+              label: "Riwayat Booking",
+              href: "/riwayat-booking",
+              icon: "ClipboardList",
+              description: "Lapangan yang pernah dibooking",
+            },
+            {
+              key: "jadwal-saya",
+              label: "Jadwal Saya",
+              href: "/jadwal-saya",
+              icon: "Calendar",
+              description: "Pertandingan atau booking mendatang",
+            },
+            {
+              key: "aktivitas",
+              label: "Aktivitas & Riwayat",
+              href: "/aktivitas",
+              icon: "Activity",
+              description: "Riwayat aktivitas",
+            },
+          ],
+        },
+        {
+          key: "team-group",
+          title: "Tim",
+          items: [
+            {
+              key: "tim-saya",
+              label: "Tim Saya",
+              href: "/tim-saya",
+              icon: "Users",
+              description: "Tim yang diikuti",
+            },
+          ],
+        },
+        {
+          key: "help-group",
+          title: "Bantuan & Keluar",
+          items: [
+            {
+              key: "help",
+              label: "Pusat Bantuan",
+              href: "/bantuan",
+              icon: "HelpCircle",
+              description: "FAQ dan panduan",
+            },
+            {
+              key: "logout",
+              label: "Logout",
+              href: "/logout",
+              icon: "LogOut",
+              color: "danger",
+            },
+          ],
+        },
+      ],
+    },
   ],
   links: {
     Login: "/login",

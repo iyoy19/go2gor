@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
-import { Navbar } from "@/components/navbar";
 import { fontPoppins } from "@/config/fonts";
+import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 import "swiper/css";
