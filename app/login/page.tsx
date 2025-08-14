@@ -4,8 +4,6 @@ import { useState, useEffect } from "react";
 import clsx from "clsx";
 import { useTheme } from "next-themes";
 
-import { ThemeSwitch } from "@/components/theme-switch";
-
 export default function LoginPage() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
