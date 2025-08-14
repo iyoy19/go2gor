@@ -32,19 +32,19 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body
         className={clsx(
-          "min-h-screen antialiased hide-scrollbar",
-          "bg-gradient-to-b bg-white text-black",
+          "min-h-screen antialiased hide-scrollbar ",
+          "bg-gradient-to-b from-white to-gray-50 text-black",
           fontPoppins.variable
         )}
       >
-        <div className="relative w-full overflow-x-hidden hide-scrollbar">
-          {/* Navbar fixed on top */}
+        <div className="relative w-full overflow-x-hidden hide-scrollbar ">
+          {/* Navbar fixed dengan background yang diatur di sini */}
           <div className="fixed top-0 left-0 right-0 z-50 hide-scrollbar">
             <Navbar />
           </div>
 
-          {/* Main content with responsive padding top to prevent navbar overlap */}
-          <main className="relative z-0 flex flex-col min-h-screen hide-scrollbar">
+          {/* Main content dengan padding top agar tidak ketimpa navbar */}
+          <main className="relative z-0 flex flex-col min-h-screen hide-scrollbar pt-[64px]">
             {children}
             <Footer />
           </main>

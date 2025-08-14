@@ -98,13 +98,13 @@ export default function LapanganSection() {
         loop={true}
         pagination={{ clickable: true }}
         modules={[Autoplay, Pagination]}
-        centeredSlides={true}
+        centeredSlides={false}
         breakpoints={{
           0: { slidesPerView: 1, spaceBetween: 10 },
-          640: { slidesPerView: 2.5, spaceBetween: 15 },
-          1024: { slidesPerView: 4.5, spaceBetween: 20 },
+          640: { slidesPerView: 2, spaceBetween: 15 },
+          1024: { slidesPerView: 4, spaceBetween: 10 },
         }}
-        className="w-full -mx-8 px-4" // Extend Swiper to edges
+        className="w-full px-4"
       >
         {lapanganData.map((lapangan) => (
           <SwiperSlide key={lapangan.id}>

@@ -49,12 +49,12 @@ export default function HomeSectionOne() {
   }, []);
 
   return (
-    <section className="relative w-full pt-10 md:pt-20 font-poppins">
+    <section className="relative w-full font-poppins">
       {/* Background Decoration */}
       <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] bg-purple-300 dark:bg-purple-700 opacity-20 rounded-full blur-3xl z-0" />
       <div className="absolute bottom-[-120px] left-[-80px] w-[250px] h-[250px] bg-indigo-300 dark:bg-indigo-700 opacity-20 rounded-full blur-2xl z-0" />
 
-      <div className="relative w-full overflow-x-hidden flex flex-col md:flex-row items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-14 py-6 md:py-12 gap-10 z-10 hide-scrollbar">
+      <div className="relative w-full overflow-x-hidden flex flex-col md:flex-row items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-14 py-6 md:py-4 gap-10 z-10 hide-scrollbar">
         {/* Mobile: Top Headings */}
         <div className="block md:hidden w-full text-left z-10 px-4 mt-2">
           <motion.span
@@ -99,9 +99,11 @@ export default function HomeSectionOne() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-2 mb-3 min-h-[4.2rem] flex items-start text-[2.2rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.2rem] font-extrabold tracking-tight leading-tight text-black dark:text-white overflow-hidden drop-shadow-md"
+            className="mt-32 mb-0 flex items-center min-h-[4.2rem] sm:min-h-[5rem] md:min-h-[5.5rem] lg:min-h-[6rem] xl:min-h-[6.5rem]
+             text-[2.2rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.2rem]
+             font-extrabold tracking-tight leading-tight text-black dark:text-white overflow-hidden drop-shadow-md"
           >
-            <span className="inline-flex pt-24 items-center min-w-[14ch] transition-all duration-300">
+            <span className="inline-flex items-center min-w-[14ch]">
               {displayText}
               <motion.span
                 className="inline-block w-[3px] h-[1.2em] ml-1 bg-yellow-500 dark:bg-pink-600"

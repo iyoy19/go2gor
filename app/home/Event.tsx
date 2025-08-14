@@ -87,11 +87,11 @@ export default function App() {
         loop={true}
         pagination={{ clickable: true }}
         modules={[Autoplay, Pagination]}
-        centeredSlides={true}
+        centeredSlides={false}
         breakpoints={{
           0: { slidesPerView: 1, spaceBetween: 10 },
           640: { slidesPerView: 2.5, spaceBetween: 15 },
-          1024: { slidesPerView: 4.5, spaceBetween: 20 },
+          1024: { slidesPerView: 3.5, spaceBetween: 20 },
         }}
         className="w-full -mx-8 px-4"
       >
