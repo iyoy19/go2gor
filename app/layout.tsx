@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 
 import "swiper/css";
 import "swiper/css/autoplay";
+import "@/styles/swiper-custom.css";
 
 export const metadata: Metadata = {
   title: {

@@ -13,7 +13,7 @@ export default function MainNavbar() {
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       isBordered
-      className="bg-background/10 backdrop-blur-lg px-4 sm:px-6 lg:px-8"
+      className="bg-background/10 backdrop-blur-lg px-0"
     >
       <MobileNavbar isMenuOpen={isMenuOpen} />
       <DesktopNavbar />
