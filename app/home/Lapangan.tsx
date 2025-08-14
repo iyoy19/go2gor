@@ -5,8 +5,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import { Pagination, Autoplay } from "swiper/modules";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import type { Swiper as SwiperClass } from "swiper/types";
 
 const lapanganData = [
   {
@@ -14,61 +15,102 @@ const lapanganData = [
     type: "Futsal",
     name: "Lapangan 1",
     img: "https://heroui.com/images/card-example-6.jpeg",
+    price: "Rp 120.000/jam",
+    rating: "4.8",
   },
   {
     id: "futsal-2",
     type: "Futsal",
     name: "Lapangan 2",
     img: "https://heroui.com/images/card-example-6.jpeg",
+    price: "Rp 120.000/jam",
+    rating: "4.9",
   },
   {
     id: "badminton-1",
     type: "Badminton",
     name: "Lapangan 1",
     img: "https://heroui.com/images/card-example-6.jpeg",
+    price: "Rp 75.000/jam",
+    rating: "4.7",
   },
   {
     id: "badminton-2",
     type: "Badminton",
     name: "Lapangan 2",
     img: "https://heroui.com/images/card-example-6.jpeg",
+    price: "Rp 75.000/jam",
+    rating: "4.6",
   },
   {
     id: "futsal-3",
     type: "Futsal",
     name: "Lapangan 3",
     img: "https://heroui.com/images/card-example-6.jpeg",
+    price: "Rp 150.000/jam",
+    rating: "5.0",
   },
 ];
 
 export default function LapanganSection() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
   const selectedLapangan = selectedId
     ? lapanganData.find((l) => l.id === selectedId)
     : null;
 
+  useEffect(() => {
+    if (swiper) {
+      if (selectedId) {
+        swiper.autoplay.stop();
+      } else {
+        swiper.autoplay.start();
+      }
+    }
+  }, [selectedId, swiper]);
+
   return (
-    <div className="w-full px-8 py-12">
-      <h2 className="text-3xl font-bold text-center mb-4">Daftar Lapangan</h2>
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+      className="w-full py-12"
+    >
+      <div className="text-left px-4">
+        <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-1">
+          Daftar Lapangan
+        </h2>
+        <p className="text-lg text-gray-500 dark:text-gray-400">
+          Temukan dan booking lapangan futsal atau badminton favoritmu dengan
+          mudah.
+        </p>
+      </div>
 
       <Swiper
+        onSwiper={setSwiper}
         spaceBetween={20}
-        autoplay={{ delay: 2500, disableOnInteraction: false }}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
         loop={true}
         pagination={{ clickable: true }}
         modules={[Autoplay, Pagination]}
+        centeredSlides={true}
         breakpoints={{
-          0: { slidesPerView: 1 }, // Mobile
-          640: { slidesPerView: 2 }, // Tablet
-          1024: { slidesPerView: 4 }, // Desktop
+          0: { slidesPerView: 1, spaceBetween: 10 },
+          640: { slidesPerView: 2.5, spaceBetween: 15 },
+          1024: { slidesPerView: 4.5, spaceBetween: 20 },
         }}
+        className="w-full -mx-8 px-4" // Extend Swiper to edges
       >
         {lapanganData.map((lapangan) => (
           <SwiperSlide key={lapangan.id}>
             <motion.div
-              layoutId={lapangan.id}
               onClick={() => setSelectedId(lapangan.id)}
-              className="cursor-pointer rounded-lg overflow-visible shadow-2xl hover:shadow-[0_35px_60px_-15px_rgba(0,0,0,0.4)] transition-shadow duration-300"
+              className="cursor-pointer rounded-lg overflow-visible shadow-2xl hover:shadow-[0_35px_60px_-15px_rgba(0,0,0,0.4)] transition-shadow duration-300" // Removed px-8
               whileHover={{ scale: 1.05 }}
               transition={{ type: "tween", duration: 0.25, ease: "easeInOut" }}
             >
@@ -89,8 +131,12 @@ export default function LapanganSection() {
                 />
                 <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between backdrop-blur-md">
                   <div>
-                    <p className="text-black text-tiny">desc1</p>
-                    <p className="text-black text-tiny">desc2</p>
+                    <p className="text-black font-semibold text-sm">
+                      {lapangan.price}
+                    </p>
+                    <p className="text-yellow-500 text-xs">
+                      ★ {lapangan.rating}
+                    </p>
                   </div>
                   <Button
                     className="text-tiny"
@@ -111,20 +157,19 @@ export default function LapanganSection() {
         {selectedId && selectedLapangan && (
           <motion.div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
-            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            animate={{ opacity: 1, backdropFilter: "blur(6px)" }}
-            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
             onClick={() => setSelectedId(null)}
           >
             <motion.div
-              layoutId={selectedId}
-              className="rounded-lg max-w-xl w-full shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)]"
+              className="rounded-lg max-w-xl w-full mx-4 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)]"
               onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, scale: 0.92 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.92 }}
-              transition={{ type: "tween", duration: 0.35, ease: "easeInOut" }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
             >
               <Card isFooterBlurred className="w-full h-[400px]">
                 <CardHeader className="absolute z-10 top-1 flex-col items-start">
@@ -143,8 +188,12 @@ export default function LapanganSection() {
                 />
                 <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between backdrop-blur-md">
                   <div>
-                    <p className="text-black text-tiny">desc1</p>
-                    <p className="text-black text-tiny">desc2</p>
+                    <p className="text-black font-semibold text-sm">
+                      {selectedLapangan.price}
+                    </p>
+                    <p className="text-yellow-500 text-xs">
+                      ★ {selectedLapangan.rating}
+                    </p>
                   </div>
                   <Button
                     className="text-tiny"
@@ -160,6 +209,6 @@ export default function LapanganSection() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }

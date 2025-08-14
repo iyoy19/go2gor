@@ -11,6 +11,11 @@ import {
   Avatar,
   Button,
   Badge,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  DropdownSection,
 } from "@heroui/react";
 import * as Icons from "lucide-react";
 import { siteConfig } from "@/config/site";
@@ -37,31 +42,76 @@ export default function MobileNavbar({ isMenuOpen }: { isMenuOpen: boolean }) {
     }));
   };
 
+  const profileNavItem = siteConfig.navItems.find(
+    (item) => item.key === "profile"
+  );
+
   return (
     <>
       {/* Toggle menu di kiri */}
       <NavbarContent className="sm:hidden px-2" justify="start">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="text-primary"
+          className="text-black"
         />
       </NavbarContent>
 
       {/* Logo di tengah */}
       <NavbarContent className="sm:hidden px-2" justify="center">
         <NavbarBrand>
-          <p className="font-bold text-xl text-primary">{siteConfig.name}</p>
+          <Link href="/">
+            <p className="font-bold text-xl text-black">{siteConfig.name}</p>
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
       {/* Notifikasi & Avatar di kanan */}
       <NavbarContent className="sm:hidden px-2" justify="end">
-        <Avatar
-          as="button"
-          src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-          size="sm"
-          className="cursor-pointer transition-transform hover:scale-105 ml-2"
-        />
+        <Dropdown placement="bottom-end">
+          <DropdownTrigger>
+            <Avatar
+              as="button"
+              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              size="sm"
+              className="cursor-pointer transition-transform hover:scale-105 ml-2"
+            />
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Profile Actions" variant="flat">
+            <DropdownItem
+              key="logged-in-as"
+              isReadOnly
+              className="opacity-100 cursor-default"
+            >
+              <div className="flex flex-col">
+                <p className="font-semibold">Logged in as</p>
+                <p className="font-semibold text-default-500">Zoey Adams</p>
+                <p className="text-xs text-default-400">zoey@example.com</p>
+              </div>
+            </DropdownItem>
+            <React.Fragment>
+              {(profileNavItem?.children || []).map((group, groupIndex) => (
+                <DropdownSection
+                  key={group.key}
+                  title={group.title}
+                  showDivider={
+                    groupIndex < (profileNavItem?.children?.length || 0) - 1
+                  }
+                >
+                  {(group.items || []).map((item) => (
+                    <DropdownItem
+                      key={item.key}
+                      href={item.href}
+                      color={item.color === "danger" ? "danger" : "default"}
+                      startContent={getIcon(item.icon, 18)}
+                    >
+                      {item.label}
+                    </DropdownItem>
+                  ))}
+                </DropdownSection>
+              ))}
+            </React.Fragment>
+          </DropdownMenu>
+        </Dropdown>
       </NavbarContent>
 
       <NavbarMenu className="gap-2 px-2 py-4">
@@ -76,7 +126,7 @@ export default function MobileNavbar({ isMenuOpen }: { isMenuOpen: boolean }) {
                     <NavbarMenuItem className="overflow-hidden rounded-md">
                       <Link
                         href={item.href}
-                        className="w-full flex items-center gap-2 px-3 py-2.5 text-default-600 hover:text-primary hover:bg-primary-50 transition-colors rounded-md"
+                        className="w-full flex items-center gap-2 px-3 py-2.5 text-black hover:text-primary hover:bg-primary-50 transition-colors rounded-md"
                       >
                         {getIcon(item.icon, 18)}
                         <span className="text-sm">{item.label}</span>
@@ -98,7 +148,9 @@ export default function MobileNavbar({ isMenuOpen }: { isMenuOpen: boolean }) {
                           </div>
                           <Icons.ChevronDown
                             size={18}
-                            className={`transition-transform ${expandedSections[item.key] ? "rotate-180" : ""}`}
+                            className={`transition-transform ${
+                              expandedSections[item.key] ? "rotate-180" : ""
+                            }`}
                           />
                         </div>
                       </NavbarMenuItem>

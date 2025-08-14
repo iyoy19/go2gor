@@ -6,7 +6,8 @@ import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import { Autoplay, Pagination } from "swiper/modules";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import type { Swiper as SwiperClass } from "swiper/types";
 
 export default function App() {
   const cards = [
@@ -43,24 +44,56 @@ export default function App() {
   ];
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
   const selectedCard = selectedId
     ? cards.find((c) => c.id === selectedId)
     : null;
 
+  useEffect(() => {
+    if (swiper) {
+      if (selectedId) {
+        swiper.autoplay.stop();
+      } else {
+        swiper.autoplay.start();
+      }
+    }
+  }, [selectedId, swiper]);
+
   return (
-    <div className="w-full px-8 py-12">
-      <h2 className="text-3xl font-bold mb-6">Event</h2>
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+      className="w-full py-12"
+    >
+      <div className="text-left px-4">
+        <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-3">
+          Event & Turnamen
+        </h2>
+        <p className="text-lg text-gray-500 dark:text-gray-400">
+          Jangan lewatkan keseruan! Ikuti event dan turnamen olahraga pilihan
+          kami.
+        </p>
+      </div>
       <Swiper
+        onSwiper={setSwiper}
         spaceBetween={20}
-        autoplay={{ delay: 2000, disableOnInteraction: false }}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
         loop={true}
         pagination={{ clickable: true }}
         modules={[Autoplay, Pagination]}
+        centeredSlides={true}
         breakpoints={{
-          0: { slidesPerView: 1 }, // Mobile
-          640: { slidesPerView: 2 }, // Tablet
-          1024: { slidesPerView: 3 }, // Desktop
+          0: { slidesPerView: 1, spaceBetween: 10 },
+          640: { slidesPerView: 2.5, spaceBetween: 15 },
+          1024: { slidesPerView: 4.5, spaceBetween: 20 },
         }}
+        className="w-full -mx-8 px-4"
       >
         {cards.map((card) => (
           <SwiperSlide key={card.id}>
@@ -104,13 +137,12 @@ export default function App() {
             onClick={() => setSelectedId(null)}
           >
             <motion.div
-              layoutId={selectedId}
-              className="rounded-lg max-w-xl w-full shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)]"
+              className="rounded-lg max-w-xl w-full mx-4 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)]"
               onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, scale: 0.92 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.92 }}
-              transition={{ type: "tween", duration: 0.35, ease: "easeInOut" }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
             >
               <Card className="w-full h-[400px] rounded-lg overflow-hidden">
                 <CardHeader className="absolute z-10 top-1 flex-col items-start">
@@ -138,6 +170,6 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
