@@ -37,7 +37,7 @@ const Hero = () => {
   );
 
   return (
-    <section className="relative flex flex-col bg-black text-white overflow-hidden">
+    <section className="relative flex flex-col bg-black text-white">
       {/* Top Hero */}
       <div className="container mx-auto flex flex-col lg:flex-row items-center gap-10 py-20 px-6">
         {/* Left - Text */}
@@ -91,7 +91,7 @@ const Hero = () => {
       </div>
 
       {/* Bottom Stats */}
-      <div className="w-full border-t border-white/10 bg-black/20 py-4 backdrop-blur-sm relative z-10">
+      <div className="w-full border-t border-white/10 bg-black/20 py-4 backdrop-blur-sm">
         <div className="container mx-auto px-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 justify-items-center">
           <StatItem
             icon={<Clock className="h-7 w-7 text-primary-300" />}
@@ -119,21 +119,6 @@ const Hero = () => {
             label="Olahraga Populer"
           />
         </div>
-      </div>
-
-      {/* Wave Divider */}
-      <div className="absolute bottom-0 left-0 right-0 z-0">
-        <svg
-          className="w-full h-24 lg:h-32"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1440 320"
-        >
-          <path
-            fill="#ffffff"
-            fillOpacity="1"
-            d="M0,256L60,240C120,224,240,192,360,186.7C480,181,600,203,720,197.3C840,192,960,160,1080,170.7C1200,181,1320,235,1380,261.3L1440,288L1440,320L0,320Z"
-          ></path>
-        </svg>
       </div>
     </section>
   );
