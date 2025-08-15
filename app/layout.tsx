@@ -44,7 +44,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </div>
 
           {/* Main content dengan padding top agar tidak ketimpa navbar */}
-          <main className="relative z-0 flex flex-col min-h-screen hide-scrollbar pt-[64px]">
+          <main className="relative z-0 flex flex-col min-h-screen hide-scrollbar">
             {children}
             <Footer />
           </main>

@@ -1,5 +1,3 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "CodeGPT.apiKey": "OpenAI",
-  "remote.localPortHost": "allInterfaces"
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,214 +1,274 @@
 "use client";
-import { Card, CardHeader, CardFooter, Image, Button } from "@heroui/react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/autoplay";
-import { Pagination, Autoplay } from "swiper/modules";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import type { Swiper as SwiperClass } from "swiper/types";
 
-const lapanganData = [
-  {
-    id: "futsal-1",
-    type: "Futsal",
-    name: "Lapangan 1",
-    img: "https://heroui.com/images/card-example-6.jpeg",
-    price: "Rp 120.000/jam",
-    rating: "4.8",
-  },
-  {
-    id: "futsal-2",
-    type: "Futsal",
-    name: "Lapangan 2",
-    img: "https://heroui.com/images/card-example-6.jpeg",
-    price: "Rp 120.000/jam",
-    rating: "4.9",
-  },
-  {
-    id: "badminton-1",
-    type: "Badminton",
-    name: "Lapangan 1",
-    img: "https://heroui.com/images/card-example-6.jpeg",
-    price: "Rp 75.000/jam",
-    rating: "4.7",
-  },
-  {
-    id: "badminton-2",
-    type: "Badminton",
-    name: "Lapangan 2",
-    img: "https://heroui.com/images/card-example-6.jpeg",
-    price: "Rp 75.000/jam",
-    rating: "4.6",
-  },
-  {
-    id: "futsal-3",
-    type: "Futsal",
-    name: "Lapangan 3",
-    img: "https://heroui.com/images/card-example-6.jpeg",
-    price: "Rp 150.000/jam",
-    rating: "5.0",
-  },
-];
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { motion } from "framer-motion";
+
+const Player = dynamic(
+  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
+  { ssr: false }
+);
+
+const words = ["Main Hari Ini!", "Booking Mudah!", "Anti Ribet!"];
 
 export default function LapanganSection() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
-  const selectedLapangan = selectedId
-    ? lapanganData.find((l) => l.id === selectedId)
-    : null;
+  const [index, setIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
   useEffect(() => {
-    if (swiper) {
-      if (selectedId) {
-        swiper.autoplay.stop();
+    const currentWord = words[index];
+    let typingSpeed = isDeleting ? 50 : 100;
+
+    const timer = setTimeout(() => {
+      if (!isDeleting) {
+        setDisplayText(currentWord.substring(0, displayText.length + 1));
+        if (displayText.length + 1 === currentWord.length) {
+          setTimeout(() => setIsDeleting(true), 2000);
+        }
       } else {
-        swiper.autoplay.start();
+        setDisplayText(currentWord.substring(0, displayText.length - 1));
+        if (displayText.length === 0) {
+          setIsDeleting(false);
+          setIndex((prev) => (prev + 1) % words.length);
+        }
       }
-    }
-  }, [selectedId, swiper]);
+    }, typingSpeed);
+
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, index]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollIndicator(window.scrollY === 0);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="w-full py-12"
-    >
-      <div className="text-left px-4">
-        <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-1">
-          Daftar Lapangan
-        </h2>
-        <p className="text-lg text-gray-500 dark:text-gray-400">
-          Temukan dan booking lapangan futsal atau badminton favoritmu dengan
-          mudah.
-        </p>
+    <section className="relative w-full font-poppins">
+      {/* Background Decoration */}
+      <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] bg-purple-300 dark:bg-purple-700 opacity-20 rounded-full blur-3xl z-0" />
+      <div className="absolute bottom-[-120px] left-[-80px] w-[250px] h-[250px] bg-indigo-300 dark:bg-indigo-700 opacity-20 rounded-full blur-2xl z-0" />
+
+      <div className="relative w-full overflow-x-hidden flex flex-col md:flex-row items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-14 py-6 md:py-4 gap-10 z-10 hide-scrollbar">
+        {/* Mobile: Top Headings */}
+        <div className="block md:hidden w-full text-left z-10 px-4 mt-2">
+          <motion.span
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="inline-flex items-center px-4 py-1 text-xs font-bold text-white bg-yellow-400 dark:bg-pink-600 rounded-full shadow-md w-fit"
+          >
+            #1 Booking Lapangan Online
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-base sm:text-lg font-medium tracking-wide text-black dark:text-white mt-2"
+          >
+            Booking Lapangan Gampang & Cepat
+          </motion.h2>
+        </div>
+
+        {/* Desktop: Left Text */}
+        <div className="hidden md:flex w-full md:w-1/2 flex-col justify-start text-left z-10 px-4 md:px-0">
+          <motion.span
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="inline-flex items-center px-4 py-1 text-xs font-bold text-white bg-yellow-400 dark:bg-pink-600 rounded-full shadow-md w-fit"
+          >
+            #1 Booking Lapangan Online
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wide text-black dark:text-white mt-2"
+          >
+            Booking Lapangan Gampang & Cepat
+          </motion.h2>
+
+          {/* Typewriter */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="mt-32 mb-0 flex items-center min-h-[4.2rem] sm:min-h-[5rem] md:min-h-[5.5rem] lg:min-h-[6rem] xl:min-h-[6.5rem]
+             text-[2.2rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.2rem]
+             font-extrabold tracking-tight leading-tight text-black dark:text-white overflow-hidden drop-shadow-md"
+          >
+            <span className="inline-flex items-center min-w-[14ch]">
+              {displayText}
+              <motion.span
+                className="inline-block w-[3px] h-[1.2em] ml-1 bg-yellow-500 dark:bg-pink-600"
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ repeat: Infinity, duration: 1 }}
+              />
+            </span>
+          </motion.div>
+
+          {/* Extra Heading (New Line) */}
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+            className="text-lg sm:text-xl font-semibold text-black dark:text-white mt-1 lg:mt-2"
+          >
+            Tinggal Klik, Lapangan Langsung Dapet!
+          </motion.h3>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1 }}
+            className="mt-2 text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 md:w-4/5 font-medium"
+          >
+            Nggak perlu ribet datang ke GOR! <br />
+            Cukup buka website kami, pilih jadwal & lapangan favorit, langsung
+            booking.
+          </motion.p>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="mt-8 flex flex-row justify-start items-center gap-3 w-full"
+          >
+            <Link
+              href="/lapangan"
+              className="basis-1/2 text-center px-4 py-3 text-sm sm:text-base font-semibold text-white bg-blue-500 dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-800 rounded-lg shadow-md transition duration-200 transform hover:scale-105 backdrop-blur-md"
+            >
+              Cek Lapangan
+            </Link>
+            <Link
+              href="/booking"
+              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-500 dark:text-blue-700 border-2 border-blue-500 dark:border-blue-700 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105 backdrop-blur-md"
+            >
+              Booking Now
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Mobile: Animation */}
+        <div className="block md:hidden w-full flex justify-center items-center z-0">
+          <motion.div
+            className="w-[250px] sm:w-[350px]"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+          >
+            <Player
+              autoplay
+              loop
+              src="/animations/socer.json"
+              className="w-full h-full"
+            />
+          </motion.div>
+        </div>
+
+        {/* Mobile: Text */}
+        <div className="block md:hidden w-full flex flex-col justify-start text-left z-10 px-4 mt-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="mt-2 mb-3 min-h-[2.5rem] sm:min-h-[3rem] flex items-start text-[2rem] sm:text-[2.5rem] font-extrabold tracking-tight leading-tight text-black dark:text-white overflow-hidden drop-shadow-md"
+          >
+            <span className="inline-flex items-center min-w-[14ch] transition-all duration-300">
+              {displayText}
+              <motion.span
+                className="inline-block w-[3px] h-[1.2em] ml-1 bg-yellow-500 dark:bg-pink-600"
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ repeat: Infinity, duration: 1 }}
+              />
+            </span>
+          </motion.div>
+
+          {/* Extra Heading (Mobile) */}
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+            className="text-base sm:text-lg font-semibold text-black dark:text-white mt-1"
+          >
+            Tinggal Klik, Lapangan Langsung Dapet!
+          </motion.h3>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1 }}
+            className="mt-2 text-sm sm:text-base text-gray-700 dark:text-gray-300 font-medium"
+          >
+            Nggak perlu ribet datang ke GOR! <br />
+            Cukup buka website kami, pilih jadwal & lapangan favorit, langsung
+            booking. <br />
+          </motion.p>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="mt-6 flex flex-row justify-start items-center gap-3 w-full backdrop-blur-md"
+          >
+            <Link
+              href="/lapangan"
+              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 rounded-lg shadow-md transition duration-200 transform hover:scale-105"
+            >
+              Cek Lapangan
+            </Link>
+            <Link
+              href="/booking"
+              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-500 dark:text-blue-600 border-2 border-blue-500 dark:border-blue-600 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105"
+            >
+              Booking Now
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Desktop: Animation */}
+        <div className="hidden md:flex w-full md:w-1/2 justify-center items-center z-0">
+          <motion.div
+            className="w-[250px] sm:w-[350px] md:w-[450px]"
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          >
+            <Player
+              autoplay
+              loop
+              src="/animations/socer.json"
+              className="w-full h-full"
+            />
+          </motion.div>
+        </div>
       </div>
 
-      <Swiper
-        onSwiper={setSwiper}
-        spaceBetween={20}
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
-        }}
-        loop={true}
-        pagination={{ clickable: true }}
-        modules={[Autoplay, Pagination]}
-        centeredSlides={false}
-        breakpoints={{
-          0: { slidesPerView: 1, spaceBetween: 10 },
-          640: { slidesPerView: 2, spaceBetween: 15 },
-          1024: { slidesPerView: 4, spaceBetween: 10 },
-        }}
-        className="w-full px-4"
-      >
-        {lapanganData.map((lapangan) => (
-          <SwiperSlide key={lapangan.id}>
-            <motion.div
-              onClick={() => setSelectedId(lapangan.id)}
-              className="cursor-pointer rounded-lg overflow-visible shadow-2xl hover:shadow-[0_35px_60px_-15px_rgba(0,0,0,0.4)] transition-shadow duration-300" // Removed px-8
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "tween", duration: 0.25, ease: "easeInOut" }}
-            >
-              <Card isFooterBlurred className="w-full h-[300px]">
-                <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                  <p className="text-tiny text-white/60 uppercase font-bold">
-                    {lapangan.type}
-                  </p>
-                  <h4 className="text-black font-medium text-2xl">
-                    {lapangan.name}
-                  </h4>
-                </CardHeader>
-                <Image
-                  removeWrapper
-                  alt="Card example background"
-                  className="z-0 w-full h-full scale-125 -translate-y-6 object-cover drop-shadow-[0_15px_30px_rgba(0,0,0,0.3)]"
-                  src={lapangan.img}
-                />
-                <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between backdrop-blur-md">
-                  <div>
-                    <p className="text-black font-semibold text-sm">
-                      {lapangan.price}
-                    </p>
-                    <p className="text-yellow-500 text-xs">
-                      ★ {lapangan.rating}
-                    </p>
-                  </div>
-                  <Button
-                    className="text-tiny"
-                    color="primary"
-                    radius="full"
-                    size="sm"
-                  >
-                    Booking
-                  </Button>
-                </CardFooter>
-              </Card>
-            </motion.div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-
-      <AnimatePresence>
-        {selectedId && selectedLapangan && (
-          <motion.div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            onClick={() => setSelectedId(null)}
-          >
-            <motion.div
-              className="rounded-lg max-w-xl w-full mx-4 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)]"
-              onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-            >
-              <Card isFooterBlurred className="w-full h-[400px]">
-                <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                  <p className="text-tiny text-white/60 uppercase font-bold">
-                    {selectedLapangan.type}
-                  </p>
-                  <h4 className="text-black font-medium text-2xl">
-                    {selectedLapangan.name}
-                  </h4>
-                </CardHeader>
-                <Image
-                  removeWrapper
-                  alt="Card example background"
-                  className="z-0 w-full h-full object-cover drop-shadow-[0_25px_50px_rgba(0,0,0,0.35)]"
-                  src={selectedLapangan.img}
-                />
-                <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between backdrop-blur-md">
-                  <div>
-                    <p className="text-black font-semibold text-sm">
-                      {selectedLapangan.price}
-                    </p>
-                    <p className="text-yellow-500 text-xs">
-                      ★ {selectedLapangan.rating}
-                    </p>
-                  </div>
-                  <Button
-                    className="text-tiny"
-                    color="primary"
-                    radius="full"
-                    size="sm"
-                  >
-                    Booking
-                  </Button>
-                </CardFooter>
-              </Card>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+      {/* Scroll Indicator */}
+      {showScrollIndicator && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 1,
+            delay: 1.4,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+          className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
+        >
+          <div className="w-6 h-6 border-b-2 border-r-2 border-black dark:border-white rotate-45 animate-bounce" />
+        </motion.div>
+      )}
+    </section>
   );
 }
