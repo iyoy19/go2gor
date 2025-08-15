@@ -1,33 +1,46 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { Button, Link } from "@nextui-org/react";
 import { motion } from "framer-motion";
-import { Button, Card, CardBody } from "@nextui-org/react";
-import { ArrowRight, Clock, Calendar, MapPin } from "lucide-react";
+import { ArrowRight, Clock, Users, Ticket, MapPin, Trophy } from "lucide-react";
 
-export default function Hero() {
+const Hero = () => {
   const [time, setTime] = useState(new Date());
+  const [onlineUsers, setOnlineUsers] = useState(1337);
+  const [dailyBookings, setDailyBookings] = useState(256);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const timer = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timer);
+    const userCounter = setInterval(() => {
+      setOnlineUsers((prev) => prev + Math.floor(Math.random() * 3) - 1);
+    }, 2500);
+    const bookingCounter = setInterval(() => {
+      if (Math.random() > 0.7) setDailyBookings((prev) => prev + 1);
+    }, 5000);
+    return () => {
+      clearInterval(timer);
+      clearInterval(userCounter);
+      clearInterval(bookingCounter);
+    };
   }, []);
 
-  const scheduleToday = [
-    { time: "08:00 - 10:00", activity: "Futsal", status: "Booked" },
-    { time: "10:00 - 12:00", activity: "Badminton", status: "Available" },
-    { time: "13:00 - 15:00", activity: "Futsal", status: "Available" },
-  ];
+  const StatItem = ({ icon, value, label }: any) => (
+    <div className="flex items-center gap-3">
+      {icon}
+      <div>
+        <p className="font-semibold text-white text-sm sm:text-base">{value}</p>
+        <p className="text-xs text-gray-400">{label}</p>
+      </div>
+    </div>
+  );
 
   return (
-    <section
-      className="relative bg-cover bg-center bg-no-repeat text-white"
-      style={{ backgroundImage: "url('/images/hero.jpg')" }}
-    >
-      {/* Overlay gelap agar teks terbaca */}
-      <div className="absolute inset-0 bg-black/60" />
-
-      <div className="relative container mx-auto flex flex-col lg:flex-row items-center gap-10 py-20 px-6">
-        {/* Kiri - Teks */}
+    <section className="relative flex flex-col bg-black text-white overflow-hidden">
+      {/* Top Hero */}
+      <div className="container mx-auto flex flex-col lg:flex-row items-center gap-10 py-20 px-6">
+        {/* Left - Text */}
         <div className="flex-1 text-center lg:text-left">
           <motion.h1
             className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight"
@@ -37,7 +50,7 @@ export default function Hero() {
             GOR Margono — Sport & Community Hub
           </motion.h1>
           <motion.p
-            className="mt-6 text-lg sm:text-xl text-gray-200 leading-relaxed"
+            className="mt-6 text-lg sm:text-xl text-gray-300 leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
@@ -50,6 +63,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
           >
             <Button
+              as={Link}
               href="/lapangan"
               color="primary"
               size="lg"
@@ -62,52 +76,67 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Kanan - Card Jadwal */}
+        {/* Right - Image */}
         <motion.div
-          className="flex-1 max-w-md w-full"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
+          className="flex-1"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
         >
-          <Card className="bg-white/10 backdrop-blur-lg border border-white/20 text-white">
-            <CardBody>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold flex items-center gap-2">
-                  <Calendar className="h-5 w-5" /> Jadwal Hari Ini
-                </h3>
-                <span className="flex items-center gap-2 text-sm text-gray-300">
-                  <Clock className="h-4 w-4" />{" "}
-                  {time.toLocaleTimeString("en-GB")}
-                </span>
-              </div>
-              <ul className="space-y-3">
-                {scheduleToday.map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="flex justify-between items-center border-b border-white/10 pb-2"
-                  >
-                    <div>
-                      <p className="font-medium">{item.time}</p>
-                      <p className="text-sm text-gray-300">{item.activity}</p>
-                    </div>
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        item.status === "Available"
-                          ? "bg-green-500/20 text-green-300"
-                          : "bg-red-500/20 text-red-300"
-                      }`}
-                    >
-                      {item.status}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-4 flex items-center gap-2 text-sm text-gray-300">
-                <MapPin className="h-4 w-4" /> Lokasi: Serang, Banten
-              </div>
-            </CardBody>
-          </Card>
+          <img
+            src="/images/hero.jpg"
+            alt="Lapangan GOR Margono"
+            className="rounded-2xl shadow-2xl w-full object-cover"
+          />
         </motion.div>
+      </div>
+
+      {/* Bottom Stats */}
+      <div className="w-full border-t border-white/10 bg-black/20 py-4 backdrop-blur-sm relative z-10">
+        <div className="container mx-auto px-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 justify-items-center">
+          <StatItem
+            icon={<Clock className="h-7 w-7 text-primary-300" />}
+            value={isMounted ? time.toLocaleTimeString("en-GB") : "00:00:00"}
+            label="Waktu Lokal"
+          />
+          <StatItem
+            icon={<Users className="h-7 w-7 text-primary-300" />}
+            value={isMounted ? onlineUsers.toLocaleString() : "..."}
+            label="Pengguna Online"
+          />
+          <StatItem
+            icon={<Ticket className="h-7 w-7 text-primary-300" />}
+            value={isMounted ? dailyBookings.toString() : "..."}
+            label="Booking Hari Ini"
+          />
+          <StatItem
+            icon={<MapPin className="h-7 w-7 text-primary-300" />}
+            value="Jakarta & Bandung"
+            label="Lokasi Tersedia"
+          />
+          <StatItem
+            icon={<Trophy className="h-7 w-7 text-primary-300" />}
+            value="Futsal & Badminton"
+            label="Olahraga Populer"
+          />
+        </div>
+      </div>
+
+      {/* Wave Divider */}
+      <div className="absolute bottom-0 left-0 right-0 z-0">
+        <svg
+          className="w-full h-24 lg:h-32"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 320"
+        >
+          <path
+            fill="#ffffff"
+            fillOpacity="1"
+            d="M0,256L60,240C120,224,240,192,360,186.7C480,181,600,203,720,197.3C840,192,960,160,1080,170.7C1200,181,1320,235,1380,261.3L1440,288L1440,320L0,320Z"
+          ></path>
+        </svg>
       </div>
     </section>
   );
-}
+};
+
+export default Hero;
