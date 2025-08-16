@@ -1,15 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Carousel from "@/components/Carousel";
-
-const Player = dynamic(
-  () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
-  { ssr: false },
-);
 
 const words = ["Main Hari Ini!", "Booking Mudah!", "Anti Ribet!"];
 
@@ -37,7 +31,7 @@ export default function LapanganSection() {
   // Typewriter effect
   useEffect(() => {
     const currentWord = words[index];
-    let typingSpeed = isDeleting ? 50 : 100;
+    const typingSpeed = isDeleting ? 50 : 100;
 
     const timer = setTimeout(() => {
       if (!isDeleting) {

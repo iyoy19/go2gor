@@ -3,6 +3,12 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Clock, Users, CalendarDays, MapPin, Trophy } from "lucide-react";
 
+interface StatItemProps {
+  icon: React.ReactNode;
+  value: string | number;
+  label: string;
+}
+
 const Hero = () => {
   const [time, setTime] = useState(new Date());
   const [teams, setTeams] = useState(120);
@@ -34,7 +40,7 @@ const Hero = () => {
     }
   }, [isMounted]);
 
-  const StatItem = ({ icon, value, label }: any) => (
+  const StatItem = ({ icon, value, label }: StatItemProps) => (
     <div className="flex items-center gap-0 py-2 rounded-lg flex-shrink-0 w-auto px-4 sm:w-auto">
       <div className="flex-shrink-0 text-primary-300">{icon}</div>
       <div className="flex flex-col ml-2">

@@ -246,6 +246,7 @@ export default function KontakPage() {
               style={{ border: 0 }}
               allowFullScreen={true}
               loading="lazy"
+              title="Google Maps Location"
               className="w-full"
             ></iframe>
           </div>

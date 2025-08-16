@@ -79,8 +79,13 @@ export default function BookingModal({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
+      role="presentation"
     >
-      <div className="bg-white/80 rounded-2xl shadow-2xl p-0 max-w-lg w-full relative animate-fadeIn overflow-hidden border border-blue-100 my-auto">
+      <div
+        className="bg-white/80 rounded-2xl shadow-2xl p-0 max-w-lg w-full relative animate-fadeIn overflow-hidden border border-blue-100 my-auto"
+        role="dialog"
+        aria-modal="true"
+      >
         <button
           className="absolute top-3 right-3 text-gray-500 bg-white/70 hover:bg-gray-200 rounded-full p-1 z-10"
           onClick={onClose}

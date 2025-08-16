@@ -5,16 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  FiSearch,
-  FiMapPin,
-  FiCalendar,
-  FiTag,
-  FiArrowRight,
-  FiXCircle,
-} from "react-icons/fi";
+import { FiSearch, FiMapPin, FiArrowRight, FiXCircle } from "react-icons/fi";
 import { FaFutbol, FaRegLightbulb } from "react-icons/fa";
-import { GiWhistle, GiPodiumWinner } from "react-icons/gi";
+import { GiWhistle } from "react-icons/gi";
 import clsx from "clsx";
 
 import { LapanganType, dummyFields } from "@/data/lapangan";

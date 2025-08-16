@@ -24,8 +24,8 @@ export default function ForumPage() {
       forumPosts.filter(
         (post) =>
           post.title.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          post.content.toLowerCase().includes(e.target.value.toLowerCase())
-      )
+          post.content.toLowerCase().includes(e.target.value.toLowerCase()),
+      ),
     );
   };
 
@@ -60,16 +60,16 @@ export default function ForumPage() {
   const handleLike = (postId: number) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
-        post.id === postId ? { ...post, likes: post.likes + 1 } : post
-      )
+        post.id === postId ? { ...post, likes: post.likes + 1 } : post,
+      ),
     );
   };
 
   const handleDislike = (postId: number) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
-        post.id === postId ? { ...post, dislikes: post.dislikes + 1 } : post
-      )
+        post.id === postId ? { ...post, dislikes: post.dislikes + 1 } : post,
+      ),
     );
   };
 

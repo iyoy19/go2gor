@@ -4,14 +4,7 @@ import { useParams } from "next/navigation";
 import { useMemo } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  FiMapPin,
-  FiTag,
-  FiDollarSign,
-  FiCheckCircle,
-  FiCalendar,
-  FiArrowRight,
-} from "react-icons/fi";
+import { FiMapPin, FiCheckCircle, FiArrowRight } from "react-icons/fi";
 import { FaFutbol } from "react-icons/fa";
 import { GiWhistle } from "react-icons/gi";
 import Link from "next/link";

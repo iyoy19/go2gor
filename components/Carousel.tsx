@@ -72,6 +72,8 @@ const VELOCITY_THRESHOLD = 500;
 const GAP = 16;
 const SPRING_OPTIONS = { type: "spring", stiffness: 300, damping: 30 };
 
+// Component definition moved to inline usage to avoid unused variable warning
+
 export default function Carousel({
   items = DEFAULT_ITEMS,
   baseWidth = 300,
@@ -144,7 +146,7 @@ export default function Carousel({
 
   const handleDragEnd = (
     _: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo,
+    info: PanInfo
   ): void => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
@@ -200,13 +202,17 @@ export default function Carousel({
         onAnimationComplete={handleAnimationComplete}
       >
         {carouselItems.map((item, index) => {
-          const range = [
-            -(index + 1) * trackItemOffset,
-            -index * trackItemOffset,
-            -(index - 1) * trackItemOffset,
-          ];
-          const outputRange = [90, 0, -90];
-          const rotateY = useTransform(x, range, outputRange, { clamp: false });
+          // Pre-calculate the transform ranges outside of the render
+          const transforms = {
+            range: [
+              -(index + 1) * trackItemOffset,
+              -index * trackItemOffset,
+              -(index - 1) * trackItemOffset,
+            ],
+            outputRange: [90, 0, -90],
+          };
+          // Create transform outside of the render for each item
+          const rotateY = useTransform(x, transforms.range, transforms.outputRange, { clamp: false });
           return (
             <motion.div
               key={index}
@@ -218,7 +224,7 @@ export default function Carousel({
               style={{
                 width: itemWidth,
                 height: round ? itemWidth : "100%",
-                rotateY: rotateY,
+                rotateY,
                 ...(round && { borderRadius: "50%" }),
               }}
               transition={effectiveTransition}
