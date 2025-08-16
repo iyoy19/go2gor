@@ -103,8 +103,8 @@ export default function BookingModal({
         </button>
         <div className="p-6">
           <h3 className="text-2xl font-extrabold mb-2 text-blue-700 flex items-center gap-2">
-            <CalendarDaysIcon className="w-6 h-6 text-blue-400" /> Detail
-            Booking
+            <CalendarDaysIcon className="w-6 h-6 text-blue-400" />
+            Detail Booking
           </h3>
           <div className="flex items-center gap-4 mb-4">
             {currentField?.image && (
@@ -151,7 +151,7 @@ export default function BookingModal({
                   "w-full px-3 py-2 rounded-md border focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-base bg-white/80 mb-2",
                   !namaPemesan && formError
                     ? "border-red-400"
-                    : "border-gray-300"
+                    : "border-gray-300",
                 )}
                 placeholder="Masukkan nama/Tim"
                 value={namaPemesan}
@@ -208,7 +208,7 @@ export default function BookingModal({
               <span className="font-semibold">Total harga:</span> Rp
               {currentField && selectedTimes.length > 0
                 ? (currentField.price * selectedTimes.length).toLocaleString(
-                    "id-ID"
+                    "id-ID",
                   )
                 : "-"}
             </div>

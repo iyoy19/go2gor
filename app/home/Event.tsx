@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardHeader, CardFooter, Image, Button } from "@heroui/react";
+import { Card, CardHeader, CardFooter, Image } from "@heroui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -61,21 +61,41 @@ export default function App() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      className="text-center px-4 sm:px-6 md:px-0 "
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="w-full py-12"
+      transition={{ duration: 0.7, ease: "easeInOut" }}
     >
-      <div className="text-left px-4">
-        <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-3">
-          Event & Turnamen
-        </h2>
-        <p className="text-lg text-gray-500 dark:text-gray-400">
-          Jangan lewatkan keseruan! Ikuti event dan turnamen olahraga pilihan
-          kami.
-        </p>
-      </div>
+      {/* Judul dengan gradient hanya pada "Seru Bareng" */}
+      <h2 className="text-3xl pt-12 sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 text-gray-900 leading-snug drop-shadow-lg">
+        Event Olahraga,{" "}
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-pink-600">
+          Seru Bareng
+        </span>{" "}
+        Komunitas!
+      </h2>
+
+      {/* Paragraf dengan kata penting pakai gradient yang sama */}
+      <p className="text-base sm:text-lg md:text-xl text-gray-900 dark:text-gray-100 mb-4 leading-relaxed font-sans">
+        Event bukan cuma soal{" "}
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-pink-600 font-semibold">
+          menang-kalah
+        </span>
+        , tapi juga tempat{" "}
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-pink-600 font-semibold">
+          ketemu temen baru
+        </span>
+        , nambah{" "}
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-pink-600 font-semibold">
+          relasi
+        </span>
+        , dan pastinya bikin{" "}
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-pink-600 font-semibold">
+          momen tak terlupakan
+        </span>
+        . Siapin raket, sepatu, dan energi terbaikmu!
+      </p>
       <Swiper
         onSwiper={setSwiper}
         spaceBetween={20}

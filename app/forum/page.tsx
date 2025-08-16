@@ -57,6 +57,22 @@ export default function ForumPage() {
     setShowForm(false);
   };
 
+  const handleLike = (postId: number) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId ? { ...post, likes: post.likes + 1 } : post
+      )
+    );
+  };
+
+  const handleDislike = (postId: number) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId ? { ...post, dislikes: post.dislikes + 1 } : post
+      )
+    );
+  };
+
   return (
     <motion.div
       className="min-h-screen bg-gray-50 py-4 px-3 sm:px-4 md:px-16 mt-16"
@@ -181,23 +197,37 @@ export default function ForumPage() {
                 ))}
               </div>
               <div className="flex items-center gap-4 sm:gap-6 mt-2 text-gray-500">
-                <div
-                  className="flex items-center gap-1 cursor-pointer hover:text-green-600"
+                {/* Comments */}
+                <button
+                  type="button"
                   onClick={() =>
                     setOpenCommentId(openCommentId === post.id ? null : post.id)
                   }
+                  className="flex items-center gap-1 cursor-pointer hover:text-green-600 focus:outline-none"
                 >
                   <FaRegCommentDots />
-                  <span className="text-sm">{post.comments.length}</span>
-                </div>
-                <div className="flex items-center gap-1 cursor-pointer hover:text-green-600">
+                  <span className="text-sm">{post.comments?.length ?? 0}</span>
+                </button>
+
+                {/* Likes */}
+                <button
+                  type="button"
+                  onClick={() => handleLike(post.id)} // <- tinggal bikin fungsi handleLike
+                  className="flex items-center gap-1 cursor-pointer hover:text-green-600 focus:outline-none"
+                >
                   <FaRegThumbsUp />
-                  <span className="text-sm">{post.likes}</span>
-                </div>
-                <div className="flex items-center gap-1 cursor-pointer hover:text-red-500">
+                  <span className="text-sm">{post.likes ?? 0}</span>
+                </button>
+
+                {/* Dislikes */}
+                <button
+                  type="button"
+                  onClick={() => handleDislike(post.id)} // <- tinggal bikin fungsi handleDislike
+                  className="flex items-center gap-1 cursor-pointer hover:text-red-500 focus:outline-none"
+                >
                   <FaRegThumbsDown />
-                  <span className="text-sm">{post.dislikes}</span>
-                </div>
+                  <span className="text-sm">{post.dislikes ?? 0}</span>
+                </button>
               </div>
               {/* Komentar Expandable Section */}
               {openCommentId === post.id && (

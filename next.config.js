@@ -3,16 +3,16 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'cdn-icons-png.flaticon.com',
+        protocol: "https",
+        hostname: "cdn-icons-png.flaticon.com",
       },
       {
-        protocol: 'https',
-        hostname: 'picsum.photos',
+        protocol: "https",
+        hostname: "picsum.photos",
       },
       {
-        protocol: 'https',
-        hostname: 'i.pravatar.cc',
+        protocol: "https",
+        hostname: "i.pravatar.cc",
       },
     ],
   },

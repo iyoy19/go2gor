@@ -73,3 +73,29 @@ section::-webkit-scrollbar,
 main::-webkit-scrollbar {
   display: none;
 }
+
+/* Added for auto-scrolling marquee on hero section */
+.marquee-container {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    white 10%,
+    white 90%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    white 10%,
+    white 90%,
+    transparent
+  );
+}
+
+/* Added to narrow the hero stats grid on desktop */
+.stats-grid-container {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}

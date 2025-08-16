@@ -1,123 +1,199 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Button, Link } from "@nextui-org/react";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, Users, Ticket, MapPin, Trophy } from "lucide-react";
+import { Clock, Users, CalendarDays, MapPin, Trophy } from "lucide-react";
 
 const Hero = () => {
   const [time, setTime] = useState(new Date());
-  const [onlineUsers, setOnlineUsers] = useState(1337);
-  const [dailyBookings, setDailyBookings] = useState(256);
+  const [teams, setTeams] = useState(120);
+  const [events] = useState(8);
   const [isMounted, setIsMounted] = useState(false);
+  const marqueeRef = React.useRef<HTMLDivElement>(null);
+  const [marqueeWidth, setMarqueeWidth] = useState(0);
 
   useEffect(() => {
     setIsMounted(true);
     const timer = setInterval(() => setTime(new Date()), 1000);
-    const userCounter = setInterval(() => {
-      setOnlineUsers((prev) => prev + Math.floor(Math.random() * 3) - 1);
-    }, 2500);
-    const bookingCounter = setInterval(() => {
-      if (Math.random() > 0.7) setDailyBookings((prev) => prev + 1);
-    }, 5000);
+    const teamCounter = setInterval(() => {
+      if (Math.random() > 0.9) setTeams((prev) => prev + 1);
+    }, 4000);
     return () => {
       clearInterval(timer);
-      clearInterval(userCounter);
-      clearInterval(bookingCounter);
+      clearInterval(teamCounter);
     };
   }, []);
 
+  useEffect(() => {
+    if (isMounted && marqueeRef.current) {
+      // The timeout gives the browser a moment to calculate the layout
+      setTimeout(() => {
+        if (marqueeRef.current) {
+          setMarqueeWidth(marqueeRef.current.scrollWidth / 2);
+        }
+      }, 100);
+    }
+  }, [isMounted]);
+
   const StatItem = ({ icon, value, label }: any) => (
-    <div className="flex items-center gap-3">
-      {icon}
-      <div>
-        <p className="font-semibold text-white text-sm sm:text-base">{value}</p>
-        <p className="text-xs text-gray-400">{label}</p>
+    <div className="flex items-center gap-0 py-2 rounded-lg flex-shrink-0 w-auto px-4 sm:w-auto">
+      <div className="flex-shrink-0 text-primary-300">{icon}</div>
+      <div className="flex flex-col ml-2">
+        <motion.p
+          whileHover={{ color: "#38bdf8", textShadow: "0px 0px 6px #38bdf8" }}
+          transition={{ duration: 0.3 }}
+          className="font-semibold text-white text-xs sm:text-sm"
+        >
+          {label}
+        </motion.p>
+        <motion.p
+          whileHover={{ color: "#38bdf8", textShadow: "0px 0px 8px #38bdf8" }}
+          transition={{ duration: 0.3 }}
+          className="text-[10px] sm:text-xs text-gray-300"
+        >
+          {value}
+        </motion.p>
       </div>
     </div>
   );
 
   return (
-    <section className="relative flex flex-col bg-black text-white">
-      {/* Top Hero */}
-      <div className="container mx-auto flex flex-col lg:flex-row items-center gap-10 py-20 px-6">
-        {/* Left - Text */}
-        <div className="flex-1 text-center lg:text-left">
+    <section
+      className="relative flex flex-col text-white bg-cover bg-center"
+      style={{ backgroundImage: "url('/images/hero1.jpg')" }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/60" />
+
+      {/* Hero Content */}
+      <div className="relative container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center py-35 px-6">
+        {/* Kiri - Teks */}
+        <div className="flex flex-col items-start gap-4 text-left">
           <motion.h1
-            className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-balance"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            GOR Margono — Sport & Community Hub
+            Temukan Energi Baru di GOR Margono
           </motion.h1>
           <motion.p
-            className="mt-6 text-lg sm:text-xl text-gray-300 leading-relaxed"
+            className="max-w-2xl text-sm sm:text-base md:text-lg text-gray-200 leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            Booking lapangan futsal & badminton, ikut event, dan rasakan
-            pengalaman olahraga premium di GOR Margono.
+            Dari futsal seru hingga badminton penuh semangat, GOR Margono hadir
+            sebagai pusat olahraga & komunitas modern. Nikmati atmosfer
+            kompetitif sekaligus kebersamaan dalam satu arena.
           </motion.p>
-          <motion.div
-            className="mt-8 flex flex-wrap gap-4 justify-center lg:justify-start"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <Button
-              as={Link}
-              href="/lapangan"
-              color="primary"
-              size="lg"
-              endContent={<ArrowRight className="h-5 w-5" />}
-              className="font-bold px-8 py-6 text-lg shadow-lg hover:scale-105 transition-transform"
-              variant="shadow"
-            >
-              Pesan Lapangan Sekarang
-            </Button>
-          </motion.div>
         </div>
 
-        {/* Right - Image */}
-        <motion.div
-          className="flex-1"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-        >
-          <img
-            src="/images/hero.jpg"
-            alt="Lapangan GOR Margono"
-            className="rounded-2xl shadow-2xl w-full object-cover"
-          />
-        </motion.div>
+        {/* Kanan - Kosong */}
+        <div className="hidden lg:block"></div>
       </div>
 
       {/* Bottom Stats */}
-      <div className="w-full border-t border-white/10 bg-black/20 py-4 backdrop-blur-sm">
-        <div className="container mx-auto px-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 justify-items-center">
-          <StatItem
-            icon={<Clock className="h-7 w-7 text-primary-300" />}
-            value={isMounted ? time.toLocaleTimeString("en-GB") : "00:00:00"}
-            label="Waktu Lokal"
-          />
-          <StatItem
-            icon={<Users className="h-7 w-7 text-primary-300" />}
-            value={isMounted ? onlineUsers.toLocaleString() : "..."}
-            label="Pengguna Online"
-          />
-          <StatItem
-            icon={<Ticket className="h-7 w-7 text-primary-300" />}
-            value={isMounted ? dailyBookings.toString() : "..."}
-            label="Booking Hari Ini"
-          />
-          <StatItem
-            icon={<MapPin className="h-7 w-7 text-primary-300" />}
-            value="Jakarta & Bandung"
-            label="Lokasi Tersedia"
-          />
-          <StatItem
-            icon={<Trophy className="h-7 w-7 text-primary-300" />}
-            value="Futsal & Badminton"
-            label="Olahraga Populer"
-          />
+      <div className="relative w-full border-t border-white/20 bg-black/40 backdrop-blur-sm">
+        <div className="container mx-auto px-4">
+          {/* Desktop: grid */}
+          <div className="hidden sm:grid sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 stats-grid-container">
+            <StatItem
+              icon={<Clock className="h-4 w-4 sm:h-5 sm:w-5" />}
+              value={isMounted ? time.toLocaleTimeString("en-GB") : "00:00:00"}
+              label="Waktu Lokal"
+            />
+            <StatItem
+              icon={<Users className="h-4 w-4 sm:h-5 sm:w-5" />}
+              value={isMounted ? teams.toString() : "..."}
+              label="Team"
+            />
+            <StatItem
+              icon={<CalendarDays className="h-4 w-4 sm:h-5 sm:w-5" />}
+              value={isMounted ? events.toString() : "..."}
+              label="Event Bulan Ini"
+            />
+            <StatItem
+              icon={<MapPin className="h-4 w-4 sm:h-5 sm:w-5" />}
+              value="Jakarta & Bandung"
+              label="Lokasi"
+            />
+            <StatItem
+              icon={<Trophy className="h-4 w-4 sm:h-5 sm:w-5" />}
+              value="Futsal & Badminton"
+              label="Olahraga Populer"
+            />
+          </div>
+
+          {/* Mobile: auto-scrolling marquee */}
+          <div className="sm:hidden marquee-container">
+            <motion.div
+              ref={marqueeRef}
+              className="flex"
+              animate={{
+                x: [0, -marqueeWidth],
+              }}
+              transition={{
+                ease: "linear",
+                duration: marqueeWidth / 20,
+                repeat: Infinity,
+                repeatType: "loop",
+              }}
+            >
+              <StatItem
+                icon={<Clock className="h-4 w-4 sm:h-5 sm:w-5" />}
+                value={
+                  isMounted ? time.toLocaleTimeString("en-GB") : "00:00:00"
+                }
+                label="Waktu"
+              />
+              <StatItem
+                icon={<Users className="h-4 w-4 sm:h-5 sm:w-5" />}
+                value={isMounted ? teams.toString() : "..."}
+                label="Team"
+              />
+              <StatItem
+                icon={<CalendarDays className="h-4 w-4 sm:h-5 sm:w-5" />}
+                value={isMounted ? events.toString() : "..."}
+                label="Event Bulan Ini"
+              />
+              <StatItem
+                icon={<MapPin className="h-4 w-4 sm:h-5 sm:w-5" />}
+                value="Labuan"
+                label="Lokasi"
+              />
+              <StatItem
+                icon={<Trophy className="h-4 w-4 sm:h-5 sm:w-5" />}
+                value="Futsal & Badminton"
+                label="Arena"
+              />
+              {/* Duplicated for seamless scroll */}
+              <StatItem
+                icon={<Clock className="h-4 w-4 sm:h-5 sm:w-5" />}
+                value={
+                  isMounted ? time.toLocaleTimeString("en-GB") : "00:00:00"
+                }
+                label="Waktu"
+              />
+              <StatItem
+                icon={<Users className="h-4 w-4 sm:h-5 sm:w-5" />}
+                value={isMounted ? teams.toString() : "..."}
+                label="Team"
+              />
+              <StatItem
+                icon={<CalendarDays className="h-4 w-4 sm:h-5 sm:w-5" />}
+                value={isMounted ? events.toString() : "..."}
+                label="Event Bulan Ini"
+              />
+              <StatItem
+                icon={<MapPin className="h-4 w-4 sm:h-5 sm:w-5" />}
+                value="Labuan"
+                label="Lokasi"
+              />
+              <StatItem
+                icon={<Trophy className="h-4 w-4 sm:h-5 sm:w-5" />}
+                value="Futsal & Badminton"
+                label="Arena"
+              />
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>

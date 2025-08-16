@@ -31,7 +31,7 @@ export default function TimeSlotGrid({
                 ? "bg-red-200 text-red-700 cursor-not-allowed opacity-70"
                 : isSelected
                   ? "bg-blue-600 text-white ring-2 ring-blue-400"
-                  : "bg-green-200 text-green-700 hover:bg-green-300"
+                  : "bg-green-200 text-green-700 hover:bg-green-300",
             )}
             disabled={slot.isBooked}
             onClick={() => {

@@ -35,7 +35,7 @@ export type EventType = {
 // ✅ Dummy Images
 const randomImages = Array.from(
   { length: 10 },
-  (_, i) => `https://picsum.photos/seed/event-${i + 1}/500/300`
+  (_, i) => `https://picsum.photos/seed/event-${i + 1}/500/300`,
 );
 
 const eventTitles = [

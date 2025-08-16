@@ -55,7 +55,7 @@ export default function FieldSelector({
               className={clsx(
                 "text-neutral-800",
                 "hover:bg-gray-100",
-                index < fields.length - 1 && "border-b border-gray-200"
+                index < fields.length - 1 && "border-b border-gray-200",
               )}
             >
               {field.name} ({field.sport})

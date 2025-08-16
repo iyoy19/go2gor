@@ -10,17 +10,23 @@ import {
 export default function BookingSteps() {
   const steps = [
     {
-      icon: <ClipboardDocumentListIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />,
+      icon: (
+        <ClipboardDocumentListIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+      ),
       title: "Pilih Lapangan",
       desc: "Pilih lapangan yang sesuai kebutuhanmu.",
     },
     {
-      icon: <CalendarDaysIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />,
+      icon: (
+        <CalendarDaysIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+      ),
       title: "Pilih Jadwal",
       desc: "Tentukan tanggal dan waktu booking.",
     },
     {
-      icon: <CheckBadgeIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />,
+      icon: (
+        <CheckBadgeIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+      ),
       title: "Konfirmasi Booking",
       desc: "Lengkapi data dan lakukan pembayaran.",
     },

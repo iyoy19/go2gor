@@ -44,7 +44,6 @@ export default function BookingDatePicker({
             }}
             className="absolute left-10 top-1/2 -translate-y-1/2 px-3 py-2 rounded-lg border border-gray-300 text-sm bg-white shadow z-20"
             style={{ minWidth: 120 }}
-            autoFocus
             onBlur={() => setShowDateInput(false)}
           />
         )}
@@ -60,7 +59,7 @@ export default function BookingDatePicker({
             "flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors",
             selectedDate === dateOption.date
               ? "bg-blue-600 text-white shadow-md"
-              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+              : "bg-gray-200 text-gray-800 hover:bg-gray-300",
           )}
         >
           {dateOption.label}

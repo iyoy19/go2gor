@@ -124,7 +124,7 @@ export default function JadwalLapanganPage({ params }: PageProps) {
   // Cek apakah ID lapangan valid
   useEffect(() => {
     const fieldExists = dummyFields.some(
-      (field) => field.id.toString() === fieldId
+      (field) => field.id.toString() === fieldId,
     );
     if (!fieldExists) {
       notFound();
@@ -133,7 +133,7 @@ export default function JadwalLapanganPage({ params }: PageProps) {
 
   const currentField = useMemo(
     () => dummyFields.find((f) => f.id.toString() === selectedFieldId),
-    [selectedFieldId]
+    [selectedFieldId],
   );
 
   useEffect(() => {
@@ -148,7 +148,7 @@ export default function JadwalLapanganPage({ params }: PageProps) {
 
   const handleTimeSelect = (time: string) => {
     setSelectedTimes((prev) =>
-      prev.includes(time) ? prev.filter((t) => t !== time) : [...prev, time]
+      prev.includes(time) ? prev.filter((t) => t !== time) : [...prev, time],
     );
   };
 
@@ -207,12 +207,12 @@ export default function JadwalLapanganPage({ params }: PageProps) {
                   "inline-flex items-center gap-2 px-8 py-4 rounded-full text-lg font-bold shadow-xl transition-all duration-300 ease-in-out",
                   selectedTimes.length === 0
                     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-blue-600 text-white hover:bg-blue-700"
+                    : "bg-blue-600 text-white hover:bg-blue-700",
                 )}
                 onClick={() => {
                   if (selectedTimes.length === 0) {
                     setFormError(
-                      "Pilih minimal satu jam booking terlebih dahulu."
+                      "Pilih minimal satu jam booking terlebih dahulu.",
                     );
                     return;
                   }

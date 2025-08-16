@@ -33,8 +33,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={clsx(
           "min-h-screen antialiased hide-scrollbar ",
-          "bg-gradient-to-b from-white to-gray-50 text-black",
-          fontPoppins.variable
+          "bg-gradient-to-b from-gray-300 to-gray-300 text-black",
+          fontPoppins.variable,
         )}
       >
         <div className="relative w-full overflow-x-hidden hide-scrollbar ">

@@ -121,7 +121,7 @@ export default function EventPage() {
                         <span>
                           {new Date(event.eventDate).toLocaleDateString(
                             "id-ID",
-                            { day: "numeric", month: "long", year: "numeric" }
+                            { day: "numeric", month: "long", year: "numeric" },
                           )}
                         </span>
                       </div>
@@ -233,7 +233,7 @@ export default function EventPage() {
                         <p className="text-sm">
                           {new Date(selectedEvent!.eventDate).toLocaleString(
                             "id-ID",
-                            { dateStyle: "full", timeStyle: "short" }
+                            { dateStyle: "full", timeStyle: "short" },
                           )}
                         </p>
                       </div>
@@ -279,7 +279,7 @@ export default function EventPage() {
                           <div className="text-sm font-medium">
                             Rp{" "}
                             {selectedEvent!.prizes.first.amount.toLocaleString(
-                              "id-ID"
+                              "id-ID",
                             )}
                             {selectedEvent!.prizes.first.extras && (
                               <div className="text-xs mt-1 bg-black/20 p-1 rounded">
@@ -302,7 +302,7 @@ export default function EventPage() {
                           <div className="text-sm font-medium">
                             Rp{" "}
                             {selectedEvent!.prizes.second.amount.toLocaleString(
-                              "id-ID"
+                              "id-ID",
                             )}
                             {selectedEvent!.prizes.second.extras && (
                               <div className="text-xs mt-1 bg-black/20 p-1 rounded">
@@ -325,7 +325,7 @@ export default function EventPage() {
                           <div className="text-sm font-medium">
                             Rp{" "}
                             {selectedEvent!.prizes.third.amount.toLocaleString(
-                              "id-ID"
+                              "id-ID",
                             )}
                             {selectedEvent!.prizes.third.extras && (
                               <div className="text-xs mt-1 bg-black/20 p-1 rounded">

@@ -20,11 +20,16 @@ const config = {
         "400": "400% 400%",
       },
       animation: {
+        shine: "shine 5s linear infinite",
         "gradient-x": "gradient-x 8s ease infinite",
         "gradient-y": "gradient-y 8s ease infinite",
         "gradient-xy": "gradient-xy 10s ease infinite",
       },
       keyframes: {
+        shine: {
+          "0%": { "background-position": "100%" },
+          "100%": { "background-position": "-100%" },
+        },
         "gradient-x": {
           "0%, 100%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },

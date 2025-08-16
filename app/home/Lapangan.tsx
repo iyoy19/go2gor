@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Carousel from "@/components/Carousel";
 
 const Player = dynamic(
   () => import("@lottiefiles/react-lottie-player").then((mod) => mod.Player),
-  { ssr: false }
+  { ssr: false },
 );
 
 const words = ["Main Hari Ini!", "Booking Mudah!", "Anti Ribet!"];
@@ -17,7 +18,23 @@ export default function LapanganSection() {
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const carouselContainerRef = useRef<HTMLDivElement>(null);
+  const mobileCarouselContainerRef = useRef<HTMLDivElement>(null);
+  const [carouselWidth, setCarouselWidth] = useState(0);
 
+  // Hitung lebar carousel
+  useEffect(() => {
+    const setWidth = () => {
+      const desktopWidth = carouselContainerRef.current?.offsetWidth ?? 0;
+      const mobileWidth = mobileCarouselContainerRef.current?.offsetWidth ?? 0;
+      setCarouselWidth(desktopWidth > 0 ? desktopWidth : mobileWidth);
+    };
+    setWidth();
+    window.addEventListener("resize", setWidth);
+    return () => window.removeEventListener("resize", setWidth);
+  }, []);
+
+  // Typewriter effect
   useEffect(() => {
     const currentWord = words[index];
     let typingSpeed = isDeleting ? 50 : 100;
@@ -40,6 +57,7 @@ export default function LapanganSection() {
     return () => clearTimeout(timer);
   }, [displayText, isDeleting, index]);
 
+  // Scroll indicator visibility
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollIndicator(window.scrollY === 0);
@@ -54,57 +72,49 @@ export default function LapanganSection() {
       <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] bg-purple-300 dark:bg-purple-700 opacity-20 rounded-full blur-3xl z-0" />
       <div className="absolute bottom-[-120px] left-[-80px] w-[250px] h-[250px] bg-indigo-300 dark:bg-indigo-700 opacity-20 rounded-full blur-2xl z-0" />
 
-      <div className="relative w-full overflow-x-hidden flex flex-col md:flex-row items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-14 py-6 md:py-4 gap-10 z-10 hide-scrollbar">
-        {/* Mobile: Top Headings */}
-        <div className="block md:hidden w-full text-left z-10 px-4 mt-2">
-          <motion.span
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="inline-flex items-center px-4 py-1 text-xs font-bold text-white bg-yellow-400 dark:bg-pink-600 rounded-full shadow-md w-fit"
-          >
-            #1 Booking Lapangan Online
-          </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-base sm:text-lg font-medium tracking-wide text-black dark:text-white mt-2"
-          >
-            Booking Lapangan Gampang & Cepat
-          </motion.h2>
+      <div className="relative w-full overflow-x-hidden flex flex-col md:flex-row items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-14 py-6 md:py-4 gap-10 z-10">
+        {/* Desktop: Left Animation */}
+        <div
+          ref={carouselContainerRef}
+          className="hidden pt-4 md:flex w-full md:w-1/2 justify-center items-center"
+        >
+          <div className="w-full relative z-0 overflow-hidden">
+            {carouselWidth > 0 && (
+              <Carousel
+                baseWidth={carouselWidth}
+                autoplay
+                autoplayDelay={3000}
+                pauseOnHover
+                loop
+                round={false}
+              />
+            )}
+          </div>
         </div>
 
-        {/* Desktop: Left Text */}
-        <div className="hidden md:flex w-full md:w-1/2 flex-col justify-start text-left z-10 px-4 md:px-0">
+        {/* Desktop: Right Text */}
+        <div className="hidden md:flex w-full md:w-1/2 flex-col justify-start text-left px-4 md:px-0 pt-10 relative z-10">
           <motion.span
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="inline-flex items-center px-4 py-1 text-xs font-bold text-white bg-yellow-400 dark:bg-pink-600 rounded-full shadow-md w-fit"
+            className="inline-flex items-center px-4 py-1 text-xs font-bold text-white bg-gradient-to-r from-purple-400 to-pink-600 rounded-full shadow-md w-fit"
           >
             #1 Booking Lapangan Online
           </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-wide text-black dark:text-white mt-2"
-          >
-            Booking Lapangan Gampang & Cepat
-          </motion.h2>
 
-          {/* Typewriter */}
+          {/* Desktop Typewriter */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-32 mb-0 flex items-center min-h-[4.2rem] sm:min-h-[5rem] md:min-h-[5.5rem] lg:min-h-[6rem] xl:min-h-[6.5rem]
-             text-[2.2rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[3.8rem] xl:text-[4.2rem]
-             font-extrabold tracking-tight leading-tight text-black dark:text-white overflow-hidden drop-shadow-md"
+            className="mb-0 min-w-[14ch] pt-10 px-1 flex items-center text-[3rem] lg:text-[3.8rem] xl:text-[4.2rem] font-extrabold tracking-tight leading-tight text-black dark:text-white drop-shadow-md"
           >
-            <span className="inline-flex items-center min-w-[14ch]">
-              {displayText}
+            <span className="inline-flex items-center min-h-[4.5rem] lg:min-h-[5rem]">
+              {
+                displayText ||
+                  "\u00A0" /* spasi non-breaking biar nggak collapse */
+              }
               <motion.span
                 className="inline-block w-[3px] h-[1.2em] ml-1 bg-yellow-500 dark:bg-pink-600"
                 animate={{ opacity: [0, 1, 0] }}
@@ -113,12 +123,12 @@ export default function LapanganSection() {
             </span>
           </motion.div>
 
-          {/* Extra Heading (New Line) */}
+          {/* Extra Heading */}
           <motion.h3
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
-            className="text-lg sm:text-xl font-semibold text-black dark:text-white mt-1 lg:mt-2"
+            className="text-lg sm:text-xl font-semibold text-black dark:text-white mt-2"
           >
             Tinggal Klik, Lapangan Langsung Dapet!
           </motion.h3>
@@ -140,48 +150,59 @@ export default function LapanganSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
-            className="mt-8 flex flex-row justify-start items-center gap-3 w-full"
+            className="mt-8 flex flex-row gap-3 w-full"
           >
             <Link
               href="/lapangan"
-              className="basis-1/2 text-center px-4 py-3 text-sm sm:text-base font-semibold text-white bg-blue-500 dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-800 rounded-lg shadow-md transition duration-200 transform hover:scale-105 backdrop-blur-md"
+              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-500 dark:text-blue-700 border-2 border-blue-500 dark:border-blue-700 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105"
             >
               Cek Lapangan
             </Link>
             <Link
               href="/booking"
-              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-500 dark:text-blue-700 border-2 border-blue-500 dark:border-blue-700 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105 backdrop-blur-md"
+              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-500 dark:text-blue-700 border-2 border-blue-500 dark:border-blue-700 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105"
             >
               Booking Now
             </Link>
           </motion.div>
         </div>
 
-        {/* Mobile: Animation */}
-        <div className="block md:hidden w-full flex justify-center items-center z-0">
-          <motion.div
-            className="w-[250px] sm:w-[350px]"
-            animate={{ y: [0, -10, 0] }}
-            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+        {/* Mobile: Text + Animation */}
+        <div className="block md:hidden w-full flex flex-col text-left px-4 mt-4">
+          <motion.span
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="inline-flex items-center px-4 py-1 text-xs font-bold text-white bg-gradient-to-r from-purple-400 to-pink-600 dark:bg-pink-600 rounded-full shadow-md w-fit"
           >
-            <Player
-              autoplay
-              loop
-              src="/animations/socer.json"
-              className="w-full h-full"
-            />
-          </motion.div>
-        </div>
+            #1 Booking Lapangan Online
+          </motion.span>
 
-        {/* Mobile: Text */}
-        <div className="block md:hidden w-full flex flex-col justify-start text-left z-10 px-4 mt-4">
+          {/* Mobile: Animation */}
+          <div
+            ref={mobileCarouselContainerRef}
+            className="w-full flex justify-center items-center mt-1 relative z-0 overflow-hidden"
+          >
+            {carouselWidth > 0 && (
+              <Carousel
+                baseWidth={carouselWidth}
+                autoplay
+                autoplayDelay={2000}
+                pauseOnHover
+                loop
+                round={false}
+              />
+            )}
+          </div>
+
+          {/* Typewriter */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-2 mb-3 min-h-[2.5rem] sm:min-h-[3rem] flex items-start text-[2rem] sm:text-[2.5rem] font-extrabold tracking-tight leading-tight text-black dark:text-white overflow-hidden drop-shadow-md"
+            className="relative z-10 mt-6 mb-3 min-h-[3rem] text-[2rem] sm:text-[2.5rem] font-extrabold tracking-tight leading-tight text-black dark:text-white drop-shadow-md"
           >
-            <span className="inline-flex items-center min-w-[14ch] transition-all duration-300">
+            <span className="inline-flex items-center min-w-[14ch]">
               {displayText}
               <motion.span
                 className="inline-block w-[3px] h-[1.2em] ml-1 bg-yellow-500 dark:bg-pink-600"
@@ -191,12 +212,12 @@ export default function LapanganSection() {
             </span>
           </motion.div>
 
-          {/* Extra Heading (Mobile) */}
+          {/* Extra Heading */}
           <motion.h3
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
-            className="text-base sm:text-lg font-semibold text-black dark:text-white mt-1"
+            className="relative z-10 text-base sm:text-lg font-semibold text-black dark:text-white mt-1"
           >
             Tinggal Klik, Lapangan Langsung Dapet!
           </motion.h3>
@@ -206,11 +227,11 @@ export default function LapanganSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1 }}
-            className="mt-2 text-sm sm:text-base text-gray-700 dark:text-gray-300 font-medium"
+            className="relative z-10 mt-2 text-sm sm:text-base text-gray-700 dark:text-gray-300 font-medium"
           >
             Nggak perlu ribet datang ke GOR! <br />
             Cukup buka website kami, pilih jadwal & lapangan favorit, langsung
-            booking. <br />
+            booking.
           </motion.p>
 
           {/* CTA */}
@@ -218,11 +239,11 @@ export default function LapanganSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
-            className="mt-6 flex flex-row justify-start items-center gap-3 w-full backdrop-blur-md"
+            className="relative z-10 mt-6 flex flex-row gap-3 w-full"
           >
             <Link
               href="/lapangan"
-              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-white bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 rounded-lg shadow-md transition duration-200 transform hover:scale-105"
+              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-500 dark:text-blue-600 border-2 border-blue-500 dark:border-blue-600 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105"
             >
               Cek Lapangan
             </Link>
@@ -232,23 +253,6 @@ export default function LapanganSection() {
             >
               Booking Now
             </Link>
-          </motion.div>
-        </div>
-
-        {/* Desktop: Animation */}
-        <div className="hidden md:flex w-full md:w-1/2 justify-center items-center z-0">
-          <motion.div
-            className="w-[250px] sm:w-[350px] md:w-[450px]"
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-          >
-            <Player
-              autoplay
-              loop
-              src="/animations/socer.json"
-              className="w-full h-full"
-            />
           </motion.div>
         </div>
       </div>
@@ -264,7 +268,7 @@ export default function LapanganSection() {
             repeat: Infinity,
             repeatType: "reverse",
           }}
-          className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
         >
           <div className="w-6 h-6 border-b-2 border-r-2 border-black dark:border-white rotate-45 animate-bounce" />
         </motion.div>

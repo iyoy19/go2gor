@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function CTA() {
   return (
@@ -46,7 +47,7 @@ export default function CTA() {
           transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true }}
         >
-          <a
+          <Link
             href="/lapangan"
             className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 dark:from-blue-500 to-purple-700 dark:to-purple-600 text-white px-8 py-4 font-bold text-lg rounded-full shadow-2xl hover:scale-105 hover:shadow-blue-500/50 dark:hover:shadow-purple-500/50 focus:outline-none focus:ring-4 focus:ring-black/50 dark:focus:ring-white/50 transition-all duration-300 ease-in-out"
             aria-label="Mulai booking lapangan"
@@ -66,7 +67,7 @@ export default function CTA() {
                 d="M13 7l5 5m0 0l-5 5m5-5H6"
               />
             </svg>
-          </a>
+          </Link>
         </motion.div>
       </div>
     </section>

@@ -86,7 +86,7 @@ function ClientTime({
 }
 
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { FiCalendar, FiMapPin, FiX, FiArrowRight } from "react-icons/fi";
 import { dummyEvents } from "@/data/event";
 import { matches, MatchType } from "@/data/matches";
@@ -112,14 +112,14 @@ export default function EventPage() {
     .filter((e) => new Date(e.eventDate) > now)
     .sort(
       (a, b) =>
-        new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime()
+        new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime(),
     );
 
   // Jadwal pertandingan dari matches
   const today = new Date();
   const liveMatches = matches.filter((m) => m.status === "live");
   const upcomingMatches = matches.filter(
-    (m) => m.status === "upcoming" && new Date(m.eventDate) > today
+    (m) => m.status === "upcoming" && new Date(m.eventDate) > today,
   );
 
   return (

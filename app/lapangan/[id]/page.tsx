@@ -37,7 +37,7 @@ export default function LapanganDetailPage() {
     return dummyFields.find(
       (f) =>
         (idToParse && f.id === parseInt(idToParse, 10)) || // Use idToParse here
-        (idToParse && f.name.toLowerCase().replace(/ /g, "-") === idToParse) // Use idToParse here
+        (idToParse && f.name.toLowerCase().replace(/ /g, "-") === idToParse), // Use idToParse here
     );
   }, [fieldId]);
 
