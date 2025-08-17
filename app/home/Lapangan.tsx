@@ -105,10 +105,7 @@ export default function LapanganSection() {
             className="mb-0 min-w-[14ch] pt-10 px-1 flex items-center text-[3rem] lg:text-[3.8rem] xl:text-[4.2rem] font-extrabold tracking-tight leading-tight text-black dark:text-white drop-shadow-md"
           >
             <span className="inline-flex items-center min-h-[4.5rem] lg:min-h-[5rem]">
-              {
-                displayText ||
-                  "\u00A0" /* spasi non-breaking biar nggak collapse */
-              }
+              {displayText || "\u00A0"}
               <motion.span
                 className="inline-block w-[3px] h-[1.2em] ml-1 bg-yellow-500 dark:bg-pink-600"
                 animate={{ opacity: [0, 1, 0] }}
@@ -161,9 +158,26 @@ export default function LapanganSection() {
           </motion.div>
         </div>
 
-        {/* Mobile: Text + Animation */}
+        {/* Mobile: Carousel + Text */}
         <div className="block md:hidden w-full flex flex-col text-left px-0 sm:mt-4 overflow-visible">
-          {/* Mobile: Text Content */}
+          {/* 🔼 Carousel dulu */}
+          <div
+            ref={mobileCarouselContainerRef}
+            className="w-full flex justify-center items-center relative z-0 overflow-visible max-w-[85vw] mx-auto sm:max-w-[80vw] mb-6 sm:mb-8"
+          >
+            {carouselWidth > 0 && (
+              <Carousel
+                baseWidth={carouselWidth}
+                autoplay={true}
+                autoplayDelay={5000}
+                pauseOnHover={true}
+                loop
+                round={false}
+              />
+            )}
+          </div>
+
+          {/* 🔽 Baru teks */}
           <div className="px-4 mb-6">
             <motion.span
               initial={{ opacity: 0, y: -20 }}
@@ -212,23 +226,6 @@ export default function LapanganSection() {
               Cukup buka website kami, pilih jadwal & lapangan favorit, langsung
               booking.
             </motion.p>
-          </div>
-
-          {/* Mobile: Animation */}
-          <div
-            ref={mobileCarouselContainerRef}
-            className="w-full flex justify-center items-center relative z-0 overflow-visible max-w-[85vw] mx-auto sm:max-w-[80vw] mb-6 sm:mb-8"
-          >
-            {carouselWidth > 0 && (
-              <Carousel
-                baseWidth={carouselWidth}
-                autoplay={true}
-                autoplayDelay={5000}
-                pauseOnHover={true}
-                loop
-                round={false}
-              />
-            )}
           </div>
 
           {/* CTA */}

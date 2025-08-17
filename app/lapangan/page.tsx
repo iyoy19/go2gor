@@ -30,7 +30,7 @@ export default function LapanganPage() {
 
   const textColorClass = "text-gray-900";
   const secondaryTextColorClass = "text-gray-500";
-  const bgColorClass = "bg-white";
+  const bgColorClass = "bg-transparent";
   const cardBgClass = "bg-white/90";
   const borderColorClass = "border-gray-100";
 
@@ -39,7 +39,7 @@ export default function LapanganPage() {
       className={clsx(
         "min-h-screen pt-28 pb-16 px-4 sm:px-6 lg:px-8 font-poppins",
         bgColorClass,
-        textColorClass,
+        textColorClass
       )}
     >
       <div className="max-w-7xl mx-auto">
@@ -53,7 +53,7 @@ export default function LapanganPage() {
           <h1
             className={clsx(
               "text-4xl md:text-5xl font-bold tracking-tight mb-3",
-              textColorClass,
+              textColorClass
             )}
           >
             Pilih Lapangan Impianmu
@@ -71,7 +71,7 @@ export default function LapanganPage() {
           className={clsx(
             "sticky top-24 z-40 backdrop-blur-lg p-4 rounded-2xl border mb-12",
             cardBgClass,
-            borderColorClass,
+            borderColorClass
           )}
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
@@ -79,7 +79,7 @@ export default function LapanganPage() {
               <FiSearch
                 className={clsx(
                   "absolute left-4 top-1/2 -translate-y-1/2",
-                  secondaryTextColorClass,
+                  secondaryTextColorClass
                 )}
               />
               <input
@@ -89,7 +89,7 @@ export default function LapanganPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className={clsx(
                   "w-full rounded-lg pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition",
-                  "bg-gray-100 border border-gray-300 text-neutral-800",
+                  "bg-gray-100 border border-gray-300 text-neutral-800"
                 )}
               />
             </div>
@@ -102,7 +102,7 @@ export default function LapanganPage() {
                     "px-5 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300",
                     activeSport === sport
                       ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
-                      : "bg-gray-200 text-gray-800 hover:bg-gray-300",
+                      : "bg-gray-200 text-gray-800 hover:bg-gray-300"
                   )}
                 >
                   {sport}
@@ -180,7 +180,7 @@ const FieldCard = ({
       href={`/lapangan/${field.id}`}
       className={clsx(
         "rounded-2xl overflow-hidden h-full flex flex-col group transition-all duration-300 hover:border-indigo-400 hover:shadow-xl transform hover:-translate-y-1 cursor-pointer",
-        "bg-white border border-gray-100 shadow-sm",
+        "bg-white border border-gray-100 shadow-sm"
       )}
     >
       <div className="relative h-56 overflow-hidden rounded-t-2xl bg-gray-100">
@@ -207,7 +207,7 @@ const FieldCard = ({
         <p
           className={clsx(
             "text-sm mb-1 flex items-center gap-2",
-            secondaryTextColorClass,
+            secondaryTextColorClass
           )}
         >
           <FiMapPin /> {field.venue}
@@ -215,7 +215,7 @@ const FieldCard = ({
         <h3
           className={clsx(
             "text-xl font-semibold mb-3 leading-tight flex-grow tracking-tight",
-            textColorClass,
+            textColorClass
           )}
         >
           {field.name}
@@ -226,7 +226,7 @@ const FieldCard = ({
             <span
               key={feature}
               className={clsx(
-                "text-xs px-2 py-1 rounded-full flex items-center gap-1.5 border border-gray-200 bg-gray-50 text-gray-600",
+                "text-xs px-2 py-1 rounded-full flex items-center gap-1.5 border border-gray-200 bg-gray-50 text-gray-600"
               )}
             >
               <FaRegLightbulb className="text-yellow-400" /> {feature}
@@ -237,7 +237,7 @@ const FieldCard = ({
         <div
           className={clsx(
             "mt-auto flex justify-between items-center pt-4 border-t",
-            borderColorClass,
+            borderColorClass
           )}
         >
           <div>

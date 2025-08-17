@@ -143,14 +143,12 @@ export const siteConfig: SiteConfig = {
       ],
     },
 
-    // === Semua menu avatar dimasukkan di sini ===
     {
       key: "profile",
       label: "Profile",
       dropdown: true,
       icon: User2,
       children: [
-        // Profil
         {
           key: "profil",
           title: "Profil",
@@ -158,28 +156,27 @@ export const siteConfig: SiteConfig = {
             {
               key: "profil-saya",
               label: "Profil Saya",
-              href: "/profile/profil",
+              href: "/profile", // tetap /profile
               icon: UserCircle,
               description: "Lihat & edit data diri",
             },
             {
               key: "pengaturan",
               label: "Pengaturan Akun",
-              href: "/profile/pengaturan",
+              href: "/pengaturan", // tanpa /profile
               icon: Settings2,
               description: "Email, password, foto profil",
             },
             {
               key: "notif",
               label: "Preferensi Notifikasi",
-              href: "/profile/notifikasi",
+              href: "/notifikasi", // tanpa /profile
               icon: Bell,
               description: "Atur notifikasi",
             },
           ],
         },
 
-        // Aktivitas
         {
           key: "aktivitas",
           title: "Aktivitas",
@@ -187,21 +184,20 @@ export const siteConfig: SiteConfig = {
             {
               key: "jadwal-saya",
               label: "Jadwal Saya",
-              href: "/aktivitas/jadwal-saya",
+              href: "/jadwal-saya",
               icon: CalendarDays,
               description: "Pertandingan atau booking mendatang",
             },
             {
               key: "aktivitas-riwayat",
               label: "Aktivitas & Riwayat",
-              href: "/aktivitas/aktivitas",
+              href: "/aktivitas",
               icon: Activity,
               description: "Riwayat aktivitas",
             },
           ],
         },
 
-        // Riwayat
         {
           key: "riwayat",
           title: "Riwayat",
@@ -209,14 +205,13 @@ export const siteConfig: SiteConfig = {
             {
               key: "riwayat-booking",
               label: "Riwayat Booking",
-              href: "/riwayat/booking",
+              href: "/booking",
               icon: ClipboardList,
               description: "Lapangan yang pernah dibooking",
             },
           ],
         },
 
-        // Team
         {
           key: "team",
           title: "Team",
@@ -224,14 +219,13 @@ export const siteConfig: SiteConfig = {
             {
               key: "tim-saya",
               label: "Tim Saya",
-              href: "/team/tim-saya",
+              href: "/team",
               icon: Users,
               description: "Tim yang diikuti",
             },
           ],
         },
 
-        // Bantuan
         {
           key: "bantuan",
           title: "Bantuan",
@@ -239,14 +233,14 @@ export const siteConfig: SiteConfig = {
             {
               key: "help",
               label: "Pusat Bantuan",
-              href: "/bantuan/help",
+              href: "/bantuan",
               icon: HelpCircle,
               description: "FAQ dan panduan",
             },
             {
               key: "logout",
               label: "Logout",
-              href: "/profile/logout",
+              href: "/logout",
               icon: LogOut,
               color: "danger",
             },
