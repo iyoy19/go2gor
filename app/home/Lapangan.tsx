@@ -61,12 +61,12 @@ export default function LapanganSection() {
   }, []);
 
   return (
-    <section className="relative w-full font-poppins">
+    <section className="relative w-full font-poppins pt-2 sm:pt-16 pb-2 sm:pb-24">
       {/* Background Decoration */}
       <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] bg-purple-300 dark:bg-purple-700 opacity-20 rounded-full blur-3xl z-0" />
       <div className="absolute bottom-[-120px] left-[-80px] w-[250px] h-[250px] bg-indigo-300 dark:bg-indigo-700 opacity-20 rounded-full blur-2xl z-0" />
 
-      <div className="relative w-full overflow-x-hidden flex flex-col md:flex-row items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-14 py-6 md:py-4 gap-10 z-10">
+      <div className="relative w-full overflow-x-hidden flex flex-col md:flex-row items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 gap-8 md:gap-12 z-10">
         {/* Desktop: Left Animation */}
         <div
           ref={carouselContainerRef}
@@ -77,7 +77,7 @@ export default function LapanganSection() {
               <Carousel
                 baseWidth={carouselWidth}
                 autoplay
-                autoplayDelay={3000}
+                autoplayDelay={5000}
                 pauseOnHover
                 loop
                 round={false}
@@ -144,17 +144,17 @@ export default function LapanganSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
-            className="mt-8 flex flex-row gap-3 w-full"
+            className="mt-8 flex flex-row gap-4 w-full"
           >
             <Link
               href="/lapangan"
-              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-500 dark:text-blue-700 border-2 border-blue-500 dark:border-blue-700 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105"
+              className="basis-1/2 text-center px-6 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg shadow-sm backdrop-blur-sm transition-all duration-200 transform hover:scale-[1.02]"
             >
               Cek Lapangan
             </Link>
             <Link
               href="/booking"
-              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-500 dark:text-blue-700 border-2 border-blue-500 dark:border-blue-700 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105"
+              className="basis-1/2 text-center px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 rounded-lg shadow-md transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg"
             >
               Booking Now
             </Link>
@@ -162,88 +162,91 @@ export default function LapanganSection() {
         </div>
 
         {/* Mobile: Text + Animation */}
-        <div className="block md:hidden w-full flex flex-col text-left px-4 mt-4">
-          <motion.span
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="inline-flex items-center px-4 py-1 text-xs font-bold text-white bg-gradient-to-r from-purple-400 to-pink-600 dark:bg-pink-600 rounded-full shadow-md w-fit"
-          >
-            #1 Booking Lapangan Online
-          </motion.span>
+        <div className="block md:hidden w-full flex flex-col text-left px-0 sm:mt-4 overflow-visible">
+          {/* Mobile: Text Content */}
+          <div className="px-4 mb-6">
+            <motion.span
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="inline-flex items-center px-3 py-1 text-[10px] sm:text-xs font-bold text-white bg-gradient-to-r from-purple-400 to-pink-600 dark:bg-pink-600 rounded-full shadow-md w-fit"
+            >
+              #1 Booking Lapangan Online
+            </motion.span>
+
+            {/* Typewriter */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="relative z-10 mt-6 sm:mt-4 mb-1 sm:mb-5 min-h-[2.5rem] sm:min-h-[3rem] text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight text-black dark:text-white drop-shadow-md"
+            >
+              <span className="inline-flex items-center min-w-[14ch]">
+                {displayText}
+                <motion.span
+                  className="inline-block w-[3px] h-[1.2em] ml-1 bg-yellow-500 dark:bg-pink-600"
+                  animate={{ opacity: [0, 1, 0] }}
+                  transition={{ repeat: Infinity, duration: 1 }}
+                />
+              </span>
+            </motion.div>
+
+            {/* Extra Heading */}
+            <motion.h3
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.9 }}
+              className="relative z-10 text-base sm:text-lg font-semibold text-black dark:text-white mt-1"
+            >
+              Tinggal Klik, Lapangan Langsung Dapet!
+            </motion.h3>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1 }}
+              className="relative z-10 mt-2 text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-300 font-medium"
+            >
+              Nggak perlu ribet datang ke GOR! <br />
+              Cukup buka website kami, pilih jadwal & lapangan favorit, langsung
+              booking.
+            </motion.p>
+          </div>
 
           {/* Mobile: Animation */}
           <div
             ref={mobileCarouselContainerRef}
-            className="w-full flex justify-center items-center mt-1 relative z-0 overflow-hidden"
+            className="w-full flex justify-center items-center relative z-0 overflow-visible max-w-[85vw] mx-auto sm:max-w-[80vw] mb-6 sm:mb-8"
           >
             {carouselWidth > 0 && (
               <Carousel
                 baseWidth={carouselWidth}
-                autoplay
-                autoplayDelay={2000}
-                pauseOnHover
+                autoplay={true}
+                autoplayDelay={5000}
+                pauseOnHover={true}
                 loop
                 round={false}
               />
             )}
           </div>
 
-          {/* Typewriter */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="relative z-10 mt-6 mb-3 min-h-[3rem] text-[2rem] sm:text-[2.5rem] font-extrabold tracking-tight leading-tight text-black dark:text-white drop-shadow-md"
-          >
-            <span className="inline-flex items-center min-w-[14ch]">
-              {displayText}
-              <motion.span
-                className="inline-block w-[3px] h-[1.2em] ml-1 bg-yellow-500 dark:bg-pink-600"
-                animate={{ opacity: [0, 1, 0] }}
-                transition={{ repeat: Infinity, duration: 1 }}
-              />
-            </span>
-          </motion.div>
-
-          {/* Extra Heading */}
-          <motion.h3
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
-            className="relative z-10 text-base sm:text-lg font-semibold text-black dark:text-white mt-1"
-          >
-            Tinggal Klik, Lapangan Langsung Dapet!
-          </motion.h3>
-
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="relative z-10 mt-2 text-sm sm:text-base text-gray-700 dark:text-gray-300 font-medium"
-          >
-            Nggak perlu ribet datang ke GOR! <br />
-            Cukup buka website kami, pilih jadwal & lapangan favorit, langsung
-            booking.
-          </motion.p>
-
           {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
-            className="relative z-10 mt-6 flex flex-row gap-3 w-full"
+            className="relative z-10 mt-6 sm:mt-8 flex flex-row gap-3 w-full px-4"
           >
             <Link
               href="/lapangan"
-              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-500 dark:text-blue-600 border-2 border-blue-500 dark:border-blue-600 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105"
+              className="basis-1/2 text-center px-4 py-2 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg shadow-sm backdrop-blur-sm transition-all duration-200 transform hover:scale-[1.02]"
             >
               Cek Lapangan
             </Link>
             <Link
               href="/booking"
-              className="basis-1/2 text-center px-4 py-3 text-sm font-semibold text-blue-500 dark:text-blue-600 border-2 border-blue-500 dark:border-blue-600 hover:bg-blue-600 hover:text-white rounded-lg shadow-sm transition duration-200 transform hover:scale-105"
+              className="basis-1/2 text-center px-4 py-2 text-xs sm:text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-violet-500 hover:from-blue-600 hover:to-violet-600 rounded-lg shadow-md transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg"
             >
               Booking Now
             </Link>

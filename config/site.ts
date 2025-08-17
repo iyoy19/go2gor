@@ -142,94 +142,111 @@ export const siteConfig: SiteConfig = {
         },
       ],
     },
+
+    // === Semua menu avatar dimasukkan di sini ===
     {
       key: "profile",
       label: "Profile",
       dropdown: true,
       icon: User2,
       children: [
+        // Profil
         {
-          key: "account-group",
-          title: "Data & Pengaturan Akun",
+          key: "profil",
+          title: "Profil",
           items: [
             {
               key: "profil-saya",
               label: "Profil Saya",
-              href: "/profil",
+              href: "/profile/profil",
               icon: UserCircle,
               description: "Lihat & edit data diri",
             },
             {
               key: "pengaturan",
               label: "Pengaturan Akun",
-              href: "/pengaturan",
+              href: "/profile/pengaturan",
               icon: Settings2,
               description: "Email, password, foto profil",
             },
             {
               key: "notif",
               label: "Preferensi Notifikasi",
-              href: "/notifikasi",
+              href: "/profile/notifikasi",
               icon: Bell,
               description: "Atur notifikasi",
             },
           ],
         },
+
+        // Aktivitas
         {
-          key: "activity-group",
-          title: "Aktivitas & Riwayat",
+          key: "aktivitas",
+          title: "Aktivitas",
           items: [
-            {
-              key: "riwayat-booking",
-              label: "Riwayat Booking",
-              href: "/riwayat-booking",
-              icon: ClipboardList,
-              description: "Lapangan yang pernah dibooking",
-            },
             {
               key: "jadwal-saya",
               label: "Jadwal Saya",
-              href: "/jadwal-saya",
-              icon: Calendar,
+              href: "/aktivitas/jadwal-saya",
+              icon: CalendarDays,
               description: "Pertandingan atau booking mendatang",
             },
             {
-              key: "aktivitas",
+              key: "aktivitas-riwayat",
               label: "Aktivitas & Riwayat",
-              href: "/aktivitas",
+              href: "/aktivitas/aktivitas",
               icon: Activity,
               description: "Riwayat aktivitas",
             },
           ],
         },
+
+        // Riwayat
         {
-          key: "team-group",
-          title: "Tim",
+          key: "riwayat",
+          title: "Riwayat",
+          items: [
+            {
+              key: "riwayat-booking",
+              label: "Riwayat Booking",
+              href: "/riwayat/booking",
+              icon: ClipboardList,
+              description: "Lapangan yang pernah dibooking",
+            },
+          ],
+        },
+
+        // Team
+        {
+          key: "team",
+          title: "Team",
           items: [
             {
               key: "tim-saya",
               label: "Tim Saya",
-              href: "/tim-saya",
+              href: "/team/tim-saya",
               icon: Users,
               description: "Tim yang diikuti",
             },
           ],
         },
+
+        // Bantuan
         {
-          key: "help-group",
-          title: "Bantuan & Keluar",
+          key: "bantuan",
+          title: "Bantuan",
           items: [
             {
               key: "help",
               label: "Pusat Bantuan",
-              href: "/bantuan",
+              href: "/bantuan/help",
               icon: HelpCircle,
               description: "FAQ dan panduan",
             },
             {
               key: "logout",
               label: "Logout",
-              href: "/logout",
+              href: "/profile/logout",
               icon: LogOut,
               color: "danger",
             },

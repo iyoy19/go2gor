@@ -77,13 +77,13 @@ const SPRING_OPTIONS = { type: "spring", stiffness: 300, damping: 30 };
 export default function Carousel({
   items = DEFAULT_ITEMS,
   baseWidth = 300,
-  autoplay = false,
-  autoplayDelay = 3000,
-  pauseOnHover = false,
-  loop = false,
-  round = true,
+  autoplay = true,
+  autoplayDelay = 5000,
+  pauseOnHover = true,
+  loop = true,
+  round = false,
 }: CarouselProps): JSX.Element {
-  const containerPadding = 16;
+  const containerPadding = 24;
   const itemWidth = baseWidth - containerPadding * 2;
   const trackItemOffset = itemWidth + GAP;
 
@@ -212,7 +212,12 @@ export default function Carousel({
             outputRange: [90, 0, -90],
           };
           // Create transform outside of the render for each item
-          const rotateY = useTransform(x, transforms.range, transforms.outputRange, { clamp: false });
+          const rotateY = useTransform(
+            x,
+            transforms.range,
+            transforms.outputRange,
+            { clamp: false }
+          );
           return (
             <motion.div
               key={index}
@@ -237,16 +242,23 @@ export default function Carousel({
                 className="absolute inset-0 z-0"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
-              <div className="relative z-20 p-3 flex flex-col justify-end h-full">
-                <div className="flex items-center mt-2 mb-90">
-                  <span className="flex h-[28px] w-[28px] items-center justify-center rounded-full bg-black bg-opacity-50 mr-3">
-                    {item.icon}
+              <div className="relative z-20 p-4 sm:p-6 flex flex-col justify-between h-full min-h-[280px] sm:min-h-[400px]">
+                <div className="flex items-center">
+                  <span className="flex h-[28px] w-[28px] sm:h-[36px] sm:w-[36px] items-center justify-center rounded-full bg-black bg-opacity-50 mr-2 sm:mr-3">
+                    {React.cloneElement(item.icon as React.ReactElement, {
+                      className:
+                        "h-[12px] w-[12px] sm:h-[16px] sm:w-[16px] text-white",
+                    })}
                   </span>
-                  <h3 className="font-black text-xl text-white">
+                  <h3 className="font-bold sm:font-black text-lg sm:text-2xl text-white line-clamp-1">
                     {item.title}
                   </h3>
                 </div>
-                <p className="text-base text-white">{item.description}</p>
+                <div className="mt-auto">
+                  <p className="text-sm sm:text-lg text-white/90 line-clamp-2 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
               </div>
             </motion.div>
           );

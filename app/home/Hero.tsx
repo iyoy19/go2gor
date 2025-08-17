@@ -63,15 +63,21 @@ const Hero = () => {
   );
 
   return (
-    <section
-      className="relative flex flex-col text-white bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/hero1.jpg')" }}
-    >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60" />
+    <section className="relative flex flex-col text-white">
+      {/* Background Image Container */}
+      <div className="absolute inset-0 w-full h-full">
+        <div className="relative w-full h-full">
+          <img
+            src="/images/hero1.jpg"
+            alt="Hero Background"
+            className="w-full h-full object-cover md:object-center object-[80%] select-none"
+          />
+          <div className="absolute inset-0 bg-black/60" />
+        </div>
+      </div>
 
       {/* Hero Content */}
-      <div className="relative container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center py-35 px-6">
+      <div className="relative container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center py-20 sm:py-32 px-4 sm:px-6">
         {/* Kiri - Teks */}
         <div className="flex flex-col items-start gap-4 text-left">
           <motion.h1
