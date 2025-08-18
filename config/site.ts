@@ -19,7 +19,7 @@ import {
   LogOut,
 } from "lucide-react";
 
-import { NavItem } from "@/components/Navbar";
+import { NavItem } from "@/types";
 
 interface SiteConfig {
   name: string;
@@ -194,20 +194,6 @@ export const siteConfig: SiteConfig = {
               href: "/aktivitas",
               icon: Activity,
               description: "Riwayat aktivitas",
-            },
-          ],
-        },
-
-        {
-          key: "riwayat",
-          title: "Riwayat",
-          items: [
-            {
-              key: "riwayat-booking",
-              label: "Riwayat Booking",
-              href: "/booking",
-              icon: ClipboardList,
-              description: "Lapangan yang pernah dibooking",
             },
           ],
         },

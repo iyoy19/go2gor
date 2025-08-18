@@ -77,7 +77,7 @@ const Hero = () => {
       </div>
 
       {/* Hero Content */}
-      <div className="relative container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center py-36 sm:py-20 mt-10 px-4 sm:px-6">
+      <div className="relative container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center py-36 sm:py-20 mt-36 px-4 sm:px-6">
         {/* Kiri - Teks */}
         <div className="flex flex-col items-start gap-4 text-left">
           <motion.h1

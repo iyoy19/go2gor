@@ -34,12 +34,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
         className={clsx(
           "min-h-screen antialiased hide-scrollbar ",
           "bg-gradient-to-b from-gray-300 to-gray-300 text-black",
-          fontPoppins.variable,
+          fontPoppins.variable
         )}
       >
-        <div className="relative w-full overflow-x-hidden hide-scrollbar ">
+        <div className="relative w-full overflow-x-hidden hide-scrollbar">
           {/* Navbar fixed dengan background yang diatur di sini */}
-          <div className="fixed top-0 left-0 right-0 z-50 hide-scrollbar">
+          <div className="fixed top-0 left-0 right-0 z-50 hide-scrollbar ">
             <Navbar />
           </div>
 

@@ -23,6 +23,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^11.18.2",
+    "gl-matrix": "^3.4.4",
     "gsap": "^3.13.0",
     "intl-messageformat": "10.7.16",
     "keen-slider": "^6.8.6",
