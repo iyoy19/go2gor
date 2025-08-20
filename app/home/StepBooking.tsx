@@ -28,7 +28,6 @@ export default function BookingSteps() {
   ];
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
   const toggleStep = (i: number) => {
     setActiveIndex(activeIndex === i ? null : i);
   };
@@ -38,10 +37,10 @@ export default function BookingSteps() {
       <div className="max-w-3xl mx-auto px-4">
         {/* Heading */}
         <motion.div
-          className="text-center mb-8"
-          initial={{ opacity: 0, y: 30 }}
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
           viewport={{ once: true }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-black dark:text-white">
@@ -53,26 +52,25 @@ export default function BookingSteps() {
         </motion.div>
 
         {/* Steps */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           {steps.map((step, i) => (
             <motion.div
               key={i}
-              className="overflow-hidden rounded-md"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
+              layout
+              className="overflow-hidden rounded-md border border-gray-200 dark:border-slate-700"
+              transition={{ layout: { duration: 0.4, ease: "easeOut" } }}
             >
               <button
                 onClick={() => toggleStep(i)}
-                className="w-full flex items-center justify-between p-3 focus:outline-none"
+                className="w-full flex items-center justify-between p-4 focus:outline-none hover:bg-gray-50 dark:hover:bg-slate-800 transition-all duration-300 ease-in-out"
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <div className="p-1 rounded-full">{step.icon}</div>
                   <span className="font-medium text-black dark:text-white">
                     {step.title}
                   </span>
                 </div>
-                <span className="text-gray-400 dark:text-gray-300">
+                <span className="text-gray-400 dark:text-gray-300 text-xl font-bold transition-transform duration-300 ease-in-out">
                   {activeIndex === i ? "−" : "+"}
                 </span>
               </button>
@@ -80,11 +78,12 @@ export default function BookingSteps() {
               <AnimatePresence>
                 {activeIndex === i && (
                   <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="pl-8 pr-3 pb-2 text-gray-600 dark:text-gray-300 text-sm"
+                    layout
+                    initial={{ opacity: 0, scale: 0.97 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.97 }}
+                    transition={{ duration: 0.35, ease: "easeOut" }}
+                    className="pl-12 pr-4 pb-4 text-gray-700 dark:text-gray-300 text-sm"
                   >
                     {step.desc}
                   </motion.div>

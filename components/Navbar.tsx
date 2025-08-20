@@ -59,9 +59,12 @@ const renderDropdownContent = (items: NavGroup[]) => (
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [openDropdownKey, setOpenDropdownKey] = React.useState<string | null>(
-    null
-  );
+  const [desktopDropdownKey, setDesktopDropdownKey] = React.useState<
+    string | null
+  >(null);
+  const [mobileDropdownKey, setMobileDropdownKey] = React.useState<
+    string | null
+  >(null);
   const [navbarHeight, setNavbarHeight] = React.useState(64);
   const [isClient, setIsClient] = React.useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -71,25 +74,28 @@ export default function Navbar() {
     setIsClient(true);
     const navbar = document.querySelector('[data-slot="base"]') as HTMLElement;
     if (navbar) setNavbarHeight(navbar.offsetHeight);
+
+    const handleResize = () => {
+      if (navbar) setNavbarHeight(navbar.offsetHeight);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Lock scroll saat dropdown desktop terbuka
+  // Lock scroll saat dropdown desktop atau menu mobile terbuka
   useEffect(() => {
-    if (openDropdownKey || isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-  }, [openDropdownKey, isMenuOpen]);
+    document.body.style.overflow =
+      desktopDropdownKey || isMenuOpen ? "hidden" : "";
+  }, [desktopDropdownKey, isMenuOpen]);
 
-  // Close dropdown saat klik di luar
+  // Close desktop dropdown saat klik di luar
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setOpenDropdownKey(null);
+        setDesktopDropdownKey(null);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -98,8 +104,12 @@ export default function Navbar() {
     };
   }, []);
 
-  const toggleDropdown = (key: string) => {
-    setOpenDropdownKey((prev) => (prev === key ? null : key));
+  const toggleDesktopDropdown = (key: string) => {
+    setDesktopDropdownKey((prev) => (prev === key ? null : key));
+  };
+
+  const toggleMobileDropdown = (key: string) => {
+    setMobileDropdownKey((prev) => (prev === key ? null : key));
   };
 
   return (
@@ -125,7 +135,7 @@ export default function Navbar() {
             <NavbarMenuToggle
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-              className="text-white hover:bg-white/10 active:bg-white/20 rounded-lg p-2 transition-all duration-200 ease-in-out transform active:scale-90"
+              className="text-white hover:bg-white/10 rounded-lg p-2 transition-all duration-200 ease-in-out transform active:scale-90"
             />
           </div>
           <NavbarBrand className="hidden sm:flex">
@@ -161,11 +171,11 @@ export default function Navbar() {
               .map((item) => (
                 <NavbarItem key={item.key}>
                   {item.children ? (
-                    <Dropdown isOpen={openDropdownKey === item.key}>
+                    <Dropdown isOpen={desktopDropdownKey === item.key}>
                       <DropdownTrigger>
                         <Button
                           disableRipple
-                          onClick={() => toggleDropdown(item.key)}
+                          onClick={() => toggleDesktopDropdown(item.key)}
                           className="p-0 text-white drop-shadow-sm hover:text-white/90"
                           radius="sm"
                           variant="light"
@@ -206,14 +216,9 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         <NavbarMenu
-          className={`fixed left-0 right-0 z-[150] px-2 py-4 bg-black/20 backdrop-blur-md transition-all duration-200 ${
+          className={`fixed inset-x-0 top-[${navbarHeight}px] bottom-0 z-[150] px-2 py-4 bg-black/20 backdrop-blur-md transition-all duration-200 overflow-y-auto ${
             isMenuOpen ? "visible opacity-100" : "invisible opacity-0"
           }`}
-          style={{
-            top: "full", // ⬅ mulai di bawah navbar, jadi tidak nutup hamburger
-            height: `calc(100vh - ${navbarHeight}px)`,
-            overflowY: "auto",
-          }}
         >
           <div className="space-y-2">
             {siteConfig.navItems
@@ -235,9 +240,9 @@ export default function Navbar() {
                     <div className="mb-2">
                       <NavbarMenuItem
                         role="button"
-                        aria-expanded={!!item.key}
+                        aria-expanded={mobileDropdownKey === item.key}
                         className="bg-white/10 hover:bg-white/15 rounded-t-lg cursor-pointer transition-all duration-200 ease-in-out"
-                        onClick={() => toggleDropdown(item.key)}
+                        onClick={() => toggleMobileDropdown(item.key)}
                       >
                         <div className="w-full flex items-center justify-between px-3 py-2.5 text-white drop-shadow-sm">
                           <div className="flex items-center gap-2">
@@ -247,14 +252,14 @@ export default function Navbar() {
                           <ChevronDown
                             size={18}
                             className={`transition-transform duration-300 ease-in-out ${
-                              openDropdownKey === item.key
+                              mobileDropdownKey === item.key
                                 ? "rotate-180"
                                 : "rotate-0"
                             }`}
                           />
                         </div>
                       </NavbarMenuItem>
-                      {openDropdownKey === item.key && (
+                      {mobileDropdownKey === item.key && (
                         <div className="pl-6 pr-3 py-2 space-y-2 bg-white/5 rounded-b-lg">
                           {item.children?.map((group) =>
                             group.items?.map((sub) => (
