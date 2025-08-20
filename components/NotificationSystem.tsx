@@ -275,7 +275,9 @@ export default function NotificationSystem() {
       {isOpen && (
         <div
           ref={panelRef}
-          className="fixed top-15 inset-x-4 sm:absolute sm:right-0 sm:w-96 sm:inset-x-auto bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700/50 z-50 max-h-[calc(100vh-6rem)] flex flex-col"
+          className="fixed top-20 left-0 right-0 sm:absolute sm:right-0 sm:w-96 sm:inset-x-auto 
+               bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl 
+               border border-gray-700/50 z-[60] max-h-[calc(100vh-6rem)] flex flex-col"
         >
           {/* Header */}
           <div className="p-4 border-b border-gray-700/60 flex items-center justify-between">

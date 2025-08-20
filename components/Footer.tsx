@@ -194,7 +194,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-gray-200/80 dark:border-slate-800/80 mt-12">
+      <div className="border-t border-gray-200/80 dark:border-slate-800/80 mt-0">
         <div className="container mx-auto px-4 sm:px-6 py-6 max-w-7xl flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 dark:text-gray-500 text-xs sm:text-sm">
             &copy; {new Date().getFullYear()} Go2Gor. All rights reserved.

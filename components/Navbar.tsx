@@ -21,7 +21,7 @@ import { ChevronDown } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import NotificationSystem from "./NotificationSystem";
 import { NavGroup } from "@/types";
-import ProfileAvatar from "./Profile/ProfileAvatar"; // <- gunakan ProfileAvatar
+import ProfileAvatar from "./Profile/ProfileAvatar";
 
 // Fungsi render dropdown desktop
 const renderDropdownContent = (items: NavGroup[]) => (
@@ -110,7 +110,7 @@ export default function Navbar() {
         shouldHideOnScroll={false}
         isBordered
         position="sticky"
-        className="fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-sm border-b border-white/20"
+        className="fixed top-0 left-0 right-0 z-[100] bg-black/40 backdrop-blur-sm border-b border-white/20"
         classNames={{
           wrapper: "max-w-screen-xl relative",
           base: "bg-transparent",
@@ -121,7 +121,7 @@ export default function Navbar() {
       >
         {/* Left */}
         <NavbarContent justify="start" className="relative">
-          <div className="sm:hidden">
+          <div className="sm:hidden relative z-[200]">
             <NavbarMenuToggle
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -183,7 +183,7 @@ export default function Navbar() {
                     </Dropdown>
                   ) : (
                     <Link
-                      href={item.href}
+                      href={(item as any).href}
                       className="text-white drop-shadow-sm hover:text-white/90 transition-colors duration-200"
                     >
                       {item.label}
@@ -206,11 +206,11 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         <NavbarMenu
-          className={`fixed inset-0 z-[60] px-2 py-4 bg-black/20 backdrop-blur-md transition-all duration-200 ${
+          className={`fixed left-0 right-0 z-[150] px-2 py-4 bg-black/20 backdrop-blur-md transition-all duration-200 ${
             isMenuOpen ? "visible opacity-100" : "invisible opacity-0"
           }`}
           style={{
-            top: `${navbarHeight}px`,
+            top: "full", // ⬅ mulai di bawah navbar, jadi tidak nutup hamburger
             height: `calc(100vh - ${navbarHeight}px)`,
             overflowY: "auto",
           }}
@@ -220,10 +220,10 @@ export default function Navbar() {
               .filter((item) => item.key !== "profile")
               .map((item) => (
                 <React.Fragment key={item.key}>
-                  {!item.dropdown ? (
+                  {!item.children ? (
                     <NavbarMenuItem role="menuitem">
                       <Link
-                        href={item.href}
+                        href={(item as any).href}
                         className="w-full flex items-center gap-2 px-3 py-2.5 text-white drop-shadow-sm hover:bg-white/10 transition-colors rounded-md"
                         onClick={() => setIsMenuOpen(false)}
                       >
@@ -254,6 +254,23 @@ export default function Navbar() {
                           />
                         </div>
                       </NavbarMenuItem>
+                      {openDropdownKey === item.key && (
+                        <div className="pl-6 pr-3 py-2 space-y-2 bg-white/5 rounded-b-lg">
+                          {item.children?.map((group) =>
+                            group.items?.map((sub) => (
+                              <Link
+                                key={sub.key}
+                                href={sub.href}
+                                className="flex items-center gap-2 text-sm text-white hover:underline"
+                                onClick={() => setIsMenuOpen(false)}
+                              >
+                                {sub.icon ? <sub.icon size={16} /> : null}
+                                {sub.label}
+                              </Link>
+                            ))
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                 </React.Fragment>

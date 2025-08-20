@@ -4,8 +4,6 @@ import "@/styles/globals.css";
 import Hero from "@/app/home/Hero";
 import Konten from "@/app/home/Konten";
 import Lapangan from "@/app/home/Lapangan";
-import team from "@/app/home/Team";
-import Testimoni from "@/app/home/Testimoni";
 import StepBooking from "@/app/home/StepBooking";
 import Event from "@/app/home/Event";
 import CTA from "@/app/home/CTA";
@@ -21,7 +19,6 @@ export default function HomePage() {
         <Event />
         <TeamSection />
         <StepBooking />
-        <Testimoni />
         <CTA />
       </div>
     </main>

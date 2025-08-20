@@ -819,7 +819,7 @@ class InfiniteGridMenu {
   private init(onInit?: InitCallback): void {
     const gl = this.canvas.getContext("webgl2", {
       antialias: true,
-      alpha: false,
+      alpha: true,
     });
     if (!gl) {
       throw new Error("No WebGL 2 context!");
@@ -1293,17 +1293,45 @@ const InfiniteMenu: FC<InfiniteMenuProps> = ({ items = [] }) => {
 
       {activeItem && (
         <>
+          {/* Button / Icon */}
+          <div
+            onClick={handleButtonClick}
+            className={`
+          absolute
+          left-1/2
+          z-10
+          w-[44px]
+          h-[44px]
+          grid
+          place-items-center
+          bg-[#00ffff]
+          border-[3px]
+          border-black
+          rounded-full
+          cursor-pointer
+          transition-all
+          ease-[cubic-bezier(0.25,0.1,0.25,1.0)]
+          ${
+            isMoving
+              ? "bottom-[-50px] opacity-0 pointer-events-none duration-[100ms] scale-0 -translate-x-1/2"
+              : "bottom-[2.5em] opacity-100 pointer-events-auto duration-[500ms] scale-100 -translate-x-1/2"
+          }
+        `}
+          >
+            <p className="select-none text-[#060010] text-[14px]">&#x2197;</p>
+          </div>
+
+          {/* Title di bawah ikon */}
           <h2
             className={`
           select-none
           absolute
           font-black
-          [font-size:4rem]
-          left-[1.6em]
-          top-1/2
-          transform
-          translate-x-[20%]
-          -translate-y-1/2
+          text-[1.5rem]
+          left-1/2
+          bottom-[0.5em]   /* jarak dari tombol */
+          transform -translate-x-1/2
+          text-center
           transition-all
           ease-[cubic-bezier(0.25,0.1,0.25,1.0)]
           ${
@@ -1315,55 +1343,6 @@ const InfiniteMenu: FC<InfiniteMenuProps> = ({ items = [] }) => {
           >
             {activeItem.title}
           </h2>
-
-          <p
-            className={`
-          select-none
-          absolute
-          max-w-[10ch]
-          text-[1.5rem]
-          top-1/2
-          right-[1%]
-          transition-all
-          ease-[cubic-bezier(0.25,0.1,0.25,1.0)]
-          ${
-            isMoving
-              ? "opacity-0 pointer-events-none duration-[100ms] translate-x-[-60%] -translate-y-1/2"
-              : "opacity-100 pointer-events-auto duration-[500ms] translate-x-[-90%] -translate-y-1/2"
-          }
-        `}
-          >
-            {activeItem.description}
-          </p>
-
-          <div
-            onClick={handleButtonClick}
-            className={`
-          absolute
-          left-1/2
-          z-10
-          w-[60px]
-          h-[60px]
-          grid
-          place-items-center
-          bg-[#00ffff]
-          border-[5px]
-          border-black
-          rounded-full
-          cursor-pointer
-          transition-all
-          ease-[cubic-bezier(0.25,0.1,0.25,1.0)]
-          ${
-            isMoving
-              ? "bottom-[-80px] opacity-0 pointer-events-none duration-[100ms] scale-0 -translate-x-1/2"
-              : "bottom-[3.8em] opacity-100 pointer-events-auto duration-[500ms] scale-100 -translate-x-1/2"
-          }
-        `}
-          >
-            <p className="select-none relative text-[#060010] top-[2px] text-[26px]">
-              &#x2197;
-            </p>
-          </div>
         </>
       )}
     </div>
