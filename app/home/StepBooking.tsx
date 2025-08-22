@@ -1,40 +1,38 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
-  CheckBadgeIcon,
   ClipboardDocumentListIcon,
   CalendarDaysIcon,
+  CheckBadgeIcon,
 } from "@heroicons/react/24/outline";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function BookingSteps() {
   const steps = [
     {
-      icon: <ClipboardDocumentListIcon className="w-6 h-6 text-blue-600" />,
+      icon: <ClipboardDocumentListIcon className="w-8 h-8 text-blue-600" />,
       title: "Pilih Lapangan",
-      desc: "Pilih lapangan yang sesuai kebutuhanmu.",
     },
     {
-      icon: <CalendarDaysIcon className="w-6 h-6 text-blue-600" />,
+      icon: <CalendarDaysIcon className="w-8 h-8 text-blue-600" />,
       title: "Pilih Jadwal",
-      desc: "Tentukan tanggal dan waktu booking.",
     },
     {
-      icon: <CheckBadgeIcon className="w-6 h-6 text-blue-600" />,
+      icon: <CheckBadgeIcon className="w-8 h-8 text-blue-600" />,
       title: "Konfirmasi Booking",
-      desc: "Lengkapi data dan lakukan pembayaran.",
     },
   ];
 
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const toggleStep = (i: number) => {
-    setActiveIndex(activeIndex === i ? null : i);
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const nextStep = () => {
+    setCurrentStep((prev) => (prev + 1) % steps.length);
   };
 
   return (
-    <section className="w-full py-16">
-      <div className="max-w-3xl mx-auto px-4">
+    <section className="py-16">
+      <div className="max-w-4xl mx-auto px-4">
         {/* Heading */}
         <motion.div
           className="text-center mb-12"
@@ -51,44 +49,59 @@ export default function BookingSteps() {
           </p>
         </motion.div>
 
-        {/* Steps */}
-        <div className="space-y-3">
+        {/* Mobile View */}
+        <div className="md:hidden flex flex-col items-center">
+          {/* Card */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col items-center text-center w-72 sm:w-80 cursor-pointer"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              transition={{ duration: 0.5 }}
+              onClick={nextStep}
+            >
+              <div className="mb-4">{steps[currentStep].icon}</div>
+              <h3 className="font-semibold text-lg text-black dark:text-white">
+                {steps[currentStep].title}
+              </h3>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Indicators: semua dot */}
+          <div className="flex mt-4 space-x-3 z-10">
+            {steps.map((_, i) => (
+              <span
+                key={i}
+                className={`flex items-center justify-center rounded-full transition-all duration-300
+                  ${
+                    i === currentStep
+                      ? "bg-black/90 dark:bg-black-500 w-6 h-6 text-white font-semibold"
+                      : "bg-black/50 dark:bg-gray-400 w-4 h-4"
+                  }`}
+              >
+                {i === currentStep ? i + 1 : ""}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop View */}
+        <div className="hidden md:flex justify-between gap-6">
           {steps.map((step, i) => (
             <motion.div
               key={i}
-              layout
-              className="overflow-hidden rounded-md border border-gray-200 dark:border-slate-700"
-              transition={{ layout: { duration: 0.4, ease: "easeOut" } }}
+              className="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 flex flex-col items-center text-center w-64"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.2 }}
             >
-              <button
-                onClick={() => toggleStep(i)}
-                className="w-full flex items-center justify-between p-4 focus:outline-none hover:bg-gray-50 dark:hover:bg-slate-800 transition-all duration-300 ease-in-out"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="p-1 rounded-full">{step.icon}</div>
-                  <span className="font-medium text-black dark:text-white">
-                    {step.title}
-                  </span>
-                </div>
-                <span className="text-gray-400 dark:text-gray-300 text-xl font-bold transition-transform duration-300 ease-in-out">
-                  {activeIndex === i ? "−" : "+"}
-                </span>
-              </button>
-
-              <AnimatePresence>
-                {activeIndex === i && (
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, scale: 0.97 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.97 }}
-                    transition={{ duration: 0.35, ease: "easeOut" }}
-                    className="pl-12 pr-4 pb-4 text-gray-700 dark:text-gray-300 text-sm"
-                  >
-                    {step.desc}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <div className="mb-3">{step.icon}</div>
+              <h3 className="font-semibold text-lg text-black dark:text-white">
+                {step.title}
+              </h3>
             </motion.div>
           ))}
         </div>

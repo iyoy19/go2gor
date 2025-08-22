@@ -1297,28 +1297,40 @@ const InfiniteMenu: FC<InfiniteMenuProps> = ({ items = [] }) => {
           <div
             onClick={handleButtonClick}
             className={`
-          absolute
-          left-1/2
-          z-10
-          w-[44px]
-          h-[44px]
-          grid
-          place-items-center
-          bg-[#00ffff]
-          border-[3px]
-          border-black
-          rounded-full
-          cursor-pointer
-          transition-all
-          ease-[cubic-bezier(0.25,0.1,0.25,1.0)]
-          ${
-            isMoving
-              ? "bottom-[-50px] opacity-0 pointer-events-none duration-[100ms] scale-0 -translate-x-1/2"
-              : "bottom-[2.5em] opacity-100 pointer-events-auto duration-[500ms] scale-100 -translate-x-1/2"
-          }
-        `}
+    absolute
+    left-1/2
+    z-10
+    w-11
+    h-11
+    grid
+    place-items-center
+    border-2
+    border-black
+    rounded-full
+    cursor-pointer
+    transition-all
+    ease-[cubic-bezier(0.25,0.1,0.25,1.0)]
+    ${
+      isMoving
+        ? "bottom-[-50px] opacity-0 pointer-events-none scale-0 -translate-x-1/2 duration-[100ms]"
+        : "bottom-[3.5em] opacity-100 pointer-events-auto scale-100 -translate-x-1/2 duration-[500ms]"
+    }
+  `}
           >
-            <p className="select-none text-[#060010] text-[14px]">&#x2197;</p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6 text-black"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
+              />
+            </svg>
           </div>
 
           {/* Title di bawah ikon */}

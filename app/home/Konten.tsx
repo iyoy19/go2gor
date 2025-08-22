@@ -12,9 +12,27 @@ export default function KontenSection() {
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const [isVisible, setIsVisible] = useState(false); // <-- state untuk scroll animasi
   const carouselContainerRef = useRef<HTMLDivElement>(null);
   const mobileCarouselContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const [carouselWidth, setCarouselWidth] = useState(0);
+
+  // IntersectionObserver untuk animasi saat scroll
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 } // 20% section terlihat
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   // Hitung lebar carousel
   useEffect(() => {
@@ -61,13 +79,16 @@ export default function KontenSection() {
   }, []);
 
   return (
-    <section className="relative w-full font-poppins pt-2 sm:pt-16 pb-2 sm:pb-24 overflow-x-visible">
+    <section
+      ref={sectionRef}
+      className="relative w-full font-poppins pt-2 sm:pt-16 pb-2 sm:pb-24 overflow-x-visible"
+    >
       {/* Background Decoration */}
       <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] bg-purple-300 dark:bg-purple-700 opacity-20 rounded-full blur-3xl z-0" />
       <div className="absolute bottom-[-120px] left-[-80px] w-[250px] h-[250px] bg-indigo-300 dark:bg-indigo-700 opacity-20 rounded-full blur-2xl z-0" />
 
       <div className="relative w-full flex flex-col md:flex-row items-center justify-between py-8 md:py-12 gap-8 md:gap-12 z-10">
-        {/* Desktop: Left Animation */}
+        {/* Desktop: Left Carousel */}
         <div
           ref={carouselContainerRef}
           className="hidden md:flex w-full md:w-1/2 justify-center items-center overflow-visible"
@@ -88,7 +109,7 @@ export default function KontenSection() {
         <div className="hidden md:flex w-full md:w-1/2 flex-col justify-start text-left pt-10 relative z-10">
           <motion.span
             initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="inline-flex items-center px-4 py-1 text-xs font-bold text-white bg-gradient-to-r from-purple-400 to-pink-600 rounded-full shadow-md w-fit"
           >
@@ -97,7 +118,7 @@ export default function KontenSection() {
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.6 }}
             className="mb-0 min-w-[14ch] pt-10 px-1 flex items-center text-[3rem] lg:text-[3.8rem] xl:text-[4.2rem] font-extrabold tracking-tight leading-tight text-black dark:text-white drop-shadow-md"
           >
@@ -113,7 +134,7 @@ export default function KontenSection() {
 
           <motion.h3
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.9 }}
             className="text-lg sm:text-xl font-semibold text-black dark:text-white mt-2"
           >
@@ -122,7 +143,7 @@ export default function KontenSection() {
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 1 }}
             className="mt-2 text-sm sm:text-base lg:text-lg text-gray-700 dark:text-gray-300 md:w-full font-medium"
           >
@@ -133,7 +154,7 @@ export default function KontenSection() {
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 1.2 }}
             className="mt-8 flex flex-row gap-4 w-full"
           >
@@ -154,7 +175,6 @@ export default function KontenSection() {
 
         {/* Mobile: Carousel + Text */}
         <div className="block md:hidden w-full flex flex-col text-left px-0 overflow-visible">
-          {/* Carousel */}
           <div
             ref={mobileCarouselContainerRef}
             className="w-full flex justify-center items-center relative z-0 overflow-visible mb-6 sm:mb-8"
@@ -171,11 +191,10 @@ export default function KontenSection() {
             )}
           </div>
 
-          {/* Text */}
           <div className="px-0 mb-6">
             <motion.span
               initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="inline-flex items-center px-3 py-1 text-[10px] sm:text-xs font-bold text-white bg-gradient-to-r from-purple-400 to-pink-600 rounded-full shadow-md w-fit"
             >
@@ -184,7 +203,7 @@ export default function KontenSection() {
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.6 }}
               className="relative z-10 mt-6 sm:mt-4 mb-1 sm:mb-5 min-h-[2.5rem] sm:min-h-[3rem] text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight text-black dark:text-white drop-shadow-md"
             >
@@ -200,7 +219,7 @@ export default function KontenSection() {
 
             <motion.h3
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.9 }}
               className="relative z-10 text-base sm:text-lg font-semibold text-black dark:text-white mt-1"
             >
@@ -209,7 +228,7 @@ export default function KontenSection() {
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 1 }}
               className="relative z-10 mt-2 text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-300 font-medium"
             >
@@ -219,10 +238,9 @@ export default function KontenSection() {
             </motion.p>
           </div>
 
-          {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 1.2 }}
             className="relative z-10 mt-6 sm:mt-8 flex flex-row gap-3 w-full px-0"
           >
@@ -242,7 +260,6 @@ export default function KontenSection() {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
       {showScrollIndicator && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}

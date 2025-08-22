@@ -2,6 +2,7 @@
 
 import React from "react";
 import InfiniteMenu from "@/components/InfiniteMenu/InfiniteMenu";
+import { motion } from "framer-motion";
 
 const items = [
   {
@@ -25,24 +26,57 @@ const items = [
 ];
 
 export default function TeamSection() {
+  const containerVariants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.15 } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
+
   return (
     <section className="py-16 md:py-24">
-      <div className="container mx-auto px-4 md:px-6">
+      <motion.div
+        className="container mx-auto px-4 md:px-6"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={containerVariants}
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start md:items-center">
           {/* Kiri desktop: Heading + Teks + CTA */}
-          <div className="flex flex-col gap-6">
+          <motion.div variants={itemVariants} className="flex flex-col gap-6">
             {/* Heading */}
-            <h2 className="text-3xl md:text-4xl font-bold font-poppins text-gray-900 leading-snug mb-2">
-              Tim Hebat Bergabung di Sini
-            </h2>
+            <motion.h2
+              variants={itemVariants}
+              className="text-3xl md:text-4xl font-bold font-poppins text-gray-900 leading-snug"
+            >
+              Tim Hebat{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-pink-600">
+                Bergabung
+              </span>{" "}
+              di Sini
+            </motion.h2>
 
             {/* Mobile: Menu muncul setelah Heading */}
-            <div className="md:hidden relative rounded-2xl overflow-hidden aspect-square bg-transparent mt-4">
+            <motion.div
+              variants={itemVariants}
+              className="md:hidden relative rounded-2xl overflow-hidden aspect-square bg-transparent"
+            >
               <InfiniteMenu items={items} />
-            </div>
+            </motion.div>
 
             {/* Deskripsi + CTA */}
-            <p className="text-gray-600 font-inter text-base md:text-lg leading-relaxed">
+            <motion.p
+              variants={itemVariants}
+              className="text-gray-600 font-inter text-base md:text-lg leading-relaxed"
+            >
               Banyak tim berbakat dari berbagai bidang telah bergabung bersama
               kami untuk berkolaborasi, berkembang, dan menciptakan karya
               terbaik.
@@ -50,29 +84,38 @@ export default function TeamSection() {
               <br />
               Jadilah bagian dari komunitas ini, daftarkan tim Anda, atau ajukan
               tanding melawan tim lain sekarang.
-            </p>
-            <div className="flex flex-wrap gap-4 mt-2">
-              <a
+            </motion.p>
+
+            <motion.div
+              variants={itemVariants}
+              className="flex flex-wrap gap-4 mt-2"
+            >
+              <motion.a
+                variants={itemVariants}
                 href="/daftar-tim"
                 className="inline-block bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold font-inter px-5 py-2.5 rounded-xl shadow transition"
               >
                 Daftarkan Tim Anda
-              </a>
-              <a
+              </motion.a>
+              <motion.a
+                variants={itemVariants}
                 href="/ajukan-tanding"
                 className="inline-block bg-gradient-to-r from-sky-500 to-emerald-500 hover:opacity-90 text-white font-semibold font-inter px-5 py-2.5 rounded-xl shadow transition"
               >
                 Ajukan Match
-              </a>
-            </div>
-          </div>
+              </motion.a>
+            </motion.div>
+          </motion.div>
 
           {/* Kanan desktop: Menu */}
-          <div className="hidden md:block relative rounded-2xl overflow-hidden aspect-square bg-transparent">
+          <motion.div
+            variants={itemVariants}
+            className="hidden md:block relative rounded-2xl overflow-hidden aspect-square bg-transparent"
+          >
             <InfiniteMenu items={items} />
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

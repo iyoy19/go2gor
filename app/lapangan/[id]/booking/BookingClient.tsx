@@ -21,7 +21,6 @@ interface FieldSchedule {
   slots: TimeSlot[];
 }
 
-// Seeded random generator biar hasil booking dummy stabil
 function seededRandom(seed: string) {
   let h = 0;
   for (let i = 0; i < seed.length; i++) {
@@ -78,7 +77,11 @@ const getDatesForNext7Days = (): DateOption[] => {
   return dates;
 };
 
-export default function BookingClient({ fieldId: initialFieldId }: { fieldId: string }) {
+export default function BookingClient({
+  fieldId: initialFieldId,
+}: {
+  fieldId: string;
+}) {
   const availableDates = useMemo(() => getDatesForNext7Days(), []);
   const [selectedFieldId, setSelectedFieldId] = useState(initialFieldId);
   const [selectedDate, setSelectedDate] = useState(availableDates[0].date);
@@ -93,7 +96,6 @@ export default function BookingClient({ fieldId: initialFieldId }: { fieldId: st
     [selectedFieldId]
   );
 
-  // Fetch jadwal dummy berdasarkan field dan tanggal
   useEffect(() => {
     const fetchedSchedule = {
       fieldId: selectedFieldId,
@@ -101,7 +103,7 @@ export default function BookingClient({ fieldId: initialFieldId }: { fieldId: st
       slots: generateDummySchedule(selectedFieldId, selectedDate),
     };
     setSchedule(fetchedSchedule);
-    setSelectedTimes([]); // reset jam jika ganti tanggal/lapangan
+    setSelectedTimes([]);
   }, [selectedFieldId, selectedDate]);
 
   const handleTimeSelect = (time: string) => {
@@ -114,12 +116,12 @@ export default function BookingClient({ fieldId: initialFieldId }: { fieldId: st
     <section className="pt-24 pb-12 md:pt-32 md:pb-20 font-poppins">
       <div className="container mx-auto px-4 max-w-7xl">
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 rounded-xl p-6 shadow-lg border bg-white border-gray-200"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 rounded-xl p-6 shadow-lg border border-white/30 bg-black/10 backdrop-blur-sm"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          {/* Bagian Kiri - Pemilihan Lapangan */}
+          {/* Kiri - Lapangan */}
           <FieldSelector
             fields={dummyFields}
             selectedFieldId={selectedFieldId}
@@ -127,9 +129,9 @@ export default function BookingClient({ fieldId: initialFieldId }: { fieldId: st
             currentField={currentField}
           />
 
-          {/* Bagian Kanan - Pemilihan Waktu */}
+          {/* Kanan - Tanggal & Waktu */}
           <div className="flex flex-col">
-            <h2 className="text-2xl font-bold mb-4 text-neutral-800">
+            <h2 className="text-2xl font-bold mb-4 text-gray-900">
               Pilih Tanggal dan Waktu Booking
             </h2>
 
@@ -147,29 +149,31 @@ export default function BookingClient({ fieldId: initialFieldId }: { fieldId: st
               />
             )}
 
-            {/* Warning jika jam tidak berurutan */}
+            {/* Warning jam tidak berurutan */}
             {selectedTimes.length > 1 && !isTimesConsecutive(selectedTimes) && (
-              <div className="text-yellow-600 bg-yellow-100 border border-yellow-300 rounded-md px-4 py-2 mt-2 text-sm">
+              <div className="text-yellow-800 bg-yellow-100 border border-yellow-300 rounded-md px-4 py-2 mt-2 text-sm">
                 <b>Perhatian:</b> Jam booking tidak berurutan.
               </div>
             )}
 
-            {/* Booking Action */}
+            {/* Booking Button */}
             <div className="mt-8 text-center">
               {formError && (
-                <div className="text-red-500 text-sm mb-2">{formError}</div>
+                <div className="text-red-600 text-sm mb-2">{formError}</div>
               )}
               <button
                 type="button"
                 className={clsx(
-                  "inline-flex items-center gap-2 px-8 py-4 rounded-full text-lg font-bold shadow-xl transition-all duration-300 ease-in-out",
+                  "inline-flex items-center gap-2 px-8 py-4 rounded-full text-lg font-semibold shadow-md transition-all duration-300 ease-in-out",
                   selectedTimes.length === 0
                     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-blue-600 text-white hover:bg-blue-700"
+                    : "bg-teal-600 text-white hover:bg-teal-700"
                 )}
                 onClick={() => {
                   if (selectedTimes.length === 0) {
-                    setFormError("Pilih minimal satu jam booking terlebih dahulu.");
+                    setFormError(
+                      "Pilih minimal satu jam booking terlebih dahulu."
+                    );
                     return;
                   }
                   setFormError("");
@@ -187,7 +191,7 @@ export default function BookingClient({ fieldId: initialFieldId }: { fieldId: st
         {/* Notification */}
         {showNotif && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center pointer-events-none">
-            <div className="bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg text-lg font-semibold animate-fadeInUp">
+            <div className="bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg text-lg font-semibold animate-fadeInUp">
               Booking berhasil! Silakan lanjut ke pembayaran.
             </div>
           </div>
