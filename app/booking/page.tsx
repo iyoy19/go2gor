@@ -1,215 +1,276 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import { motion } from "framer-motion";
-import { dummyFields } from "@/data/lapangan";
-import FieldSelector from "@/components/Booking/FieldSelector";
-import BookingDatePicker from "@/components/Booking/BookingDatePicker";
-import TimeSlotGrid from "@/components/Booking/TimeSlotGrid";
-import BookingModal from "@/components/Booking/BookingModal";
-import clsx from "clsx";
+import { useState, useEffect, useMemo } from "react";
+import { CalendarDate, today, getLocalTimeZone } from "@internationalized/date";
 import { CalendarDaysIcon } from "@heroicons/react/24/outline";
+import clsx from "clsx";
+import { motion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
+import { dummyFields } from "@/data/lapangan";
 
-interface TimeSlot {
-  time: string;
-  isBooked: boolean;
-}
+// Dynamic BookingModal
+const BookingModal = dynamic(
+  () => import("@/components/Booking/BookingModal"),
+  { ssr: false }
+);
 
-interface FieldSchedule {
-  fieldId: string;
-  date: string;
-  slots: TimeSlot[];
-}
+const timeSlots = Array.from({ length: 15 }, (_, i) => {
+  const hour = i + 8;
+  return `${hour < 10 ? "0" : ""}${hour}:00`;
+});
 
-function seededRandom(seed: string) {
-  let h = 0;
-  for (let i = 0; i < seed.length; i++) {
-    h = (Math.imul(31, h) + seed.charCodeAt(i)) | 0;
-  }
-  return () => {
-    h = Math.imul(48271, h) % 0x7fffffff;
-    return (h & 0xfffffff) / 0x7fffffff;
-  };
-}
-
-const generateDummySchedule = (fieldId: string, date: string): TimeSlot[] => {
-  const rand = seededRandom(fieldId + date);
-  const slots: TimeSlot[] = [];
-  for (let i = 8; i <= 22; i++) {
-    const time = `${i < 10 ? "0" : ""}${i}:00`;
-    const isBooked = rand() > 0.7;
-    slots.push({ time, isBooked });
-  }
-  return slots;
-};
-
-function isTimesConsecutive(times: string[]) {
-  if (times.length < 2) return true;
-  const sorted = times.slice().sort();
-  const jamArr = sorted.map((j) => parseInt(j.split(":")[0], 10));
-  for (let i = 1; i < jamArr.length; i++) {
-    if (jamArr[i] !== jamArr[i - 1] + 1) return false;
-  }
-  return true;
-}
-
-interface DateOption {
-  date: string;
-  label: string;
-}
-
-const getDatesForNext7Days = (): DateOption[] => {
-  const dates: DateOption[] = [];
+function getNextSevenDays(start: CalendarDate) {
+  const days: CalendarDate[] = [];
   for (let i = 0; i < 7; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
-    const dateString = d.toISOString().split("T")[0];
-    const label =
-      i === 0
-        ? "Hari Ini"
-        : d.toLocaleDateString("id-ID", {
-            weekday: "short",
-            day: "numeric",
-            month: "short",
-          });
-    dates.push({ date: dateString, label });
+    days.push(start.add({ days: i }));
   }
-  return dates;
-};
+  return days;
+}
 
-export default function Booking() {
-  const availableDates = useMemo(() => getDatesForNext7Days(), []);
-  // Gunakan field pertama sebagai default
-  const [selectedFieldId, setSelectedFieldId] = useState(
-    dummyFields[0].id.toString()
-  );
-  const [selectedDate, setSelectedDate] = useState(availableDates[0].date);
-  const [schedule, setSchedule] = useState<FieldSchedule | null>(null);
+function formatDateInput(date: CalendarDate | null) {
+  if (!date) return "";
+  const m = date.month.toString().padStart(2, "0");
+  const d = date.day.toString().padStart(2, "0");
+  return `${date.year}-${m}-${d}`;
+}
+
+const monthNames = [
+  "",
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
+
+function formatDayLabel(date: CalendarDate, idx: number) {
+  if (idx === 0) return "Hari Ini";
+  if (idx === 1) return "Besok";
+  return `${date.day} ${monthNames[date.month]}`;
+}
+
+export default function BookingPage() {
+  const [mounted, setMounted] = useState(false);
+  const [selectedField, setSelectedField] = useState(dummyFields[0].id);
+  const [selectedDate, setSelectedDate] = useState<CalendarDate | null>(null);
   const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
+  const [showCalendar, setShowCalendar] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [showNotif, setShowNotif] = useState(false);
-  const [formError, setFormError] = useState("");
 
-  const currentField = useMemo(
-    () => dummyFields.find((f) => f.id.toString() === selectedFieldId),
-    [selectedFieldId]
-  );
+  const todayDate = today(getLocalTimeZone());
 
   useEffect(() => {
-    const fetchedSchedule = {
-      fieldId: selectedFieldId,
-      date: selectedDate,
-      slots: generateDummySchedule(selectedFieldId, selectedDate),
-    };
-    setSchedule(fetchedSchedule);
-    setSelectedTimes([]);
-  }, [selectedFieldId, selectedDate]);
+    setMounted(true);
+    if (!selectedDate) setSelectedDate(todayDate);
+  }, [selectedDate, todayDate]);
 
-  const handleTimeSelect = (time: string) => {
-    setSelectedTimes((prev) =>
-      prev.includes(time) ? prev.filter((t) => t !== time) : [...prev, time]
-    );
+  const nextSevenDays = useMemo(() => getNextSevenDays(todayDate), [todayDate]);
+
+  const checkSequential = (times: string[]) => {
+    const hours = times.map((t) => parseInt(t.split(":")[0]));
+    for (let i = 1; i < hours.length; i++) {
+      if (hours[i] !== hours[i - 1] + 1) return false;
+    }
+    return true;
   };
 
+  const isSequential = checkSequential(selectedTimes);
+
+  if (!mounted) return null;
+
   return (
-    <section className="pt-24 pb-12 md:pt-32 md:pb-20 font-poppins">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <div className="p-6 md:p-12 bg-transparent min-h-screen">
+      {/* Heading */}
+      <motion.div
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center md:text-left mb-8 pt-12"
+      >
+        <h1 className="text-4xl md:text-5xl font-extrabold text-teal-700 mb-2">
+          ⚽{" "}
+          <span className="bg-gradient-to-r from-teal-400 to-teal-600 text-transparent bg-clip-text">
+            Booking Lapangan
+          </span>{" "}
+          & Waktu Favoritmu!
+        </h1>
+        <p className="text-md md:text-lg text-gray-600">
+          Pilih tanggal, jam, dan nikmati permainanmu tanpa ribet.
+        </p>
+      </motion.div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Card Lapangan */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 rounded-xl p-6 shadow-lg border border-white/30 bg-black/10 backdrop-blur-sm"
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="bg-white/20 backdrop-blur-md rounded-xl shadow-lg p-6"
         >
-          {/* Kiri - Lapangan */}
-          <FieldSelector
-            fields={dummyFields}
-            selectedFieldId={selectedFieldId}
-            onFieldSelect={setSelectedFieldId}
-            currentField={currentField}
-          />
-
-          {/* Kanan - Tanggal & Waktu */}
-          <div className="flex flex-col">
-            <h2 className="text-2xl font-bold mb-4 text-gray-900">
-              Pilih Tanggal dan Waktu Booking
-            </h2>
-
-            <BookingDatePicker
-              availableDates={availableDates}
-              selectedDate={selectedDate}
-              onDateSelect={setSelectedDate}
-            />
-
-            {schedule && (
-              <TimeSlotGrid
-                slots={schedule.slots}
-                selectedTimes={selectedTimes}
-                onTimeSelect={handleTimeSelect}
-              />
-            )}
-
-            {/* Warning jam tidak berurutan */}
-            {selectedTimes.length > 1 && !isTimesConsecutive(selectedTimes) && (
-              <div className="text-yellow-800 bg-yellow-100 border border-yellow-300 rounded-md px-4 py-2 mt-2 text-sm">
-                <b>Perhatian:</b> Jam booking tidak berurutan.
-              </div>
-            )}
-
-            {/* Booking Button */}
-            <div className="mt-8 text-center">
-              {formError && (
-                <div className="text-red-600 text-sm mb-2">{formError}</div>
-              )}
-              <button
-                type="button"
+          <h2 className="text-lg font-semibold mb-4">Pilih Lapangan</h2>
+          <div className="flex flex-col gap-4">
+            {dummyFields.map((field) => (
+              <motion.button
+                key={field.id}
+                onClick={() => setSelectedField(field.id)}
+                whileHover={{ scale: 1.03 }}
                 className={clsx(
-                  "inline-flex items-center gap-2 px-8 py-4 rounded-full text-lg font-semibold shadow-md transition-all duration-300 ease-in-out",
-                  selectedTimes.length === 0
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-teal-600 text-white hover:bg-teal-700"
+                  "flex items-center gap-3 px-4 py-2 rounded-lg border text-left transition-all",
+                  selectedField === field.id
+                    ? "bg-teal-600 text-white"
+                    : "bg-white/40 hover:bg-white/60"
                 )}
-                onClick={() => {
-                  if (selectedTimes.length === 0) {
-                    setFormError(
-                      "Pilih minimal satu jam booking terlebih dahulu."
-                    );
-                    return;
-                  }
-                  setFormError("");
-                  setShowModal(true);
-                }}
-                disabled={selectedTimes.length === 0}
               >
-                <CalendarDaysIcon className="w-6 h-6" />
-                Booking Sekarang
-              </button>
-            </div>
+                <img
+                  src={field.image}
+                  alt={field.name}
+                  className="w-12 h-12 rounded-lg object-cover"
+                />
+                <span>{field.name}</span>
+              </motion.button>
+            ))}
           </div>
         </motion.div>
 
-        {/* Notification */}
-        {showNotif && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center pointer-events-none">
-            <div className="bg-green-600 text-white px-6 py-4 rounded-lg shadow-lg text-lg font-semibold animate-fadeInUp">
-              Booking berhasil! Silakan lanjut ke pembayaran.
+        {/* Card Tanggal & Jam */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="bg-white/20 backdrop-blur-md rounded-xl shadow-lg p-6"
+        >
+          <h2 className="text-lg font-semibold mb-4">Pilih Tanggal & Jam</h2>
+
+          {/* Tanggal */}
+          <div className="flex items-center gap-2 mb-4">
+            <button
+              onClick={() => setShowCalendar((prev) => !prev)}
+              className="p-2 rounded-lg border hover:bg-white/50 flex-shrink-0"
+            >
+              <CalendarDaysIcon className="w-5 h-5" />
+            </button>
+
+            <div className="flex gap-2 overflow-x-auto flex-nowrap scrollbar-hide">
+              {nextSevenDays.map((date, idx) => {
+                const isSelected = selectedDate?.toString() === date.toString();
+                const isDisabled = date.toString() < todayDate.toString();
+                return (
+                  <motion.button
+                    key={idx}
+                    onClick={() => !isDisabled && setSelectedDate(date)}
+                    disabled={isDisabled}
+                    className={clsx(
+                      "px-3 py-2 rounded-lg text-sm min-w-[64px] flex-shrink-0 transition-all",
+                      isDisabled
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : isSelected
+                          ? "bg-teal-600 text-white"
+                          : "bg-blue-500 text-white hover:bg-blue-600"
+                    )}
+                    whileTap={{ scale: isDisabled ? 1 : 0.95 }}
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={isSelected ? "selected" : "normal-" + idx}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.25 }}
+                      >
+                        {isSelected ? formatDayLabel(date, idx) : date.day}
+                      </motion.span>
+                    </AnimatePresence>
+                  </motion.button>
+                );
+              })}
             </div>
           </div>
-        )}
 
-        {/* Booking Modal */}
+          <input
+            type="date"
+            value={formatDateInput(selectedDate)}
+            min={formatDateInput(todayDate)}
+            onChange={(e) => {
+              const [y, m, d] = e.target.value.split("-").map(Number);
+              setSelectedDate(new CalendarDate(y, m, d));
+            }}
+            className={clsx(
+              "border rounded-lg px-2 py-1 mb-4",
+              showCalendar ? "block" : "hidden"
+            )}
+          />
+
+          {/* Jam */}
+          <div className="bg-white/30 backdrop-blur-sm rounded-xl p-4">
+            <h3 className="text-md font-semibold mb-2">Pilih Jam</h3>
+            <div className="grid grid-cols-3 gap-2 mb-2">
+              {timeSlots.map((time) => {
+                const selected = selectedTimes.includes(time);
+                return (
+                  <motion.button
+                    key={time}
+                    onClick={() =>
+                      setSelectedTimes((prev) =>
+                        prev.includes(time)
+                          ? prev.filter((t) => t !== time)
+                          : [...prev, time].sort()
+                      )
+                    }
+                    whileTap={{ scale: 0.95 }}
+                    className={clsx(
+                      "px-3 py-2 rounded-lg text-sm border",
+                      selected
+                        ? "bg-teal-600 text-white"
+                        : "bg-white/50 hover:bg-white/70"
+                    )}
+                  >
+                    {time}
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            {!isSequential && selectedTimes.length > 1 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="text-yellow-700 font-semibold mb-2"
+              >
+                ⚠️ Perhatikan Jam Yang Dipilih
+              </motion.div>
+            )}
+
+            <motion.button
+              className="w-full px-4 py-2 rounded-lg bg-teal-600 text-white hover:bg-teal-700"
+              disabled={!selectedDate || selectedTimes.length === 0}
+              onClick={() => setShowModal(true)}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Booking Sekarang
+            </motion.button>
+          </div>
+        </motion.div>
+      </div>
+
+      {showModal && (
         <BookingModal
           show={showModal}
           onClose={() => setShowModal(false)}
-          currentField={currentField}
-          selectedDate={selectedDate}
+          currentField={dummyFields.find((f) => f.id === selectedField)!}
+          selectedDate={selectedDate?.toString() || ""}
           selectedTimes={selectedTimes}
-          onSubmit={() => {
-            setShowModal(false);
-            setShowNotif(true);
-            setTimeout(() => setShowNotif(false), 2000);
-          }}
+          onSubmit={() => setShowModal(false)}
         />
-      </div>
-    </section>
+      )}
+    </div>
   );
 }

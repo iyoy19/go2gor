@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, easeOut } from "framer-motion";
 import { useState } from "react";
 import {
   FiCalendar,
@@ -62,7 +62,7 @@ export default function EventPage() {
       transition: {
         delay: i * 0.1,
         duration: 0.6,
-        ease: "easeOut",
+        ease: easeOut,
       },
     }),
   };

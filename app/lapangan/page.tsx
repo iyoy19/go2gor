@@ -174,12 +174,10 @@ const FieldCard = ({
   textColorClass: string;
   borderColorClass: string;
 }) => {
-  const router = useRouter();
   return (
-    <Link
-      href={`/lapangan/${field.id}`}
+    <div
       className={clsx(
-        "rounded-2xl overflow-hidden h-full flex flex-col group transition-all duration-300 hover:border-indigo-400 hover:shadow-xl transform hover:-translate-y-1 cursor-pointer",
+        "rounded-2xl overflow-hidden h-full flex flex-col group transition-all duration-300 hover:border-indigo-400 hover:shadow-xl transform hover:-translate-y-1",
         "bg-white border border-gray-100 shadow-sm"
       )}
     >
@@ -253,19 +251,16 @@ const FieldCard = ({
               </span>
             </p>
           </div>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              router.push(`/lapangan/${field.id}/booking`);
-            }}
+          {/* Link Booking dengan param fieldId */}
+          <Link
+            href={`/booking`}
             className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-full font-semibold shadow-md transition text-sm"
           >
             <span>Booking</span>
             <FiArrowRight />
-          </button>
+          </Link>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };

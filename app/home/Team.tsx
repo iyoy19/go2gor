@@ -2,7 +2,7 @@
 
 import React from "react";
 import InfiniteMenu from "@/components/InfiniteMenu/InfiniteMenu";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 
 const items = [
   {
@@ -36,7 +36,7 @@ export default function TeamSection() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
+      transition: { duration: 0.6, ease: easeOut },
     },
   };
 

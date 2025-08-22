@@ -12,7 +12,13 @@ import {
   CardHeader,
   CardFooter,
 } from "@heroui/react";
-import { motion } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  Variants,
+  easeInOut,
+  easeOut,
+} from "framer-motion";
 
 const Lapangan = () => {
   const [selectedSport, setSelectedSport] = useState<string>("all");
@@ -27,17 +33,18 @@ const Lapangan = () => {
     visible: { transition: { staggerChildren: 0.15 } },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
+      scale: 1,
+      transition: { duration: 0.6, ease: easeOut },
     },
   };
 
   return (
-    <section className="py-22 md:py-20 lg:py-28 relative">
+    <section className="py-14 md:py-20 lg:py-28 relative">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -181,7 +188,7 @@ const Lapangan = () => {
                     >
                       <Button
                         as={Link}
-                        href={`/booking/${field.id}`}
+                        href={`/booking?fieldId=${field.id}`}
                         radius="full"
                         size="sm"
                         className="px-3 py-1 text-xs font-inter font-semibold bg-gradient-to-r from-sky-500 via-cyan-500 to-emerald-500 text-white shadow-md"

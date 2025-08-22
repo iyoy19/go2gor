@@ -156,7 +156,7 @@ export default function BookingModal({
                   "w-full px-3 py-2 rounded-md border focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-base bg-white/80 mb-2",
                   !namaPemesan && formError
                     ? "border-red-400"
-                    : "border-gray-300",
+                    : "border-gray-300"
                 )}
                 placeholder="Masukkan nama/Tim"
                 value={namaPemesan}
@@ -213,7 +213,7 @@ export default function BookingModal({
               <span className="font-semibold">Total harga:</span> Rp
               {currentField && selectedTimes.length > 0
                 ? (currentField.price * selectedTimes.length).toLocaleString(
-                    "id-ID",
+                    "id-ID"
                   )
                 : "-"}
             </div>
