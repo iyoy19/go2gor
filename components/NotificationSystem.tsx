@@ -1,358 +1,217 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import {
-  Bell,
-  BellRing,
-  X,
-  CalendarCheck,
-  Clock,
-  CircleDollarSign,
-  Users,
-  CalendarX,
-  Megaphone,
-  ShieldQuestion,
-} from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Bell, X } from "lucide-react";
 
-// --- 1. Tipe Notifikasi ---
+type NotificationType = "info" | "warning" | "success" | "error";
+type NotificationPriority = "low" | "medium" | "high";
+type NotificationCategory = "semua" | "booking" | "info-gor";
+
 interface Notification {
-  id: string;
-  type:
-    | "booking_confirmation"
-    | "booking_reminder"
-    | "payment_success"
-    | "match_invite"
-    | "cancellation_info"
-    | "announcement";
+  id: number;
   title: string;
   message: string;
   timestamp: Date;
+  type: NotificationType;
+  priority: NotificationPriority;
   isRead: boolean;
-  priority: "low" | "medium" | "high";
-  actionUrl?: string;
-  metadata?: {
-    field?: string;
-    teamName?: string;
-    bookingId?: string;
-  };
+  category: NotificationCategory;
+  senderPhoto: string;
 }
 
-interface NotificationFilter {
-  type: string;
-  label: string;
-  icon: React.ElementType;
-}
-
-// --- 2. Mock Data ---
-const initialNotifications: Notification[] = [
-  {
-    id: "1",
-    type: "booking_confirmation",
-    title: "Booking Berhasil!",
-    message: "Anda berhasil booking Lapangan Futsal A pada hari ini jam 19:00.",
-    timestamp: new Date(Date.now() - 5 * 60 * 1000),
-    isRead: false,
-    priority: "high",
-    actionUrl: "/booking/history/123",
-    metadata: { field: "Lapangan Futsal A", bookingId: "BK-123" },
-  },
-  {
-    id: "2",
-    type: "booking_reminder",
-    title: "Pengingat Jadwal Tanding",
-    message: "Jangan lupa, jadwal main badminton Anda besok jam 15:00.",
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    isRead: false,
-    priority: "medium",
-    actionUrl: "/my-schedule",
-    metadata: { field: "Lapangan Badminton 3" },
-  },
-  {
-    id: "3",
-    type: "match_invite",
-    title: "Undangan Bergabung Tim",
-    message: "Tim Elang FC mengundang Anda untuk bergabung.",
-    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-    isRead: true,
-    priority: "medium",
-    actionUrl: "/team/elang-fc",
-    metadata: { teamName: "Elang FC" },
-  },
-  {
-    id: "4",
-    type: "announcement",
-    title: "Info Turnamen Kemerdekaan",
-    message: "Segera daftar untuk Turnamen Futsal Kemerdekaan! Slot terbatas.",
-    timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000),
-    isRead: true,
-    priority: "low",
-    actionUrl: "/tournaments/kemerdekaan",
-  },
-  {
-    id: "5",
-    type: "payment_success",
-    title: "Pembayaran Berhasil",
-    message: "Pembayaran untuk booking #BK-122 telah kami terima.",
-    timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
-    isRead: true,
-    priority: "medium",
-    actionUrl: "/booking/history/122",
-    metadata: { bookingId: "BK-122" },
-  },
-];
-
-// --- 3. Filter Notifikasi ---
-const notificationFilters: NotificationFilter[] = [
-  { type: "all", label: "Semua", icon: Bell },
-  { type: "booking", label: "Booking", icon: CalendarCheck },
-  { type: "match", label: "Tanding & Tim", icon: Users },
-  { type: "info", label: "Info GOR", icon: Megaphone },
-];
-
-// --- 4. Utility Functions ---
-const formatTimeAgo = (date: Date): string => {
-  const now = new Date();
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-  if (diffInSeconds < 60) return `baru saja`;
-  const diffInMinutes = Math.floor(diffInSeconds / 60);
-  if (diffInMinutes < 60) return `${diffInMinutes}m`;
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) return `${diffInHours}j`;
-  const diffInDays = Math.floor(diffInHours / 24);
-  return `${diffInDays}h`;
-};
-
-const getNotificationIcon = (type: Notification["type"]) => {
-  const iconProps = { size: 22, className: "text-gray-300" };
-  switch (type) {
-    case "booking_confirmation":
-      return <CalendarCheck {...iconProps} className="text-green-400" />;
-    case "booking_reminder":
-      return <Clock {...iconProps} className="text-blue-400" />;
-    case "payment_success":
-      return <CircleDollarSign {...iconProps} className="text-emerald-400" />;
-    case "match_invite":
-      return <Users {...iconProps} className="text-purple-400" />;
-    case "cancellation_info":
-      return <CalendarX {...iconProps} className="text-red-400" />;
-    case "announcement":
-      return <Megaphone {...iconProps} className="text-yellow-400" />;
-    default:
-      return <ShieldQuestion {...iconProps} />;
-  }
-};
-
-const getPriorityClasses = (
-  priority: Notification["priority"],
-  isRead: boolean
-): string => {
-  if (isRead) return "border-l-transparent";
-  switch (priority) {
-    case "high":
-      return "border-l-red-500";
-    case "medium":
-      return "border-l-blue-500";
-    case "low":
-      return "border-l-gray-500";
-    default:
-      return "border-l-transparent";
-  }
-};
-
-// --- 5. Component NotificationSystem ---
-export default function NotificationSystem() {
-  const [notifications, setNotifications] =
-    useState<Notification[]>(initialNotifications);
+export default function Notifications() {
+  const [notifications, setNotifications] = useState<Notification[]>([
+    {
+      id: 1,
+      title: "Server Update",
+      message: "Server akan restart malam ini pukul 23:00 WIB.",
+      timestamp: new Date(Date.now() - 1000 * 60 * 30),
+      type: "warning",
+      priority: "high",
+      isRead: false,
+      category: "info-gor",
+      senderPhoto: "/images/logo.png",
+    },
+    {
+      id: 2,
+      title: "Booking Disetujui",
+      message: "Booking lapangan futsal Anda sudah dikonfirmasi.",
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
+      type: "success",
+      priority: "medium",
+      isRead: false,
+      category: "booking",
+      senderPhoto: "/images/hero.jpg",
+    },
+    {
+      id: 3,
+      title: "Welcome!",
+      message: "Selamat datang di platform kami 🎉",
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24),
+      type: "success",
+      priority: "low",
+      isRead: true,
+      category: "semua",
+      senderPhoto: "/images/hero1.jpg",
+    },
+  ]);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState("all");
+  const [activeCategory, setActiveCategory] =
+    useState<NotificationCategory>("semua");
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Close panel jika klik di luar
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        panelRef.current &&
-        !panelRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node)
-      ) {
+    function handleClickOutside(e: MouseEvent) {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
-
-  // Lock scroll saat panel terbuka
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "auto";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+    }
+    if (isOpen) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
-  const getFilteredNotifications = () => {
-    if (selectedFilter === "all") return notifications;
-    if (selectedFilter === "booking") {
-      return notifications.filter(
-        (n) =>
-          n.type.startsWith("booking_") ||
-          n.type.startsWith("payment_") ||
-          n.type.startsWith("cancellation_")
-      );
-    }
-    if (selectedFilter === "match") {
-      return notifications.filter((n) => n.type === "match_invite");
-    }
-    if (selectedFilter === "info") {
-      return notifications.filter((n) => n.type === "announcement");
-    }
-    return [];
-  };
+  const toggleNotifications = () => setIsOpen(!isOpen);
 
-  const filteredNotifications = getFilteredNotifications();
-
-  const markAsRead = useCallback((id: string) => {
+  const handleNotificationClick = (id: number) => {
     setNotifications((prev) =>
       prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
     );
-  }, []);
+  };
 
-  const markAllAsRead = useCallback(() => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
-  }, []);
-
-  const deleteNotification = useCallback((id: string) => {
+  const deleteNotification = (id: number) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
-  }, []);
+  };
 
-  const clearAllNotifications = useCallback(() => {
-    const unread = notifications.filter((n) => !n.isRead);
-    if (notifications.length > unread.length) {
-      setNotifications(unread);
-    } else {
-      setNotifications([]);
-    }
-  }, [notifications]);
+  const formatTimeAgo = (date: Date) => {
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 1) return "Baru saja";
+    if (minutes < 60) return `${minutes}m lalu`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}j lalu`;
+    const days = Math.floor(hours / 24);
+    return `${days}h lalu`;
+  };
 
-  const handleNotificationClick = useCallback(
-    (notification: Notification) => {
-      if (!notification.isRead) markAsRead(notification.id);
-      if (notification.actionUrl)
-        console.log("Navigating to:", notification.actionUrl);
-      setIsOpen(false);
-    },
-    [markAsRead]
-  );
+  const filteredNotifications =
+    activeCategory === "semua"
+      ? notifications
+      : notifications.filter((n) => n.category === activeCategory);
 
   return (
     <div className="relative">
+      {/* Tombol Notif */}
       <button
-        ref={buttonRef}
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-full hover:bg-gray-700/80 transition-colors duration-200 group"
-        aria-label="Notifikasi"
+        onClick={toggleNotifications}
+        className="relative p-2 rounded-full hover:bg-gray-800/80 transition-colors"
       >
-        {unreadCount > 0 ? (
-          <>
-            <BellRing
-              size={22}
-              className="text-white group-hover:text-gray-100"
-            />
-            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
-              {unreadCount}
-            </span>
-          </>
-        ) : (
-          <Bell size={22} className="text-gray-300 group-hover:text-white" />
+        <Bell className="w-6 h-6 text-gray-200" />
+        {unreadCount > 0 && (
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            {unreadCount}
+          </span>
         )}
       </button>
 
-      {isOpen && (
-        <div
-          ref={panelRef}
-          className="fixed top-20 left-0 right-0 sm:absolute sm:right-0 sm:w-96 sm:inset-x-auto 
-               bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl 
-               border border-gray-700/50 z-[60] max-h-[calc(100vh-6rem)] flex flex-col"
-        >
-          {/* Header */}
-          <div className="p-4 border-b border-gray-700/60 flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-white">Notifikasi</h3>
-            <div className="flex items-center gap-2">
-              {unreadCount > 0 && (
-                <button
-                  onClick={markAllAsRead}
-                  className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
-                >
-                  Tandai semua dibaca
-                </button>
-              )}
+      {/* Panel */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            ref={panelRef}
+            className="fixed top-18 right-4 sm:right-8 w-[90%] sm:w-[420px] lg:w-[480px]
+                       bg-gray-900/100 backdrop-blur-xl rounded-xl shadow-xl
+                       border border-gray-700/50 z-[9999]
+                       max-h-[calc(100vh-8rem)] flex flex-col"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-800/70">
+              <h3 className="text-lg font-semibold text-white">Notifikasi</h3>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 text-gray-400 hover:text-white rounded-full hover:bg-gray-700/80 transition-colors"
-                title="Tutup"
+                className="p-1 text-gray-400 hover:text-white transition-colors"
               >
                 <X size={18} />
               </button>
             </div>
-          </div>
 
-          {/* Filters */}
-          <div className="p-2 border-b border-gray-700/60 flex gap-2">
-            {notificationFilters.map((filter) => (
-              <button
-                key={filter.type}
-                onClick={() => setSelectedFilter(filter.type)}
-                className={`flex-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors flex items-center justify-center gap-1.5 ${
-                  selectedFilter === filter.type
-                    ? "bg-gray-700/80 text-white"
-                    : "text-gray-400 hover:bg-gray-800/60 hover:text-gray-200"
-                }`}
-              >
-                <filter.icon size={14} />
-                {filter.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Notifications List */}
-          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
-            {filteredNotifications.length === 0 ? (
-              <div className="p-8 text-center">
-                <Bell size={48} className="text-gray-600 mx-auto mb-3" />
-                <p className="text-gray-500 text-sm">Tidak ada notifikasi</p>
-              </div>
-            ) : (
-              <div className="divide-y divide-gray-800/70">
-                {filteredNotifications.map((n) => (
-                  <div
-                    key={n.id}
-                    className={`relative p-3.5 hover:bg-gray-800/70 cursor-pointer transition-colors border-l-4 ${getPriorityClasses(
-                      n.priority,
-                      n.isRead
-                    )} ${n.isRead ? "opacity-60" : ""}`}
-                    onClick={() => handleNotificationClick(n)}
+            {/* Tabs */}
+            <div className="flex justify-around px-4 py-2 border-b border-gray-800/70 text-sm">
+              {(["semua", "booking", "info-gor"] as NotificationCategory[]).map(
+                (cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-3 py-1 rounded-md transition-colors ${
+                      activeCategory === cat
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-400 hover:text-white"
+                    }`}
                   >
-                    <div className="flex gap-3">
-                      <div className="flex-shrink-0 pt-1">
-                        {getNotificationIcon(n.type)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4
-                          className={`text-sm font-semibold ${n.isRead ? "text-gray-400" : "text-white"}`}
-                        >
-                          {n.title}
-                        </h4>
-                        <p
-                          className={`text-sm mt-1 line-clamp-2 ${n.isRead ? "text-gray-500" : "text-gray-300"}`}
-                        >
-                          {n.message}
-                        </p>
-                        <div className="flex items-center justify-between mt-2">
+                    {cat === "semua"
+                      ? "Semua"
+                      : cat === "booking"
+                        ? "Booking"
+                        : "Info Gor"}
+                  </button>
+                )
+              )}
+            </div>
+
+            {/* List */}
+            <div className="flex-1 overflow-y-auto">
+              {filteredNotifications.length === 0 ? (
+                <div className="flex items-center justify-center h-40 text-gray-400">
+                  Tidak ada notifikasi
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-800/70">
+                  {filteredNotifications.map((n) => (
+                    <div
+                      key={n.id}
+                      onClick={() => handleNotificationClick(n.id)}
+                      className={`relative px-4 py-3 hover:bg-gray-800/70 cursor-pointer transition-colors
+                                  border-l-4 ${
+                                    n.isRead
+                                      ? "border-gray-700 opacity-60"
+                                      : n.priority === "high"
+                                        ? "border-red-500"
+                                        : n.priority === "medium"
+                                          ? "border-yellow-500"
+                                          : "border-blue-500"
+                                  }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        {/* Foto Pengirim */}
+                        <img
+                          src={n.senderPhoto}
+                          alt="pengirim"
+                          className="w-10 h-10 rounded-full object-cover border border-gray-700"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h4
+                            className={`text-sm font-semibold ${
+                              n.isRead ? "text-gray-400" : "text-white"
+                            }`}
+                          >
+                            {n.title}
+                          </h4>
+                          <p
+                            className={`text-sm mt-1 line-clamp-2 ${
+                              n.isRead ? "text-gray-500" : "text-gray-300"
+                            }`}
+                          >
+                            {n.message}
+                          </p>
+                        </div>
+                        <div className="flex flex-col items-end gap-1">
                           <span className="text-xs text-gray-500">
                             {formatTimeAgo(n.timestamp)}
                           </span>
@@ -361,6 +220,8 @@ export default function NotificationSystem() {
                           )}
                         </div>
                       </div>
+
+                      {/* Tombol Hapus */}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -372,25 +233,13 @@ export default function NotificationSystem() {
                         <X size={14} />
                       </button>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Footer */}
-          {notifications.length > 0 && (
-            <div className="p-2 border-t border-gray-700/60 bg-gray-900/50 flex justify-center">
-              <button
-                onClick={clearAllNotifications}
-                className="text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 px-3 py-1.5 rounded-md transition-colors"
-              >
-                Hapus semua notifikasi yang sudah dibaca
-              </button>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

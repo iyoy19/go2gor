@@ -22,6 +22,7 @@ import { siteConfig } from "@/config/site";
 import NotificationSystem from "./NotificationSystem";
 import { NavGroup } from "@/types";
 import ProfileAvatar from "./Profile/ProfileAvatar";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Fungsi render dropdown desktop
 const renderDropdownContent = (items: NavGroup[]) => (
@@ -99,9 +100,7 @@ export default function Navbar() {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const toggleDesktopDropdown = (key: string) => {
@@ -125,7 +124,6 @@ export default function Navbar() {
           wrapper: "max-w-screen-xl relative",
           base: "bg-transparent",
           toggleIcon: "touch-manipulation",
-          menu: "mt-0",
           menuItem: "hover:opacity-80",
         }}
       >
@@ -214,73 +212,83 @@ export default function Navbar() {
           )}
         </NavbarContent>
 
-        {/* Mobile Menu */}
+        {/* ✅ Mobile Menu (tetap di dalam NextUINavbar + animasi) */}
         <NavbarMenu
-          className={`fixed inset-x-0 top-[${navbarHeight}px] bottom-0 z-[150] px-2 py-4 bg-black/20 backdrop-blur-md transition-all duration-200 overflow-y-auto ${
-            isMenuOpen ? "visible opacity-100" : "invisible opacity-0"
-          }`}
+          className="fixed inset-x-0 top-[64px] bottom-0 z-[150] px-2 py-4 
+                     bg-black/50 backdrop-blur-sm overflow-y-auto"
         >
-          <div className="space-y-2">
-            {siteConfig.navItems
-              .filter((item) => item.key !== "profile")
-              .map((item) => (
-                <React.Fragment key={item.key}>
-                  {!item.children ? (
-                    <NavbarMenuItem role="menuitem">
-                      <Link
-                        href={(item as any).href}
-                        className="w-full flex items-center gap-2 px-3 py-2.5 text-white drop-shadow-sm hover:bg-white/10 transition-colors rounded-md"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {item.icon ? <item.icon size={18} /> : null}
-                        <span className="text-sm">{item.label}</span>
-                      </Link>
-                    </NavbarMenuItem>
-                  ) : (
-                    <div className="mb-2">
-                      <NavbarMenuItem
-                        role="button"
-                        aria-expanded={mobileDropdownKey === item.key}
-                        className="bg-white/10 hover:bg-white/15 rounded-t-lg cursor-pointer transition-all duration-200 ease-in-out"
-                        onClick={() => toggleMobileDropdown(item.key)}
-                      >
-                        <div className="w-full flex items-center justify-between px-3 py-2.5 text-white drop-shadow-sm">
-                          <div className="flex items-center gap-2">
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                key="mobileMenuContent"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="space-y-2"
+              >
+                {siteConfig.navItems
+                  .filter((item) => item.key !== "profile")
+                  .map((item) => (
+                    <React.Fragment key={item.key}>
+                      {!item.children ? (
+                        <NavbarMenuItem role="menuitem">
+                          <Link
+                            href={(item as any).href}
+                            className="w-full flex items-center gap-2 px-3 py-2.5 text-white drop-shadow-sm hover:bg-white/10 transition-colors rounded-md"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
                             {item.icon ? <item.icon size={18} /> : null}
                             <span className="text-sm">{item.label}</span>
-                          </div>
-                          <ChevronDown
-                            size={18}
-                            className={`transition-transform duration-300 ease-in-out ${
-                              mobileDropdownKey === item.key
-                                ? "rotate-180"
-                                : "rotate-0"
-                            }`}
-                          />
-                        </div>
-                      </NavbarMenuItem>
-                      {mobileDropdownKey === item.key && (
-                        <div className="pl-6 pr-3 py-2 space-y-2 bg-white/5 rounded-b-lg">
-                          {item.children?.map((group) =>
-                            group.items?.map((sub) => (
-                              <Link
-                                key={sub.key}
-                                href={sub.href}
-                                className="flex items-center gap-2 text-sm text-white hover:underline"
-                                onClick={() => setIsMenuOpen(false)}
-                              >
-                                {sub.icon ? <sub.icon size={16} /> : null}
-                                {sub.label}
-                              </Link>
-                            ))
+                          </Link>
+                        </NavbarMenuItem>
+                      ) : (
+                        <div className="mb-2">
+                          <NavbarMenuItem
+                            role="button"
+                            aria-expanded={mobileDropdownKey === item.key}
+                            className="bg-white/10 hover:bg-white/15 rounded-t-lg cursor-pointer transition-all duration-200 ease-in-out"
+                            onClick={() => toggleMobileDropdown(item.key)}
+                          >
+                            <div className="w-full flex items-center justify-between px-3 py-2.5 text-white drop-shadow-sm">
+                              <div className="flex items-center gap-2">
+                                {item.icon ? <item.icon size={18} /> : null}
+                                <span className="text-sm">{item.label}</span>
+                              </div>
+                              <ChevronDown
+                                size={18}
+                                className={`transition-transform duration-300 ease-in-out ${
+                                  mobileDropdownKey === item.key
+                                    ? "rotate-180"
+                                    : "rotate-0"
+                                }`}
+                              />
+                            </div>
+                          </NavbarMenuItem>
+                          {mobileDropdownKey === item.key && (
+                            <div className="pl-6 pr-3 py-2 space-y-2 bg-white/5 rounded-b-lg">
+                              {item.children?.map((group) =>
+                                group.items?.map((sub) => (
+                                  <Link
+                                    key={sub.key}
+                                    href={sub.href}
+                                    className="flex items-center gap-2 text-sm text-white hover:underline"
+                                    onClick={() => setIsMenuOpen(false)}
+                                  >
+                                    {sub.icon ? <sub.icon size={16} /> : null}
+                                    {sub.label}
+                                  </Link>
+                                ))
+                              )}
+                            </div>
                           )}
                         </div>
                       )}
-                    </div>
-                  )}
-                </React.Fragment>
-              ))}
-          </div>
+                    </React.Fragment>
+                  ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </NavbarMenu>
       </NextUINavbar>
     </div>
