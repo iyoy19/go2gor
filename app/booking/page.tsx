@@ -77,13 +77,12 @@ const getDatesForNext7Days = (): DateOption[] => {
   return dates;
 };
 
-export default function BookingClient({
-  fieldId: initialFieldId,
-}: {
-  fieldId: string;
-}) {
+export default function Booking() {
   const availableDates = useMemo(() => getDatesForNext7Days(), []);
-  const [selectedFieldId, setSelectedFieldId] = useState(initialFieldId);
+  // Gunakan field pertama sebagai default
+  const [selectedFieldId, setSelectedFieldId] = useState(
+    dummyFields[0].id.toString()
+  );
   const [selectedDate, setSelectedDate] = useState(availableDates[0].date);
   const [schedule, setSchedule] = useState<FieldSchedule | null>(null);
   const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
