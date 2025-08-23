@@ -13,7 +13,6 @@ import {
   UserCircle,
   Settings2,
   Bell,
-  ClipboardList,
   Activity,
   HelpCircle,
   LogOut,
@@ -156,21 +155,21 @@ export const siteConfig: SiteConfig = {
             {
               key: "profil-saya",
               label: "Profil Saya",
-              href: "/profile", // tetap /profile
+              href: "/users/profile",
               icon: UserCircle,
               description: "Lihat & edit data diri",
             },
             {
               key: "pengaturan",
               label: "Pengaturan Akun",
-              href: "/pengaturan", // tanpa /profile
+              href: "/users/settings",
               icon: Settings2,
               description: "Email, password, foto profil",
             },
             {
               key: "notif",
               label: "Preferensi Notifikasi",
-              href: "/notifikasi", // tanpa /profile
+              href: "/users/notifikasi",
               icon: Bell,
               description: "Atur notifikasi",
             },
@@ -184,14 +183,14 @@ export const siteConfig: SiteConfig = {
             {
               key: "jadwal-saya",
               label: "Jadwal Saya",
-              href: "/jadwal-saya",
+              href: "/users/jadwal",
               icon: CalendarDays,
               description: "Pertandingan atau booking mendatang",
             },
             {
               key: "aktivitas-riwayat",
               label: "Aktivitas & Riwayat",
-              href: "/aktivitas",
+              href: "/users/activity",
               icon: Activity,
               description: "Riwayat aktivitas",
             },
@@ -205,7 +204,7 @@ export const siteConfig: SiteConfig = {
             {
               key: "tim-saya",
               label: "Tim Saya",
-              href: "/team",
+              href: "/users/team",
               icon: Users,
               description: "Tim yang diikuti",
             },
@@ -219,16 +218,15 @@ export const siteConfig: SiteConfig = {
             {
               key: "help",
               label: "Pusat Bantuan",
-              href: "/bantuan",
+              href: "/users/bantuan",
               icon: HelpCircle,
               description: "FAQ dan panduan",
             },
             {
               key: "logout",
               label: "Logout",
-              href: "/logout",
+              href: "/users/logout",
               icon: LogOut,
-              color: "danger",
             },
           ],
         },
