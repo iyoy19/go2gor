@@ -48,7 +48,13 @@ export default function ProfileAvatar({ navbarHeight }: ProfileAvatarProps) {
       {isClient && showProfileMenu && (
         <ProfileMenu
           isVisible={showProfileMenu}
-          profileNavItem={profileNavItem}
+          profileNavItem={{
+            children:
+              profileNavItem.children?.map((group) => ({
+                ...group,
+                title: group.title || "Menu",
+              })) || [],
+          }}
           navbarHeight={navbarHeight}
           onClose={() => setShowProfileMenu(false)}
         />

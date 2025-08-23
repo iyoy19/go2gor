@@ -39,7 +39,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       >
         <div className="relative w-full overflow-x-hidden hide-scrollbar">
           {/* Navbar fixed dengan background yang diatur di sini */}
-          <div className="fixed top-0 left-0 right-0 z-50 hide-scrollbar ">
+          <div className="top-0 left-0 right-0 z-50 hide-scrollbar ">
             <Navbar />
           </div>
 

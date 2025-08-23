@@ -20,3 +20,9 @@ export const rubikDirt = Rubik_Dirt({
   weight: "400", // hanya satu berat tersedia di Rubik Dirt
   display: "swap",
 });
+
+export const fonts = {
+  primary: "Inter, sans-serif",
+  secondary: "Poppins, sans-serif",
+  code: "Fira Code, monospace",
+};

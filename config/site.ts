@@ -1,21 +1,23 @@
 import {
-  Home,
-  Trophy,
+  Activity,
   Building2,
+  Calendar,
   CalendarDays,
   CalendarPlus,
-  Users,
-  Settings,
-  MessageCircle,
-  Calendar,
-  Image,
-  User2,
-  UserCircle,
-  Settings2,
-  Bell,
-  Activity,
   HelpCircle,
+  Home,
+  Image,
   LogOut,
+  MailIcon,
+  MessageCircle,
+  MessageSquare,
+  Settings,
+  Info,
+  Globe,
+  Settings2,
+  Trophy,
+  User2,
+  Users,
 } from "lucide-react";
 
 import { NavItem } from "@/types";
@@ -141,7 +143,6 @@ export const siteConfig: SiteConfig = {
         },
       ],
     },
-
     {
       key: "profile",
       label: "Profile",
@@ -153,34 +154,6 @@ export const siteConfig: SiteConfig = {
           title: "Profil",
           items: [
             {
-              key: "profil-saya",
-              label: "Profil Saya",
-              href: "/users/profile",
-              icon: UserCircle,
-              description: "Lihat & edit data diri",
-            },
-            {
-              key: "pengaturan",
-              label: "Pengaturan Akun",
-              href: "/users/settings",
-              icon: Settings2,
-              description: "Email, password, foto profil",
-            },
-            {
-              key: "notif",
-              label: "Preferensi Notifikasi",
-              href: "/users/notifikasi",
-              icon: Bell,
-              description: "Atur notifikasi",
-            },
-          ],
-        },
-
-        {
-          key: "aktivitas",
-          title: "Aktivitas",
-          items: [
-            {
               key: "jadwal-saya",
               label: "Jadwal Saya",
               href: "/users/jadwal",
@@ -188,37 +161,70 @@ export const siteConfig: SiteConfig = {
               description: "Pertandingan atau booking mendatang",
             },
             {
-              key: "aktivitas-riwayat",
-              label: "Aktivitas & Riwayat",
-              href: "/users/activity",
-              icon: Activity,
-              description: "Riwayat aktivitas",
-            },
-          ],
-        },
-
-        {
-          key: "team",
-          title: "Team",
-          items: [
-            {
               key: "tim-saya",
               label: "Tim Saya",
               href: "/users/team",
               icon: Users,
               description: "Tim yang diikuti",
             },
+            {
+              key: "undangan",
+              label: "Undangan",
+              href: "/users/undangan",
+              icon: MailIcon,
+              description: "Email, password, foto profil",
+            },
+            {
+              key: "notif",
+              label: "Pesan",
+              href: "/users/pesan",
+              icon: MessageSquare,
+              description: "Atur notifikasi",
+            },
           ],
         },
-
+        {
+          key: "team",
+          title: "Team",
+          items: [
+            {
+              key: "aktivitas-riwayat",
+              label: "Aktivitas & Riwayat",
+              href: "/users/activity",
+              icon: Activity,
+              description: "Riwayat aktivitas",
+            },
+            {
+              key: "pengaturan",
+              label: "Pengaturan Akun",
+              href: "/users/profile",
+              icon: Settings2,
+              description: "Email, password, foto profil",
+            },
+          ],
+        },
         {
           key: "bantuan",
           title: "Bantuan",
           items: [
             {
+              key: "about",
+              label: "Tentang Web",
+              icon: Info,
+              description: "Info aplikasi, versi, developer",
+              href: "/about",
+            },
+            {
+              key: "language",
+              label: "Bahasa / Language",
+              href: "/users/Language",
+              icon: Globe,
+              description: "FAQ dan panduan",
+            },
+            {
               key: "help",
               label: "Pusat Bantuan",
-              href: "/users/bantuan",
+              href: "/help",
               icon: HelpCircle,
               description: "FAQ dan panduan",
             },
