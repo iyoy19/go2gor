@@ -41,7 +41,7 @@ export default function TeamSection() {
   };
 
   return (
-    <section className="py-16 md:py-24">
+    <section className="p-1 py-2 md:py-24">
       <motion.div
         className="container mx-auto px-4 md:px-6"
         initial="hidden"
@@ -79,11 +79,8 @@ export default function TeamSection() {
             >
               Banyak tim berbakat dari berbagai bidang telah bergabung bersama
               kami untuk berkolaborasi, berkembang, dan menciptakan karya
-              terbaik.
-              <br />
-              <br />
-              Jadilah bagian dari komunitas ini, daftarkan tim Anda, atau ajukan
-              tanding melawan tim lain sekarang.
+              terbaik. Jadilah bagian dari komunitas ini, daftarkan tim Anda,
+              atau ajukan tanding melawan tim lain sekarang.
             </motion.p>
 
             <motion.div

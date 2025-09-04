@@ -1,125 +1,123 @@
-"use client";
+import { Star, Users, MapPin, Clock } from "lucide-react";
+import { Team } from "@/data/teamData";
 
-import { useState } from "react";
-import clsx from "clsx";
-
-export interface Team {
-  id: number;
-  name: string;
-  members: number;
-  ranking: number;
-  status: "Active" | "Inactive";
-  avatar: string;
-  description: string;
-  live: boolean; // pastikan wajib
-  captain: string;
-  memberNames: string[];
+interface MyTeamCardProps {
+  myTeam: Team;
 }
 
-export default function MyTeamCard({ myTeam }: { myTeam: Team }) {
-  const [expanded, setExpanded] = useState(false);
-
-  const getRandomAvatar = (size: number = 40) =>
-    `https://i.pravatar.cc/${size}?img=${Math.floor(Math.random() * 70) + 1}`;
-
+export const MyTeamCard = ({ myTeam }: MyTeamCardProps) => {
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 relative w-full hover:shadow-2xl transition-shadow">
-      {/* LIVE badge */}
-      {myTeam.live && (
-        <span className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
-          LIVE
-        </span>
-      )}
-
-      <div className="flex flex-col md:flex-row items-center gap-4">
-        {/* Kiri: Detail, teks align kanan */}
-        <div className="flex-1 text-right">
-          <h2 className="text-2xl font-bold text-indigo-800">{myTeam.name}</h2>
-          <p className="text-gray-600 text-sm">
-            Status:{" "}
-            <span
-              className={clsx(
-                myTeam.status === "Active" ? "text-green-600" : "text-gray-400"
-              )}
-            >
-              {myTeam.status}
-            </span>
-          </p>
-          <p className="text-gray-600 text-sm">Ranking: #{myTeam.ranking}</p>
-          <p className="text-gray-600 text-sm">Anggota: {myTeam.members}</p>
-        </div>
-
-        {/* Tengah: Avatar Tim */}
-        <div className="flex-none">
-          <img
-            src={myTeam.avatar || getRandomAvatar(96)}
-            alt={myTeam.name}
-            className={clsx(
-              "w-28 h-28 rounded-full object-cover border-4",
-              myTeam.live ? "border-red-500 animate-pulse" : "border-purple-500"
-            )}
-          />
-        </div>
-
-        {/* Kanan: Deskripsi */}
-        <div className="flex-1 flex flex-col gap-2">
-          {myTeam.description && (
-            <p className="text-gray-700 text-sm">{myTeam.description}</p>
-          )}
-        </div>
-      </div>
-
-      {/* Expandable Section: Kapten & Anggota */}
-      <div
-        className={clsx(
-          "mt-4 transition-all duration-300",
-          expanded ? "max-h-96" : "max-h-0 overflow-hidden"
-        )}
-      >
-        <h4 className="text-indigo-800 font-semibold mb-3">Kapten & Anggota</h4>
-
-        <div className="flex flex-col gap-4">
-          {/* Kapten */}
-          <div className="flex items-center gap-3">
-            <img
-              src={getRandomAvatar(40)}
-              alt={myTeam.captain}
-              className="w-12 h-12 rounded-full border-2 border-white shadow-sm"
-            />
-            <div className="flex flex-col">
-              <span className="font-semibold text-indigo-800">Kapten</span>
-              <span className="text-gray-700 text-sm">{myTeam.captain}</span>
+    <div className="bg-gradient-to-br from-white via-blue-50 to-indigo-100 rounded-2xl shadow-xl border border-blue-200 overflow-hidden">
+      <div className="relative p-8">
+        {/* Live indicator */}
+        {myTeam.live && (
+          <div className="absolute top-4 right-4">
+            <div className="flex items-center gap-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+              LIVE
             </div>
           </div>
+        )}
 
-          {/* Anggota grid 2 row */}
-          <div className="grid grid-cols-4 grid-rows-2 gap-4">
-            {myTeam.memberNames.map((m, idx) => (
-              <div key={idx} className="flex flex-col items-center">
-                <img
-                  src={getRandomAvatar(32)}
-                  alt={m}
-                  className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
-                />
-                <span className="text-xs mt-1">{m}</span>
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Team Avatar & Basic Info */}
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+            <div className="relative">
+              <img
+                src={myTeam.avatar}
+                alt={myTeam.name}
+                className="w-32 h-32 rounded-2xl object-cover shadow-lg border-4 border-white"
+              />
+              <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg shadow-lg">
+                #{myTeam.ranking}
               </div>
-            ))}
+            </div>
+            <h2 className="text-3xl font-bold text-gray-800 mt-4 mb-2">
+              {myTeam.name}
+            </h2>
+            <p className="text-gray-600 mb-4 max-w-xs">{myTeam.description}</p>
+          </div>
+
+          {/* Team Stats & Info */}
+          <div className="flex-1 space-y-6">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/50">
+                <div className="text-2xl font-bold text-blue-600">
+                  {myTeam.wins || 0}
+                </div>
+                <div className="text-sm text-gray-600">Menang</div>
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/50">
+                <div className="text-2xl font-bold text-red-500">
+                  {myTeam.losses || 0}
+                </div>
+                <div className="text-sm text-gray-600">Kalah</div>
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/50">
+                <div className="text-2xl font-bold text-green-600">
+                  {myTeam.winRate || 0}%
+                </div>
+                <div className="text-sm text-gray-600">Win Rate</div>
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/50">
+                <div className="text-2xl font-bold text-purple-600">
+                  {myTeam.upcomingMatches || 0}
+                </div>
+                <div className="text-sm text-gray-600">Mendatang</div>
+              </div>
+            </div>
+
+            {/* Team Details */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Star className="text-yellow-500" size={20} />
+                  <span className="font-medium">Kapten: {myTeam.captain}</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Users className="text-blue-500" size={20} />
+                  <span>{myTeam.members} anggota aktif</span>
+                </div>
+                {myTeam.location && (
+                  <div className="flex items-center gap-3 text-gray-700">
+                    <MapPin className="text-green-500" size={20} />
+                    <span>{myTeam.location}</span>
+                  </div>
+                )}
+                {myTeam.founded && (
+                  <div className="flex items-center gap-3 text-gray-700">
+                    <Clock className="text-purple-500" size={20} />
+                    <span>Didirikan {myTeam.founded}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Member Avatars */}
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-3">
+                  Anggota Tim:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {myTeam.memberNames.map((member, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-2 bg-white/70 backdrop-blur-sm rounded-full px-3 py-2 border border-white/50"
+                    >
+                      <img
+                        src={`https://i.pravatar.cc/32?img=${idx + 10}`}
+                        alt={member}
+                        className="w-6 h-6 rounded-full"
+                      />
+                      <span className="text-sm text-gray-700">{member}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Buttons: Expand di kiri + Keluar Grup di kanan */}
-      <div className="mt-4 flex justify-between">
-        <button
-          className="px-3 py-1 bg-purple-600 text-white rounded-full text-sm font-semibold shadow hover:scale-105 transition transform"
-          onClick={() => setExpanded(!expanded)}
-        >
-          {expanded ? "Sembunyikan Detail" : "Tampilkan Detail"}
-        </button>
-        <button className="px-3 py-1 bg-red-500 text-white rounded-full text-sm font-semibold shadow hover:scale-105 transition transform">
-          Keluar Grup
-        </button>
       </div>
     </div>
   );
-}
+};

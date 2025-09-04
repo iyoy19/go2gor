@@ -11,58 +11,72 @@ export default function HelpPage() {
         <HelpCircle className="mx-auto h-12 w-12 text-teal-500" />
         <h1 className="text-3xl font-bold mt-2">Pusat Bantuan</h1>
         <p className="text-gray-500 mt-2">
-          Temukan jawaban pertanyaan umum atau hubungi tim kami jika butuh
-          bantuan.
+          Butuh bantuan? Temukan jawaban pertanyaan umum di bawah atau hubungi
+          tim kami.
         </p>
       </div>
 
       {/* FAQ */}
       <Accordion variant="splitted">
+        {/* Akun */}
         <AccordionItem
-          key="1"
-          aria-label="Apa itu Go2Gor?"
-          title="Apa itu Go2Gor?"
+          key="akun"
+          aria-label="Akun & Registrasi"
+          title="Akun & Registrasi"
         >
-          Go2Gor adalah platform penyewaan lapangan olahraga dan komunitas
-          olahraga. Kamu bisa booking lapangan, lihat jadwal pertandingan, dan
-          terhubung dengan komunitas.
+          <p>
+            Untuk menggunakan Go2Gor, kamu perlu mendaftar menggunakan email
+            atau akun Google. Setelah registrasi, semua fitur seperti booking
+            dan komunitas bisa langsung digunakan.
+          </p>
+        </AccordionItem>
+
+        {/* Booking */}
+        <AccordionItem
+          key="booking"
+          aria-label="Booking Lapangan"
+          title="Booking Lapangan"
+        >
+          <p>
+            Masuk ke menu <b>Booking</b>, pilih lapangan, tanggal, dan waktu.
+            Lanjutkan ke pembayaran untuk mengamankan slotmu.
+          </p>
         </AccordionItem>
 
         <AccordionItem
-          key="2"
-          aria-label="Bagaimana cara melakukan booking?"
-          title="Bagaimana cara melakukan booking?"
+          key="batal"
+          aria-label="Pembatalan Booking"
+          title="Pembatalan Booking"
         >
-          Kamu bisa melakukan booking dengan masuk ke menu <b>Booking</b>, pilih
-          lapangan, tanggal, dan waktu. Setelah itu konfirmasi pembayaran sesuai
-          instruksi.
+          <p>
+            Pembatalan bisa dilakukan maksimal <b>24 jam</b> sebelum jadwal
+            mulai. Buka <b>Profil → Jadwal Saya</b> untuk membatalkan.
+          </p>
         </AccordionItem>
 
+        {/* Komunitas */}
         <AccordionItem
-          key="3"
-          aria-label="Apakah bisa membatalkan booking?"
-          title="Apakah bisa membatalkan booking?"
+          key="komunitas"
+          aria-label="Komunitas & Event"
+          title="Komunitas & Event"
         >
-          Ya, pembatalan bisa dilakukan maksimal 24 jam sebelum jadwal dimulai.
-          Silakan cek di menu <b>Profil → Jadwal Saya</b>.
+          <p>
+            Masuk ke menu <b>Komunitas</b> untuk gabung forum, event olahraga,
+            atau cari tim. Kamu juga bisa membuat tim baru lewat fitur{" "}
+            <b>Team Match</b>.
+          </p>
         </AccordionItem>
 
+        {/* Lainnya */}
         <AccordionItem
-          key="4"
-          aria-label="Bagaimana cara bergabung dengan komunitas?"
-          title="Bagaimana cara bergabung dengan komunitas?"
+          key="aplikasi"
+          aria-label="Aplikasi Mobile"
+          title="Aplikasi Mobile"
         >
-          Buka menu <b>Komunitas</b>, lalu pilih forum atau event. Kamu juga
-          bisa bergabung dengan tim olahraga melalui fitur <b>Team Match</b>.
-        </AccordionItem>
-
-        <AccordionItem
-          key="5"
-          aria-label="Apakah ada aplikasi mobile?"
-          title="Apakah ada aplikasi mobile?"
-        >
-          Saat ini Go2Gor tersedia berbasis web, tapi versi aplikasi mobile
-          sedang dalam tahap pengembangan.
+          <p>
+            Saat ini Go2Gor berbasis web. Aplikasi mobile sedang dalam tahap
+            pengembangan dan segera hadir di Play Store & App Store.
+          </p>
         </AccordionItem>
       </Accordion>
 
@@ -73,6 +87,8 @@ export default function HelpPage() {
         </p>
         <div className="flex justify-center gap-3">
           <Button
+            as="a"
+            href="mailto:support@go2gor.com"
             size="lg"
             color="primary"
             radius="lg"
@@ -81,6 +97,8 @@ export default function HelpPage() {
             Email Kami
           </Button>
           <Button
+            as="a"
+            href="tel:+62123456789"
             size="lg"
             variant="bordered"
             radius="lg"

@@ -22,6 +22,7 @@ import { siteConfig } from "@/config/site";
 import NotificationSystem from "./NotificationSystem";
 import { NavGroup } from "@/types";
 import ProfileAvatar from "./Profile/ProfileAvatar";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Render dropdown items as flat array instead of nested structure
@@ -246,29 +247,31 @@ export default function Navbar() {
             />
           </div>
 
+          {/* Desktop Brand (kiri) */}
           <NavbarBrand className="hidden sm:flex">
-            <Link href="/" className="group">
-              <motion.p
-                className="font-bold text-xl text-white drop-shadow-lg group-hover:drop-shadow-xl 
-                         transition-all duration-300 group-hover:scale-105"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {siteConfig.name}
-              </motion.p>
+            <Link href="/" className="group flex items-center gap-2">
+              <Image
+                src="/images/logo1.png"
+                alt="Go2Gor Logo"
+                width={120} // atur ukuran sesuai kebutuhan
+                height={40}
+                className="object-contain"
+                priority
+              />
             </Link>
           </NavbarBrand>
 
+          {/* Mobile Brand (tengah) */}
           <NavbarBrand className="flex sm:hidden absolute left-1/2 transform -translate-x-1/2">
-            <Link href="/" className="group">
-              <motion.p
-                className="font-bold text-xl text-white drop-shadow-lg group-hover:drop-shadow-xl 
-                         transition-all duration-300"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {siteConfig.name}
-              </motion.p>
+            <Link href="/" className="group flex items-center gap-2">
+              <Image
+                src="/images/logo1.png"
+                alt="Go2Gor Logo"
+                width={100}
+                height={32}
+                className="object-contain"
+                priority
+              />
             </Link>
           </NavbarBrand>
         </NavbarContent>
@@ -406,7 +409,7 @@ export default function Navbar() {
                           aria-expanded={mobileDropdownKey === item.key}
                           className="bg-white/10 hover:bg-white/20 rounded-t-xl cursor-pointer 
                                    transition-all duration-300 ease-out backdrop-blur-sm 
-                                   border border-white/20 hover:border-white/30"
+                                   border border-black/20 hover:border-white/30"
                           onClick={() => toggleMobileDropdown(item.key)}
                         >
                           <div
@@ -448,7 +451,7 @@ export default function Navbar() {
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.3, ease: "easeInOut" }}
                               className="overflow-hidden bg-white/5 backdrop-blur-sm border-x 
-                                       border-b border-white/20 rounded-b-xl"
+                                       border-b border-black/20 rounded-b-xl"
                             >
                               <div className="px-6 py-4 space-y-3">
                                 {item.children?.map((group) =>
