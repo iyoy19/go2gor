@@ -198,22 +198,20 @@ const Lapangan = () => {
           </div>
         </div>
 
-        {/* Grid Mode (default desktop & mobile jika dipilih) */}
-        {(mobileMode === "grid" || true) && (
-          <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredFields.map((field) => (
-              <motion.div
-                key={field.id}
-                variants={itemVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-50px" }}
-              >
-                <FieldCard field={field} />
-              </motion.div>
-            ))}
-          </div>
-        )}
+        {/* Grid Mode (desktop) */}
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredFields.map((field) => (
+            <motion.div
+              key={field.id}
+              variants={itemVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+            >
+              <FieldCard field={field} />
+            </motion.div>
+          ))}
+        </div>
 
         {/* Grid khusus mobile */}
         {mobileMode === "grid" && (
